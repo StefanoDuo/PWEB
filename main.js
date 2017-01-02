@@ -4,7 +4,8 @@ var DEBUGGING = true;
 
 function start() {
    //initialize input object
-   input = new Input('body');
+
+   input = new Input('body', new Queue(4));
    input.addListeners();
 
    //initialize sketcher object
@@ -40,5 +41,5 @@ function start() {
    setInterval(function() {
       game.movePlayer(input.getMovements());
       sketcher.draw(game.getGrid());
-   }, 200)
+   }, 100)
 }
