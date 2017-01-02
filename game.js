@@ -31,11 +31,10 @@ Game.prototype.getGrid = function() {
    return this.gameField;
 }
 
-
-Game.prototype.isHittingGridBoundaries = function(direction) {
-   return !((this.playerPosition.add(direction)).belongsToFirstQuadrant());
+Game.prototype.isExitingGrid = function(direction) {
+   var newPosition = this.playerPosition.add(direction);
+   return !newPosition.belongsToSquare(this.gameFieldSize - 1);
 }
-
 
 Game.prototype.isHittingRock = function(direction) {
    var newPosition = this.playerPosition.add(direction);
@@ -46,7 +45,10 @@ Game.prototype.isHittingRock = function(direction) {
 }
 
 Game.prototype.movePlayer = function(direction) {
-   //if(this.isHittingRock(direction) || this.isHittingGridBoundaries(direction)) return;
+   //first checks if the player is falling off the grid, otherwise
+   //isHittingRocks might check non allocated location of the array
+   if(this.isExitingGrid(direction) || this.isHittingRock(direction))
+      return;
 
    var newPosition = this.playerPosition.add(direction);
    this.gameField[this.playerPosition.y][this.playerPosition.x] = null;

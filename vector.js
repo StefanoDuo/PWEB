@@ -23,3 +23,10 @@ Vector.prototype.belongsToFirstQuadrant = function() {
    else
       return false;
 }
+
+Vector.prototype.belongsToSquare = function(sideSize) {
+   if(this.belongsToFirstQuadrant() && this.x <= sideSize && this.y <= sideSize)
+      return true;
+   else
+      return false;
+}
