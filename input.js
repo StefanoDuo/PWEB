@@ -1,5 +1,8 @@
 /* interface between keyboard events and player movements
  * requires Vector object
+ *
+ * TODO: only keep tracks of keyCodes and return the most
+ * important one with a method
  */
 
 function Input(whereToListen, inputQueue) {
@@ -51,6 +54,8 @@ Input.prototype.updateOnKeyDown = function(keyCode) {
       return;
    }
 
+   console.log('KEYDOWN: ' + pressedKey);
+
    if(this.pressedKeys[pressedKey] !== true) {
       try {
          this.inputQueue.enqueue(pressedKey);
@@ -68,6 +73,8 @@ Input.prototype.updateOnKeyUp = function(keyCode) {
       return;
    }
 
+   console.log('KEYUP: ' + pressedKey);
+
    this.pressedKeys[pressedKey] = false;
 }
 
@@ -75,6 +82,7 @@ Input.prototype.addListeners = function() {
    this.whereToListen.addEventListener('keydown', function(e) {
       e = e || window.event;
       this.updateOnKeyDown(e.keyCode);
+      //can't use e.key not supported on Chrome
    }.bind(this), false);
 
    this.whereToListen.addEventListener('keyup', function(e) {

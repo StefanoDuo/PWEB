@@ -1,3 +1,5 @@
+// TODO: change Queue implementation with the one commented at the bottom
+
 function Queue(size) {
    this.arraySize = size;
    this.array = new Array(size);
@@ -5,8 +7,9 @@ function Queue(size) {
    this.back = 0;
 }
 
-//javascript % operator returns a negative value for negative numbers
-//eg. (-3) % 5 === -2, and we want always a positive number to index the array
+/* javascript % operator returns a negative value for negative numbers
+ * eg. (-3) % 5 === -2, and we want always a positive number to index the array
+ */
 Queue.prototype.modulus = function(number, mod) {
    return ((number % mod) + mod) % mod;
 }
@@ -39,3 +42,22 @@ Queue.prototype.dequeue = function() {
    this.front = this.modulus(this.front - 1, this.arraySize);
    return returnValue;
 }
+
+
+/*
+function Queue() {
+   this.inbox = [];
+   this.outbox = [];
+}
+
+
+Queue.prototype.enqueue = function(value) {
+   this.inbox.push(value);
+}
+
+Queue.prototype.dequeue = function() {
+   while(this.inbox.length > 0)
+      this.outbox.push(this.inbox.pop());
+   return this.outbox.pop();
+}
+*/

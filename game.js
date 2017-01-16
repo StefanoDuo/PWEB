@@ -1,5 +1,9 @@
-//contains the game logic
-//requires Vector object
+/* contains the game logic
+ *
+ * DEPENDANCIES: Vector object
+ *
+ * TODO: add ball physic
+ */
 
 function Game(gameFieldSize, playerPosition, ballPosition, holePosition, rocksPositions) {
    //initialization of the 2d matrix representing the game field
