@@ -1,6 +1,12 @@
 /* interface between game logic and the browser where everything is
  * displayed, the first number in the matrix notations represents
  * the y axis the second number the x axis
+ *
+ * TODO: 1) switch to an initialization method which draws the entire grid
+         2) create another method just to update it switching the contents
+            of the player (or ball) next block with his current one
+         3) create method to do something upon reaching the hole or hitting
+            a wall or rock
  */
 
 function Sketcher(gameFieldSize, whereToDraw) {

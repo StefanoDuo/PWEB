@@ -12,34 +12,28 @@ function start() {
    sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField');
 
    //initialize game object
-   var playerPosition = {
-      x: 0,
-      y: 0
-   };
-   var ballPosition = {
-      x: 2,
-      y: 2
-   };
-   var holePosition = {
-      x: 9,
-      y: 9
-   };
+   var playerPosition = new Vector(0, 0);
+   var ballPosition = new Vector(2, 2);
+   var holePosition = new Vector(9, 9);
    var rocksPositions = [
-   {
-      x: 1,
-      y: 0
-   },
-   {
-      x: 5,
-      y: 7
-   
-   }];
-   game = new Game(GAMEFIELD_SIZE, playerPosition, ballPosition, holePosition, rocksPositions);
+      new Vector(1, 0),
+      new Vector(5, 7),
+      new Vector(6, 2)
+   ];
+   var ballMovingDirection = new Vector(0, 0);
+   var matrix = new Matrix(GAMEFIELD_SIZE, GAMEFIELD_SIZE);
+
+
+   game = new Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions, ballMovingDirection);
 
    sketcher.draw(game.getGrid());
 
-   setInterval(function() {
-      game.movePlayer(input.getMovements());
+   game.intervalID = setInterval(function() {
+      game.resetStatus();
+      if(game.isBallMoving())
+         game.moveBall();
+      else
+         game.movePlayer(input.getMovements());
       sketcher.draw(game.getGrid());
-   }, 100)
+   }, 100);
 }

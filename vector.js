@@ -1,4 +1,7 @@
-//used to simplify player movements arithmetic
+/* used to simplify player movements arithmetic
+ *
+ * TODO:
+ */
 
 function Vector(x, y) {
    this.x = Math.round(x);
@@ -22,6 +25,14 @@ Vector.prototype.belongsToFirstQuadrant = function() {
       return true;
    else
       return false;
+}
+
+Vector.prototype.isEqual = function(vector) {
+   return (this.x === vector.x && this.y === vector.y);
+}
+
+Vector.prototype.isNull = function() {
+   return (this.x === 0 && this.y === 0);
 }
 
 Vector.prototype.belongsToSquare = function(sideSize) {

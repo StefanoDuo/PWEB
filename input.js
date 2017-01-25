@@ -1,8 +1,10 @@
 /* interface between keyboard events and player movements
- * requires Vector object
  *
- * TODO: only keep tracks of keyCodes and return the most
- * important one with a method
+ * DEPENDENCIES: Vector, Queue objects
+
+ * TODO: 1) only keep tracks of keyCodes and return the most
+ *          important one with a method
+ *       2) add method to return pressedKeys Array
  */
 
 function Input(whereToListen, inputQueue) {
@@ -54,8 +56,6 @@ Input.prototype.updateOnKeyDown = function(keyCode) {
       return;
    }
 
-   console.log('KEYDOWN: ' + pressedKey);
-
    if(this.pressedKeys[pressedKey] !== true) {
       try {
          this.inputQueue.enqueue(pressedKey);
@@ -72,8 +72,6 @@ Input.prototype.updateOnKeyUp = function(keyCode) {
    } catch (e) { //triggered by a non interesting key
       return;
    }
-
-   console.log('KEYUP: ' + pressedKey);
 
    this.pressedKeys[pressedKey] = false;
 }
