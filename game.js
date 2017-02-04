@@ -22,16 +22,18 @@ function Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions
 
 
 Game.prototype.initialize = function() {
-   //positioning player, ball, hole and rocks accordingly to parameters
    this.gameField.reset();
    this.gameField.setPosition(this.startingValues.playerPosition, 'player');
    this.gameField.setPosition(this.startingValues.ballPosition, 'ball');
    this.gameField.setPosition(this.startingValues.holePosition, 'hole');
+
+   // the second argument changes the forEach scope, if not specified
+   // it default to the window object
    this.startingValues.rocksPositions.forEach(function(element) {
       this.gameField.setPosition(element, 'rock');
-   }.bind(this));
+   }, this);
 
-   //storing player and ball positions for fast access during updates
+   // storing player and ball positions to update them easily
    this.playerPosition = this.startingValues.playerPosition;
    this.ballPosition = this.startingValues.ballPosition;
    this.ballMovingDirection = this.startingValues.ballMovingDirection;
@@ -57,7 +59,7 @@ Game.prototype.getGrid = function() {
 }
 
 
-//collision check functions
+// collision check methods
 Game.prototype.isOutOfBounds = function(entity, direction) {
    var newPosition = (entity === 'player') ? this.playerPosition : this.ballPosition;
    newPosition = newPosition.add(direction);
@@ -74,7 +76,7 @@ Game.prototype.isBallOutOfBounds = function() {
 }
 
 
-//checks if entity after moving towards direction has hit object
+// checks if entity will hit collidingWith after moving towards direction
 Game.prototype.isColliding = function(entity, direction, collidingWith) {
    var newPosition = (entity === 'player') ? this.playerPosition : this.ballPosition;
    newPosition = newPosition.add(direction);

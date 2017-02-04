@@ -2,9 +2,20 @@
  *
  * DEPENDENCIES: Vector, Queue objects
 
- * TODO: 1) only keep tracks of keyCodes and return the most
- *          important one with a method
- *       2) add method to return pressedKeys Array
+ * TODO: 1) refactor as a standalone module which accepts an array containing
+            the IDs of the elements to listen and optional an array which maps
+            keyCodes to strings (if not present it doesn't allow requesting strings
+            instead of keyCodes)
+         2) the interface of the object must offer those methods
+            - setTranslator(translator)
+            - getPressedKeyCodes()
+            - getPressedTranslations()
+            - getPriorityKeyCode()
+            - getPriorityTranslation()
+         3) the constructor must accept either an array of objects each containing
+            - whereToListen string
+            - queue to store the priority of the pressed keyCodes
+            - translator
  */
 
 function Input(whereToListen, inputQueue) {
@@ -15,16 +26,16 @@ function Input(whereToListen, inputQueue) {
 
 Input.prototype.charFromKeyCode = function (keyCode, value) {
    switch(keyCode) {
-      case 87: //W
+      case 87: // W
          return 'w';
          break;
-      case 65: //A
+      case 65: // A
          return 'a';
          break;
-      case 83: //S
+      case 83: // S
          return 's';
          break;
-      case 68: //D
+      case 68: // D
          return 'd';
          break;
       default:
@@ -52,14 +63,14 @@ Input.prototype.versorFromPressedKey = function(pressedKey) {
 Input.prototype.updateOnKeyDown = function(keyCode) {
    try {
       var pressedKey = this.charFromKeyCode(keyCode);
-   } catch (e) { //trigger by a non interesting key
+   } catch (e) { // trigger by a non interesting key
       return;
    }
 
    if(this.pressedKeys[pressedKey] !== true) {
       try {
          this.inputQueue.enqueue(pressedKey);
-      } catch(e) { //queue full
+      } catch(e) { // queue full
          return;
       }
    }
@@ -69,7 +80,7 @@ Input.prototype.updateOnKeyDown = function(keyCode) {
 Input.prototype.updateOnKeyUp = function(keyCode) {
    try {
       var pressedKey = this.charFromKeyCode(keyCode);
-   } catch (e) { //triggered by a non interesting key
+   } catch (e) { // triggered by a non interesting key
       return;
    }
 
@@ -77,6 +88,8 @@ Input.prototype.updateOnKeyUp = function(keyCode) {
 }
 
 Input.prototype.addListeners = function() {
+   // have to bind the callback function otherwise
+   // this refers to the whereToListen dom element
    this.whereToListen.addEventListener('keydown', function(e) {
       e = e || window.event;
       this.updateOnKeyDown(e.keyCode);
@@ -89,7 +102,7 @@ Input.prototype.addListeners = function() {
    }.bind(this), false);
 }
 
-//interface to the inputs logic
+// interface to the inputs logic
 Input.prototype.getMovements = function() {
    try {
       var pressedKey = this.inputQueue.dequeue();

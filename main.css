@@ -52,14 +52,16 @@
    width: 140px;
    height: 100%;
    float: left;
-   margin-right: 100px;
+   margin-top: 0px;
    background-color: rgb(210, 173, 173);
 }
 
 main {
-   width: 690px;
+   width: 500px;
    height: 100%;
    float: left;
+   margin-left: 50px;
+   margin-right: 50px;
 }
 
 ul li {
@@ -74,4 +76,8 @@ ul li {
 html, body {
    margin: 0px;
    border: 0px;
+}
+
+.pressed {
+   background-color: red;
 }

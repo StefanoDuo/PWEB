@@ -7,34 +7,55 @@
             of the player (or ball) next block with his current one
          3) create method to do something upon reaching the hole or hitting
             a wall or rock
+         4) make it so the Sketcher object can be used to create level as well
+            a good way to accomplish this is by adding a method which returns the
+            grid of elements so another object can manage the events on the grid
+            boxes (the events will call the drawBox method)
  */
 
-function Sketcher(gameFieldSize, whereToDraw) {
+function Sketcher(gridSize, whereToDraw) {
    this.whereToDraw = document.getElementById(whereToDraw);
-   this.gameFieldSize = gameFieldSize;
-   this.gameField = new Array(gameFieldSize);
+   this.gridSize = gridSize;
 
+   this.initialize();
+}
 
-   //draws the grid and saves references to the elements
-   for(var i = 0; i < gameFieldSize; i++) {
-      this.gameField[i] = new Array(gameFieldSize);
-      for(var j = 0; j < gameFieldSize; j++) {
-         this.gameField[i][j] = document.createElement('div');
-         this.gameField[i][j].id = '' + (i * 10 + j);
-         this.gameField[i][j].className = 'box';
+Sketcher.prototype.initialize = function() {
+   this.grid = new Array(this.gridSize);
+   for(var i = 0; i < this.gridSize; i++) {
+      this.grid[i] = new Array(this.gridSize);
+      for(var j = 0; j < this.gridSize; j++) {
+         this.grid[i][j] = document.createElement('div');
+         this.grid[i][j].id = '' + (i * 10 + j);
+         this.grid[i][j].className = 'box';
          if(j === 0)
-            this.gameField[i][j].className += ' firstOfRow';
-         this.whereToDraw.appendChild(this.gameField[i][j]);
+            this.grid[i][j].className += ' firstOfRow';
+         this.whereToDraw.appendChild(this.grid[i][j]);
       }
    }
 }
 
-Sketcher.prototype.draw = function(grid) {
-   for(var i = 0; i < this.gameFieldSize; i++) {
-      for(var j = 0; j < this.gameFieldSize; j++) {
-         this.gameField[i][j].className = 'box ' + grid[i][j];
+Sketcher.prototype.drawGrid = function(grid) {
+   for(var i = 0; i < this.gridSize; i++) {
+      for(var j = 0; j < this.gridSize; j++) {
+         this.grid[i][j].className = 'box ' + grid[i][j];
          if(j === 0)
-            this.gameField[i][j].className += ' firstOfRow';
+            this.grid[i][j].className += ' firstOfRow';
       }
    }
+}
+
+Sketcher.prototype.drawBoxByCoordinates = function(x, y, cssClass) {
+   if(x === 0) cssClass += ' firstOfRow';
+   this.grid[y][x].className = 'box' + cssClass;
+}
+
+Sketcher.prototype.drawBoxById = function(id, cssClass) {
+   var y = Math.floor(id / this.gridSize);
+   var x = id % this.gridSize;
+   this.drawBoxByCoordinates(x, y, cssClass);
+}
+
+Sketcher.prototype.getGrid = function() {
+   return this.grid;
 }
