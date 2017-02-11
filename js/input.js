@@ -1,21 +1,6 @@
 /* interface between keyboard events and player movements
  *
  * DEPENDENCIES: Vector, Queue objects
-
- * TODO: 1) refactor as a standalone module which accepts an array containing
-            the IDs of the elements to listen and optional an array which maps
-            keyCodes to strings (if not present it doesn't allow requesting strings
-            instead of keyCodes)
-         2) the interface of the object must offer those methods
-            - setTranslator(translator)
-            - getPressedKeyCodes()
-            - getPressedTranslations()
-            - getPriorityKeyCode()
-            - getPriorityTranslation()
-         3) the constructor must accept either an array of objects each containing
-            - whereToListen string
-            - queue to store the priority of the pressed keyCodes
-            - translator
  */
 
 function Input(whereToListen, inputQueue) {

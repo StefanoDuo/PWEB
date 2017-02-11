@@ -1,0 +1,43 @@
+GAME OBJECT (features)
+1) create status object to send minimal information to the Sketcher object
+2) let the player move while the ball is moving (always move the ball first
+	to avoid strange behaviour)
+3) add score tracking
+
+SKETCHER OBJECT (features)
+?) create another method just to update it switching the contents
+	of the player (or ball) next block with his current one
+
+DATABASE OBJECT (php)
+1) create a class to abstract from the db calls
+2) the levelObject stored in the db as json must be retrieved from:
+	- an invisible input element in the value field
+	- the url
+	- Ajax call
+
+GAME OBJECT (refactoring)
+1) move player must accept strings instead of Vector objects
+2) create an object or function inside to map the string to a Vector and keep track
+	of movement history to implement undo and redo commands
+
+INPUT OBJECT (refactoring)
+1) refactor as a standalone module which accepts an array containing
+	the IDs of the elements to listen and optional an array which maps
+    keyCodes to strings (if not present it doesn't allow requesting strings
+    instead of keyCodes)
+2) the interface of the object must offer those methods
+	- setTranslator(translator)
+    - getPressedKeyCodes()
+    - getPressedTranslations()
+    - getPriorityKeyCode()
+    - getPriorityTranslation()
+3) the constructor must accept either an array of objects each containing
+	- whereToListen string
+    - queue to store the priority of the pressed keyCodes
+    - translator
+
+QUEUE OBJECT (refactoring)
+1) change Queue implementation with the one commented at the bottom
+
+GAME PAGE
+1) create button to start the setInterval and event to stop it

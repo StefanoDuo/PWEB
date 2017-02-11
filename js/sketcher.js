@@ -2,15 +2,7 @@
  * displayed, the first number in the matrix notations represents
  * the y axis the second number the x axis
  *
- * TODO: 1) switch to an initialization method which draws the entire grid
-         2) create another method just to update it switching the contents
-            of the player (or ball) next block with his current one
-         3) create method to do something upon reaching the hole or hitting
-            a wall or rock
-         4) make it so the Sketcher object can be used to create level as well
-            a good way to accomplish this is by adding a method which returns the
-            grid of elements so another object can manage the events on the grid
-            boxes (the events will call the drawBox method)
+ * DEPENDENCIES: none
  */
 
 function Sketcher(gridSize, whereToDraw) {
@@ -59,3 +51,13 @@ Sketcher.prototype.drawBoxById = function(id, cssClass) {
 Sketcher.prototype.getGrid = function() {
    return this.grid;
 }
+
+/* parses every element in the grid searching for the contained objects
+ * returns an object composed as follows: {
+      'player' : Vector object,
+      'ball' : Vector object,
+      'hole' : Vector object'
+      'rocks' : array of Vector objects
+   }
+ *    
+ */

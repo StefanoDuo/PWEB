@@ -1,5 +1,3 @@
-// TODO: change Queue implementation with the one commented at the bottom
-
 function Queue(size) {
    this.arraySize = size;
    this.array = new Array(size);

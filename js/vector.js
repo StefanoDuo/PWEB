@@ -1,6 +1,4 @@
 /* used to simplify player movements arithmetic
- *
- * TODO:
  */
 
 function Vector(x, y) {

@@ -1,11 +1,6 @@
 /* contains the game logic
  *
  * DEPENDENCIES: Vector, Matrix objects
- *
- * TODO: 2) create status object to send minimal information to the Sketcher object
- *       3) create button to start the setInterval and event to stop it
- *       4) let the player move while the ball is moving (always move the ball first
- *          to avoid strange behaviour)
  */
 
 function Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions, ballMovingDirection) {
