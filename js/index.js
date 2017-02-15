@@ -8,7 +8,7 @@ function start() {
    input.addListeners();
 
    // initialize sketcher object
-   sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField');
+   sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField', 'box');
 
    // initialize game object
    var playerPosition = new Vector(0, 0);

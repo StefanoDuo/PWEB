@@ -5,15 +5,20 @@ GAME OBJECT (features)
 3) add score tracking
 
 SKETCHER OBJECT (features)
-?) create another method just to update it switching the contents
-	of the player (or ball) next block with his current one
+2) rework how the drawing works, the rocks hole and basic grid in sketched
+	only once during the initialization,
+	the player and the ball instead are 2 divs which class gets changed
+	resulting in the moving with transitions and absolute positioning,
+	probably needs parent element realitively positioned
+
+CREATE AJAX OBJECT to simplify ajax calls
 
 DATABASE OBJECT (php)
-1) create a class to abstract from the db calls
 2) the levelObject stored in the db as json must be retrieved from:
 	- an invisible input element in the value field
 	- the url
 	- Ajax call
+3)add tests for the methods (getUser, insertLevel, insertUser done)
 
 GAME OBJECT (refactoring)
 1) move player must accept strings instead of Vector objects

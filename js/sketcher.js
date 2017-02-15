@@ -5,9 +5,10 @@
  * DEPENDENCIES: none
  */
 
-function Sketcher(gridSize, whereToDraw) {
+function Sketcher(gridSize, whereToDraw, boxClass) {
    this.whereToDraw = document.getElementById(whereToDraw);
    this.gridSize = gridSize;
+   this.boxClass = boxClass
 
    this.initialize();
 }
@@ -19,9 +20,7 @@ Sketcher.prototype.initialize = function() {
       for(var j = 0; j < this.gridSize; j++) {
          this.grid[i][j] = document.createElement('div');
          this.grid[i][j].id = '' + (i * 10 + j);
-         this.grid[i][j].className = 'box';
-         if(j === 0)
-            this.grid[i][j].className += ' firstOfRow';
+         this.grid[i][j].className = this.boxClass;
          this.whereToDraw.appendChild(this.grid[i][j]);
       }
    }
@@ -30,16 +29,13 @@ Sketcher.prototype.initialize = function() {
 Sketcher.prototype.drawGrid = function(grid) {
    for(var i = 0; i < this.gridSize; i++) {
       for(var j = 0; j < this.gridSize; j++) {
-         this.grid[i][j].className = 'box ' + grid[i][j];
-         if(j === 0)
-            this.grid[i][j].className += ' firstOfRow';
+         this.grid[i][j].className = this.boxClass + ' ' + grid[i][j];
       }
    }
 }
 
 Sketcher.prototype.drawBoxByCoordinates = function(x, y, cssClass) {
-   if(x === 0) cssClass += ' firstOfRow';
-   this.grid[y][x].className = 'box' + cssClass;
+   this.grid[y][x].className = this.boxClass + ' ' + cssClass;
 }
 
 Sketcher.prototype.drawBoxById = function(id, cssClass) {

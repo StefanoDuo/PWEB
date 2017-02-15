@@ -1,83 +1,167 @@
-#gameField {
-   height: 100%;
-   width: 100%;
-   background-color: rgb(216, 208, 208);
-   /* trying to fix border collapsing */
-   display: table;
-   border-collapse: collapse;
+* {
+   color: inherit;
+   background-color: inherit;
 }
 
-#player {
-   position: relative;
-   left: 0px;
-   top: 0px;
-   height: 20px;
-   width: 20px;
-   background-color: red;
-}
-
-.box {
-   width: 50px;
-   height: 50px;
-   float: left;
-   border: 1px solid black;
-   /* trying to fix border collapsing */
-   display: table-cell;
-   box-sizing: border-box;
-
-}
-
-.player {
-   background-color: pink;
-}
-.ball {
-   background-color: yellow;
-}
-.hole {
-   background-color: green;
-}
-.rock {
-   background-color: brown;
-}
-
-.firstOfRow {
-   clear: both;
-}
-
-.clearfix {
-   clear: both;
-}
-
-.sidebar {
-   width: 140px;
-   height: 100%;
-   float: left;
-   margin-top: 0px;
-   background-color: rgb(210, 173, 173);
-}
-
-main {
-   width: 500px;
-   height: 100%;
-   float: left;
-   margin-left: 50px;
-   margin-right: 50px;
-}
-
-ul li {
-   list-style-type: none;
-   height: 50px;
-   border: 1px solid black;
-   margin-bottom: 25px;
-   text-align: center;
-   line-height:50px;
+html {
+   font-family: 'Roboto', GillSans, Calibri, Trebuchet, sans-serif;
 }
 
 html, body {
    margin: 0px;
    border: 0px;
+   background-color: #FFFFFF;
+   color: #00000087;
 }
 
-.pressed {
-   background-color: red;
+body {
+   height: 100%;
+}
+
+.xWrapper {
+   display: flex;
+   /* establishes the main and cross axis defining the direction *
+    * elements are placed inside the flex container              */
+   flex-direction: row;
+   /* child elements will fit all in one line along the main axis */
+   flex-wrap: wrap;
+   /* specifies how extra space is distributed along the main axis */
+   justify-content: center;
+   /* specifies how items are laid out along the cross axis in *
+    * the current line                                         */
+   align-items: center;
+   /* only works when there's more than one line, specifies how *
+    * extra space in the cross axis is distrubuted              */
+   align-content: space-between;
+}
+
+.yWrapper {
+   height: 75%;
+   display: flex;
+   flex-direction: column;
+   flex-wrap: nowrap;
+   justify-content: space-around;
+   align-items: center;
+   align-content: space-between;
+}
+
+.navBar {
+   justify-content: space-between;
+   height: 64px;
+   line-height: 64px;
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+.navBar a {
+   display: block;
+   text-decoration: none;
+   padding: 0 16px;
+   transition: background-color 0.3s;
+}
+
+.navBar a:hover {
+   background-color: #FF4081;
+}
+
+.active {
+   background-color: #FF4081;
+}
+
+main {
+   height: 500px;
+   margin: 3em;
+}
+
+#gameField {
+   width: 520px;
+   border-radius: 2px;
+   background-color: rgba(0,0,0,0.05);
+}
+
+.button {
+   border: none;
+   border-radius: 2px;
+   height: 36px;
+   line-height: 36px;
+   margin: 0;
+   margin-left: 50px;
+   min-width: 88px;
+   text-align: center;
+   letter-spacing: .5px;
+   padding: 0 16px;
+   text-transform: uppercase;
+   display: inline-block;
+   cursor: pointer;
+
+   transition: background-color 0.3s ease-in-out, box-shadow 0.1s ease-in-out;
+   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 5px 2px -2px rgba(0, 0, 0, 0.2);
+   /*text-decoration: none;*/
+}
+
+.button::selection, .navbar a::selection {
+   background: rgba(0,0,0,0);
+}
+
+.button:hover:not(.disabled) {
+   background-color: rgba(0,0,0,.24);
+   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
+}
+
+.button:active:not(.disabled) {
+   background-color: rgba(0,0,0,.24);
+   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.14), 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
+}
+
+.disabled {
+   background-color: rgba(0,0,0,0.12);
+   color: rgba(0,0,0,0.26);
+   cursor: not-allowed;
+}
+
+.red, .player {
+   background-color: #F44336;
+}
+.green, .hole {
+   background-color: #4CAF50;
+}
+.brown, .rock {
+   background-color: #795548;
+}
+.yellow, .ball {
+   background-color: #FFEB3B;
+}
+.blue {
+   background-color: #3F51B5;
+   color: #fff;
+}
+.gray {
+   background-color: #E0E0E0;
+   color: rgba(0,0,0,0.88);
+}
+
+.pressedblue {
+   background-color: #FF4081;
+}
+
+.box {
+   width: 50px;
+   height: 50px;
+   border-color: rgba(0,0,0,0.3);
+   border-width: 0 1px 1px 0;
+   box-sizing: border-box;
+   border-radius: 2px;
+   margin: 1px;
+}
+
+footer {
+   position: absolute;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   height: 32px;
+   line-height: 32px;
+   text-align: left;
 }

@@ -18,7 +18,7 @@ INSERT INTO `User` VALUES ('user1', 'email1', 'user1'), ('user2', 'email2', 'use
 CREATE TABLE `Level` (
 	`name` VARCHAR(50) NOT NULL,
 	`creatorNickname` VARCHAR(50) NOT NULL,
-    `levelObject` BLOB NOT NULL,
+    `levelObject` TEXT NOT NULL,
 
 	PRIMARY KEY (`name`, `creatorNickname`),
 	FOREIGN KEY (`creatorNickname`)

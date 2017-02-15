@@ -9,14 +9,14 @@ DELIMITER $$
 
 CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50))
 BEGIN
-	SELECT U.*
+	SELECT U.nickname
     FROM User U
     WHERE U.nickname = _userNickname;
 END $$
 
 CREATE PROCEDURE getLevels()
 BEGIN
-	SELECT L.name, L.creatorNickname
+	SELECT L.name, L.creatorNickname, L.levelObject
     FROM Level L;
 END $$
 

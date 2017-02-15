@@ -1,10 +1,7 @@
 var GAMEFIELD_SIDE = 10;
 
-
-// JSON.stringify(javascriptObject) to translate a javascript object into a json one
-// JSON.parse(jsonObject) to translate a json object into a javascript one
-function retrievePlacedObjects(grid) {
-   var mapObjects = {
+function fetchLevelObject(grid) {
+   var levelObject = {
       player : null,
       ball : null,
       hole : null,
@@ -19,74 +16,63 @@ function retrievePlacedObjects(grid) {
          string = grid[i][j].className.replace(/box|firstOfRow|\s/g, '');
          if(string !== '') {
             if(string === 'player' || string === 'ball' || string === 'hole') {
-               if(mapObjects[string] !== null) {
+               if(levelObject[string] !== null) {
                   throw 'multiple player/ball/hole entity in the grid, that is not allowed';
                } else {
-               mapObjects[string] = new Vector(j+1, i+1);
+               levelObject[string] = new Vector(j+1, i+1);
                }
             } else {
-               mapObjects.rocks.push(new Vector(j+1, i+1));
+               levelObject.rocks.push(new Vector(j+1, i+1));
             }
          }
       }
    }
-
-   return mapObjects;
+   return levelObject;
 }
 
-
 function start() {
-   sketcher = new Sketcher(GAMEFIELD_SIDE, 'gameField');
+   sketcher = new Sketcher(GAMEFIELD_SIDE, 'gameField', 'box');
 
-   var playerBox = document.getElementById('playerBox');
-   var ballBox = document.getElementById('ballBox');
-   var holeBox = document.getElementById('holeBox');
-   var rockBox = document.getElementById('rockBox');
-   var resetBox = document.getElementById('resetBox');
-   var saveBox = document.getElementById('saveBox');
+   var buttons = {};
+   buttons.player = document.getElementById('player');
+   buttons.ball = document.getElementById('ball');
+   buttons.hole = document.getElementById('hole');
+   buttons.rock = document.getElementById('rock');
+   buttons.reset = document.getElementById('reset');
+   buttons.save = document.getElementById('save');
 
-   var isBoxPressed = {
-      player : false,
-      ball : false,
-      hole : false,
-      rock : false
-   };
+   var pressedButton = null;
 
-   function resetButtons() {
-      isBoxPressed.player = false;
-      isBoxPressed.ball = false;
-      isBoxPressed.hole = false;
-      isBoxPressed.player = false;
-      playerBox.className = '';
-      ballBox.className = '';
-      holeBox.className = '';
-      rockBox.className = '';
+   function releaseButton(button) {
+      button.className = button.className.replace('pressed', '');
+      button.removeAttribute('pressed');
+      pressedButton = null;
    }
 
-   function clickButton(that) {
-      var whichButton = that.textContent.toLowerCase();
-      if(!isBoxPressed[whichButton]) {
-         resetButtons();
-         that.className = 'pressed';
+   function clickButton(button) {
+      if(button.hasAttribute('pressed')) {
+         releaseButton(button)
       } else {
-         that.className = '';
+         if(pressedButton) releaseButton(pressedButton);
+         button.setAttribute('pressed', '');
+         button.className = button.className.replace(/(red)|(blue)|(green)/, 'pressed$&');
+         pressedButton = button;
       }
-      isBoxPressed[whichButton] = !isBoxPressed[whichButton];
    }
 
-   playerBox.addEventListener('click', function() {
+   buttons.player.addEventListener('click', function() {
       clickButton(this);
    });
-   ballBox.addEventListener('click', function() {
+   buttons.ball.addEventListener('click', function() {
       clickButton(this);
    });
-   holeBox.addEventListener('click', function() {
+   buttons.hole.addEventListener('click', function() {
       clickButton(this);
    });
-   rockBox.addEventListener('click', function() {
+   buttons.rock.addEventListener('click', function() {
       clickButton(this);
    });
-   resetBox.addEventListener('click', function() {
+   buttons.reset.addEventListener('click', function() {
       for(var i = 0; i < grid.length; i++)
          for(var j = 0; j < grid[i].length; j++)
             sketcher.drawBoxByCoordinates(j, i, '');
@@ -96,65 +82,18 @@ function start() {
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
          grid[i][j].addEventListener('click', function() {
-            var whichBox = '';
-            if(isBoxPressed.player)
-               whichBox = ' player';
-            else if(isBoxPressed.ball)
-               whichBox = ' ball';
-            else if(isBoxPressed.hole)
-               whichBox = ' hole';
-            else if(isBoxPressed.rock)
-               whichBox = ' rock';
-            else return;
-            sketcher.drawBoxById(this.id, this.className === 'box' || this.className === 'box firstOfRow' ? whichBox : '');
+            if(pressedButton === null) return;
+            sketcher.drawBoxById(this.id, this.className.includes(pressedButton.id) ? '' : pressedButton.id);
          })
       }
    }
 
-   saveBox.addEventListener('click', function () {
-      console.log(retrievePlacedObjects(grid));
-      retrievedObjects = retrievePlacedObjects(grid);
-      return retrievedObjects;
+   buttons.save.addEventListener('click', function () {
+      levelObject = fetchLevelObject(grid);
+      levelName = document.getElementById('levelName').value;
+      creatorNickname = document.getElementById('creatorNickname').value;
+      queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
+      console.log(queryString);
+      ajaxRequest('insertLevel.php', 'GET', queryString);
    });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
