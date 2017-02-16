@@ -27,8 +27,8 @@ function printLevelList($db) {
     $result = $db->getLevels();
     echo "<ul>";
     foreach ($result as $key => $value) {
-        // need to add the link to the level page (and creator profile ?)
-        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['name'] .'">' . $value['name'] . "</a> | Creator: " . $value['creatorNickname'] . '</li>';
+        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['name'] .'">';
+        echo $value['name'] . "</a> | Creator: " . $value['creatorNickname'] . '</li>';
     }
     echo "</ul>";
 }

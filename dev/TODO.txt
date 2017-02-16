@@ -11,7 +11,6 @@ SKETCHER OBJECT (features)
 	resulting in the moving with transitions and absolute positioning,
 	probably needs parent element realitively positioned
 
-CREATE AJAX OBJECT to simplify ajax calls
 
 DATABASE OBJECT (php)
 2) the levelObject stored in the db as json must be retrieved from:

@@ -1,3 +1,3 @@
 <footer>
-	copyright etc
+	copyright&copy;
 </footer>

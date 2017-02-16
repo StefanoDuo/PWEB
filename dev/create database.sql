@@ -25,7 +25,7 @@ CREATE TABLE `Level` (
 		REFERENCES User(`nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `Level` VALUES ('level1', 'user1', "{\"player\":{\"x\":1,\"y\":1},\"ball\":{\"x\":3,\"y\":1},\"hole\":{\"x\":10,\"y\":10},\"rocks\":[{\"x\":6,\"y\":1},{\"x\":1,\"y\":2},{\"x\":2,\"y\":2},{\"x\":3,\"y\":2},{\"x\":10,\"y\":2},{\"x\":5,\"y\":3},{\"x\":6,\"y\":5},{\"x\":9,\"y\":6},{\"x\":10,\"y\":9},{\"x\":7,\"y\":10}]}"), ('level2', 'user2', '{"player":{"x":1,"y":1},"ball":{"x":3,"y":1},"hole":{"x":10,"y":10},"rocks":[{"x":6,"y":1},{"x":1,"y":2},{"x":2,"y":2},{"x":3,"y":2},{"x":10,"y":2},{"x":5,"y":3},{"x":6,"y":5},{"x":9,"y":6},{"x":10,"y":9},{"x":7,"y":10}]}');
+INSERT INTO `Level` VALUES ('level1', 'user1', '{&quot;player&quot;:{&quot;x&quot;:0,&quot;y&quot;:0},&quot;ball&quot;:{&quot;x&quot;:1,&quot;y&quot;:1},&quot;hole&quot;:{&quot;x&quot;:4,&quot;y&quot;:5},&quot;rocks&quot;:[{&quot;x&quot;:0,&quot;y&quot;:1},{&quot;x&quot;:3,&quot;y&quot;:2},{&quot;x&quot;:1,&quot;y&quot;:3},{&quot;x&quot;:4,&quot;y&quot;:4},{&quot;x&quot;:2,&quot;y&quot;:5},{&quot;x&quot;:5,&quot;y&quot;:7},{&quot;x&quot;:3,&quot;y&quot;:8}]}'), ('level2', 'user2', '{&quot;player&quot;:{&quot;x&quot;:0,&quot;y&quot;:0},&quot;ball&quot;:{&quot;x&quot;:2,&quot;y&quot;:1},&quot;hole&quot;:{&quot;x&quot;:5,&quot;y&quot;:4},&quot;rocks&quot;:[{&quot;x&quot;:1,&quot;y&quot;:0},{&quot;x&quot;:3,&quot;y&quot;:1},{&quot;x&quot;:7,&quot;y&quot;:2},{&quot;x&quot;:2,&quot;y&quot;:3},{&quot;x&quot;:1,&quot;y&quot;:7},{&quot;x&quot;:6,&quot;y&quot;:8}]}');
 
 
 

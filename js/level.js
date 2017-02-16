@@ -1,5 +1,3 @@
-// NO LONGER NEEDED, KEEPING FOR THE MOMENT FOR REFERENCE
-
 var GAMEFIELD_SIZE = 10;
 
 
@@ -12,20 +10,19 @@ function start() {
    // initialize sketcher object
    sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField', 'box');
 
-   // initialize game object
-   var playerPosition = new Vector(0, 0);
-   var ballPosition = new Vector(2, 2);
-   var holePosition = new Vector(9, 9);
-   var rocksPositions = [
-      new Vector(1, 0),
-      new Vector(5, 7),
-      new Vector(6, 2)
-   ];
+   // retrieve levelObject from hidden input element
+   var levelObject = document.getElementById('levelObject').value;
+   console.log(levelObject);
+   levelObject = JSON.parse(levelObject);
+   levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
+   levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
+   levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
+   
    var ballMovingDirection = new Vector(0, 0);
    var matrix = new Matrix(GAMEFIELD_SIZE, GAMEFIELD_SIZE);
 
 
-   game = new Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions, ballMovingDirection);
+   game = new Game(matrix, levelObject, ballMovingDirection);
 
    sketcher.drawGrid(game.getGrid());
 

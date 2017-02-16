@@ -19,10 +19,10 @@ function fetchLevelObject(grid) {
                if(levelObject[string] !== null) {
                   throw 'multiple player/ball/hole entity in the grid, that is not allowed';
                } else {
-               levelObject[string] = new Vector(j+1, i+1);
+               levelObject[string] = new Vector(j, i);
                }
             } else {
-               levelObject.rocks.push(new Vector(j+1, i+1));
+               levelObject.rocks.push(new Vector(j, i));
             }
          }
       }
@@ -89,11 +89,11 @@ function start() {
    }
 
    buttons.save.addEventListener('click', function () {
-      levelObject = fetchLevelObject(grid);
-      levelName = document.getElementById('levelName').value;
-      creatorNickname = document.getElementById('creatorNickname').value;
-      queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
-      console.log(queryString);
-      ajaxRequest('insertLevel.php', 'GET', queryString);
+      var levelObject = fetchLevelObject(grid);
+      var levelName = document.getElementById('levelName').value;
+      var creatorNickname = document.getElementById('creatorNickname').value;
+      var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
+      buttons.save.className = 'button disabled';
+      ajaxRequest('insertLevel.php', 'GET', queryString, function() { buttons.save.className = 'button gray';});
    });
 }

@@ -3,13 +3,9 @@ include "database.php";
 
 $db = new Database(connectToDB());
 
-$levelObject = $_GET['levelObject'];
+$levelObject = htmlspecialchars($_GET['levelObject']);
 $creatorNickname = $_GET['creatorNickname'];
 $levelName = $_GET['levelName'];
-
-var_dump($levelObject);
-var_dump($creatorNickname);
-var_dump($levelName);
 
 try {
 	$db->insertLevel($levelName, $creatorNickname, $levelObject);

@@ -3,12 +3,15 @@
  * DEPENDENCIES: Vector, Matrix objects
  */
 
-function Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions, ballMovingDirection) {
+
+// function Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions, ballMovingDirection) {
+
+function Game(matrix, levelObject, ballMovingDirection) {
    this.startingValues = {
-      'playerPosition': playerPosition,
-      'ballPosition': ballPosition,
-      'holePosition': holePosition,
-      'rocksPositions': rocksPositions,
+      'playerPosition': levelObject.player,
+      'ballPosition': levelObject.ball,
+      'holePosition': levelObject.hole,
+      'rocksPositions': levelObject.rocks,
       'ballMovingDirection': ballMovingDirection
    };
    this.gameField = matrix;

@@ -29,7 +29,7 @@
 	<script type="text/javascript" src="./js/game.js"></script>
 	<script type="text/javascript" src="./js/sketcher.js"></script>
 	<script type="text/javascript" src="./js/input.js"></script>
-	<script type="text/javascript" src="./js/index.js"></script>
+	<script type="text/javascript" src="./js/level.js"></script>
 </head>
 <body id="body" onLoad="start()">
 

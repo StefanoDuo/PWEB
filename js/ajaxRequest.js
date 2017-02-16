@@ -15,6 +15,7 @@ function ajaxRequest(url, method, queryString, successCallback, failureCallback)
 	if(method === 'POST')
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
+	// this function gets invoked every time request.readystate changes
 	request.onreadystatechange = function() {
 		var status;
 		if(request.readyState === XMLHttpRequest.OPENED)
