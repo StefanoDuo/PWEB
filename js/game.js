@@ -3,19 +3,18 @@
  * DEPENDENCIES: Vector, Matrix objects
  */
 
-
-// function Game(matrix, playerPosition, ballPosition, holePosition, rocksPositions, ballMovingDirection) {
-
-function Game(matrix, levelObject, ballMovingDirection) {
+function Game(matrix, levelObject, vectorConstructor) {
    this.startingValues = {
       'playerPosition': levelObject.player,
       'ballPosition': levelObject.ball,
       'holePosition': levelObject.hole,
       'rocksPositions': levelObject.rocks,
-      'ballMovingDirection': ballMovingDirection
+      'ballMovingDirection': new vectorConstructor(0, 0)
    };
    this.gameField = matrix;
+   this.vectorConstructor = vectorConstructor;
    this.initialize();
+   this.statesStack = [];
 }
 
 
@@ -34,7 +33,7 @@ Game.prototype.initialize = function() {
    // storing player and ball positions to update them easily
    this.playerPosition = this.startingValues.playerPosition;
    this.ballPosition = this.startingValues.ballPosition;
-   this.ballMovingDirection = this.startingValues.ballMovingDirection;
+   this.ballMovingDirection = new this.vectorConstructor(0, 0);
 
    this.intervalID = null;
    this.movesNumber = 0;
@@ -101,7 +100,50 @@ Game.prototype.isBallMoving = function() {
    return !(this.ballMovingDirection.isNull());
 }
 
+Game.prototype.saveCurrentState = function() {
+   this.statesStack.push({
+      playerPosition: this.playerPosition,
+      ballPosition: this.ballPosition,
+      ballMovingDirection: this.ballMovingDirection,
+   });
+}
 
+Game.prototype.undo = function() {
+   var previousState = this.statesStack.pop();
+   this.updatePlayerPosition(previousState.playerPosition);
+   this.updateBallPosition(previousState.ballPosition);
+   this.ballMovingDirection = previousState.ballMovingDirection;
+}
+
+
+// main method
+Game.prototype.update = function(action) {
+   this.resetStatus();
+   var direction;
+   if(action === 'UP')
+      direction = new this.vectorConstructor(0, -1);
+   else if(action === 'DOWN')
+      direction = new this.vectorConstructor(0, 1);
+   else if(action === 'LEFT')
+      direction = new this.vectorConstructor(-1, 0);
+   else if(action === 'RIGHT')
+      direction = new this.vectorConstructor(1, 0);
+   else if(action === 'UNDO'){
+      this.undo();
+      return;
+   } else if(!this.isBallMoving())
+      return;
+
+   if(this.isBallMoving())
+      this.moveBall();
+   else {
+      this.saveCurrentState();
+      this.movePlayer(direction);
+   }
+}
+
+
+// movements methods
 Game.prototype.moveBall = function() {
    if(this.isBallHittingHole()) {
       this.status.hasHitHole = true;
@@ -115,12 +157,24 @@ Game.prototype.moveBall = function() {
       return;
    }
 
-   this.gameField.setPosition(this.ballPosition, null);
-   this.ballPosition = this.ballPosition.add(this.ballMovingDirection);
-   this.gameField.setPosition(this.ballPosition, 'ball');
+   this.updateBallPosition(this.ballPosition.add(this.ballMovingDirection));
+}
+
+Game.prototype.updateEntityPosition = function(entity, newPosition) {
+   this.gameField.setPosition(this[entity + 'Position'], null);
+   this[entity + 'Position'] = newPosition;
+   this.gameField.setPosition(newPosition, entity);
+}
+Game.prototype.updatePlayerPosition = function(newPosition) {
+   this.updateEntityPosition('player', newPosition);
+}
+Game.prototype.updateBallPosition = function(newPosition) {
+   this.updateEntityPosition('ball', newPosition);
 }
 
 Game.prototype.movePlayer = function(direction) {
+   if(direction.isEqual(new Vector(0,0)))
+      return;
    if(this.isPlayerOutOfBounds(direction) || this.isPlayerHittingRock(direction)) {
       if(this.isPlayerOutOfBounds(direction)) this.status.hasHitWall = true;
       if(this.isPlayerHittingRock(direction)) this.status.hasHitRock = true;
@@ -133,8 +187,6 @@ Game.prototype.movePlayer = function(direction) {
       return;
    }
 
-   this.movesNumber += !direction.isNull();
-   this.gameField.setPosition(this.playerPosition, null);
-   this.playerPosition = this.playerPosition.add(direction);
-   this.gameField.setPosition(this.playerPosition, 'player');
+   this.movesNumber++;
+   this.updatePlayerPosition(this.playerPosition.add(direction));
 }

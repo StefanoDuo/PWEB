@@ -23,9 +23,5 @@ Matrix.prototype.getPosition = function(vector) {
 }
 
 Matrix.prototype.setPosition = function(vector, value) {
-   console.log('VECTOR');
-   console.log(vector);
-   console.log('MATRIX');
-   console.log(this.matrix);
    this.matrix[vector.y][vector.x] = value;
 }

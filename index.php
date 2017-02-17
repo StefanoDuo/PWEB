@@ -9,7 +9,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="./css/main.css" >
 </head>
-<body id="body">
+<body>
 
 <?php printHeader("index", isset($_SESSION['nickname'])); ?>
 

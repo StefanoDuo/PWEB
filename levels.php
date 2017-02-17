@@ -10,7 +10,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="./css/main.css" >
 </head>
-<body id="body" onLoad="start()">
+<body>
 
 <?php printHeader("levels", isset($_SESSION['nickname'])); ?>
 

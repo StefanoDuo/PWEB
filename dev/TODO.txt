@@ -11,7 +11,6 @@ SKETCHER OBJECT (features)
 	resulting in the moving with transitions and absolute positioning,
 	probably needs parent element realitively positioned
 
-
 DATABASE OBJECT (php)
 2) the levelObject stored in the db as json must be retrieved from:
 	- an invisible input element in the value field
@@ -20,28 +19,7 @@ DATABASE OBJECT (php)
 3)add tests for the methods (getUser, insertLevel, insertUser done)
 
 GAME OBJECT (refactoring)
-1) move player must accept strings instead of Vector objects
-2) create an object or function inside to map the string to a Vector and keep track
-	of movement history to implement undo and redo commands
-
-INPUT OBJECT (refactoring)
-1) refactor as a standalone module which accepts an array containing
-	the IDs of the elements to listen and optional an array which maps
-    keyCodes to strings (if not present it doesn't allow requesting strings
-    instead of keyCodes)
-2) the interface of the object must offer those methods
-	- setTranslator(translator)
-    - getPressedKeyCodes()
-    - getPressedTranslations()
-    - getPriorityKeyCode()
-    - getPriorityTranslation()
-3) the constructor must accept either an array of objects each containing
-	- whereToListen string
-    - queue to store the priority of the pressed keyCodes
-    - translator
-
-QUEUE OBJECT (refactoring)
-1) change Queue implementation with the one commented at the bottom
+2) undo commands implemented, redo still missing
 
 GAME PAGE
 1) create button to start the setInterval and event to stop it
