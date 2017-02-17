@@ -21,6 +21,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Level: <?php echo $levelName ?></title>
+	<meta charset="utf-8">
   	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="./css/main.css" >
 	<script type="text/javascript" src="./js/vector.js"></script>

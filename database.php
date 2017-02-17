@@ -1,12 +1,14 @@
 <?php
 class Database {
 	private $mysqli;
-	private $errorString1 = "An error occurred executing the query." . PHP_EOL . "Error message: ";
-	private $errorString2 = PHP_EOL . "Error number: ";
+   private $errorString1;
+   private $errorString2;
 
 	// the constructor requires an initialized mysqli object
 	public function __construct($mysqliObject) {
 		$this->mysqli = $mysqliObject;
+      $this->errorString1 = "An error occurred executing the query." . PHP_EOL . "Error message: ";
+      $this->errorString2 = PHP_EOL . "Error number: ";
 	}
 
 	public function __destruct() {
@@ -116,7 +118,7 @@ class Database {
 function connectToDB() {
 	$hostname = "localhost";
 	$user = "root";
-	$password = "ciaociao";
+	$password = "";
 	$database = "PWEB";
 
 	$mysqli = new mysqli($hostname, $user, $password, $database);
