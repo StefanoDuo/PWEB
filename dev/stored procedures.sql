@@ -41,7 +41,7 @@ CREATE PROCEDURE getScoresObtainedBy(IN _playerNickname VARCHAR(50))
 BEGIN
 	SELECT B.levelName, B.creatorNickname, B.score
     FROM BeatenBy B
-    WHERE B._playerNickname = _playerNickname;
+    WHERE B.playerNickname = _playerNickname;
 END $$
 
 CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelObject BLOB)
