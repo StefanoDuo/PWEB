@@ -2,7 +2,10 @@ GAME OBJECT (features)
 1) create status object to send minimal information to the Sketcher object
 2) let the player move while the ball is moving (always move the ball first
 	to avoid strange behaviour)
-3) add score tracking
+4) foreseeing the change on the sketching animation, instantly calculate the
+   ball ending position and apply it, leaving the motion to the transition
+   or transform animation, this fixes as well the problem with the ball and
+   player moving at the same time and the undo/redo actions
 
 SKETCHER OBJECT (features)
 2) rework how the drawing works, the rocks hole and basic grid in sketched
@@ -12,14 +15,16 @@ SKETCHER OBJECT (features)
 	probably needs parent element realitively positioned
 
 DATABASE OBJECT (php)
-2) the levelObject stored in the db as json must be retrieved from:
-	- an invisible input element in the value field
-	- the url
-	- Ajax call
 3)add tests for the methods (getUser, insertLevel, insertUser done)
 
-GAME OBJECT (refactoring)
-2) undo commands implemented, redo still missing
 
-GAME PAGE
-1) create button to start the setInterval and event to stop it
+LEVEL PAGE
+1) after beating a level
+   a) submit the score with an ajax request if the player is logged in ------ DONE
+   b) save the score in the local storage and show a message explaining to log in if willing to
+   save the score, offering a link to login or register page that will redirect the user back
+   to the level page after completing the task
+   c) show next level button which pick 1 level that the player has yet to beat
+
+   to check if the user is logged in we search for the profile tab (element with id nickname)
+2) allow replay playback or create another page to see them

@@ -31,7 +31,9 @@ Input.prototype.getPressedTranslations = function() {
 }
 
 Input.prototype.getPriorityKeyCode = function() {
-   return this.inputQueue.dequeue();
+   var keyCode = this.inputQueue.dequeue();
+   this.pressedKeyCodes[keyCode] = false;
+   return keyCode;
 }
 
 Input.prototype.getPriorityTranslation = function() {
@@ -51,7 +53,6 @@ Input.prototype.getPriorityTranslation = function() {
  *    => keyCodes enqueued, pressedKeyCodes[keyCode]=true
  */
 Input.prototype.updateOnKeyDown = function(keyCode) {
-   // console.log('KEYDOWN: ' + keyCode);
    if(!this.pressedKeyCodes[keyCode]) {
       this.inputQueue.enqueue(keyCode);
       this.pressedKeyCodes[keyCode] = true;
@@ -59,7 +60,6 @@ Input.prototype.updateOnKeyDown = function(keyCode) {
 }
 
 Input.prototype.updateOnKeyUp = function(keyCode) {
-   // console.log('KEYUP: ' + keyCode);
    this.pressedKeyCodes[keyCode] = false;
 }
 

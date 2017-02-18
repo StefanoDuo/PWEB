@@ -1,6 +1,7 @@
 <?php
    session_start();
-   if(!isset($_SESSION['nickname'])) {
+   $nickname = $_SESSION['nickname'];
+   if(!isset($nickname)) {
       header("Location: /PWEB/index.php");
       exit();
    }
@@ -22,13 +23,12 @@
 </head>
 <body id="body" onLoad="start()">
 
-<?php printHeader("levelCreation", isset($_SESSION['nickname'])); ?>
+<?php printHeader("levelCreation", isset($nickname) ? $nickname : false); ?>
 
 <main class="xWrapper">
    <div id="gameField" class="xWrapper"></div>
    <div class="yWrapper">
       <input type="text" id="levelName">
-      <input type="hidden" id="creatorNickname" value="<?php echo $_SESSION['nickname']; ?>">
       <a id="player" class="button gray">Player</a>
       <a id="ball" class="button gray">Ball</a>
       <a id="hole" class="button gray">Hole</a>

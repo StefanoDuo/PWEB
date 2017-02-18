@@ -1,23 +1,24 @@
 <?php
-function printHeader($currentPage, $isSessionActive) {
+function printHeader($currentPage, $nickname) {
 	$index = $currentPage === 'index' ? 'active' : '';
 	$levelCreation = $currentPage === 'levelCreation' ? 'active' : '';
 	$logout = $currentPage === 'logout' ? 'active' : '';
 	$login = $currentPage === 'login' ? 'active' : '';
 	$levels = $currentPage === 'levels' ? 'active' : '';
-	$leaderboard = $currentPage === 'leaderboard' ? 'active' : '';
+	$profile = $currentPage === 'profile' ? 'active' : '';
 	echo '<header>';
 	echo '<nav>';
    	echo '<ul class="xWrapper navBar blue">';
-    echo 	'<li><a href = "index.php" class="' . $index . '">Home</a></li>';
-    if($isSessionActive)
-    	echo '<li><a href = "levelCreation.php" class="' . $levelCreation . '">Workshop</a></li>';
-    if($isSessionActive)
-    	echo '<li><a href = "logout.php" class="' . $logout . '">LogOut</a></li>';
+    echo 	'<li><a href="index.php" class="' . $index . '">Home</a></li>';
+    if($nickname)
+    	echo '<li><a href="levelCreation.php" class="' . $levelCreation . '">Workshop</a></li>';
+    if($nickname)
+    	echo '<li><a href="logout.php" class="' . $logout . '">LogOut</a></li>';
     else
-    	echo '<li><a href = "login.php" class="' . $login . '">LogIn / SignUp</a></li>';
-    echo 	'<li><a href = "levels.php" class="' . $levels . '">Levels</a></li>';
-    echo 	'<li><a href = "leaderboard.php" class="' . $leaderboard . '">Leaderboard</a></li>';
+    	echo '<li><a href="login.php" class="' . $login . '">LogIn / SignUp</a></li>';
+    echo 	'<li><a href="levels.php" class="' . $levels . '">Levels</a></li>';
+    if($nickname)
+        echo '<li><a href="profile.php" id="nickname" class="' . $profile . '">' . $nickname . '</a></li>';
     echo '</ul>';
 	echo '</nav>';
 	echo '</header>';
@@ -25,14 +26,30 @@ function printHeader($currentPage, $isSessionActive) {
 
 function printLevelList($db) {
     $result = $db->getLevels();
-    echo "<ul>";
+    echo '<ul>';
     foreach ($result as $key => $value) {
         echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['name'] .'">';
-        echo $value['name'] . "</a> | Creator: " . $value['creatorNickname'] . '</li>';
+        echo $value['name'] . '</a> | Creator: ' . $value['creatorNickname'] . '</li>';
     }
-    echo "</ul>";
+    echo '</ul>';
 }
 
+function printLevelCreatedBy($creatorNickname, $db) {
+    $result = $db->getLevelsCreatedBy($creatorNickname);
+    echo '<ul>';
+    foreach ($result as $key => $value) {
+        echo '<li>Level name: <a href="level.php?creatorNickname=' . $creatorNickname .'&levelName=' . $value['name'] . '">' . $value['name'] . '</a></li>';
+    }
+    echo '</ul>';
+}
 
-
+function printScoresObtainedBy($playerNickname, $db) {
+    $result = $db->getScoresObtainedBy($playerNickname);
+    echo '<ul>';
+    foreach ($result as $key => $value) {
+        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['levelName'] . '">';
+        echo $value['levelName'] . '</a> | Creator: ' . $value['creatorNickname'] . '| Score: ' . $value['score'] . '</li>';
+    }
+    echo '</ul>';
+}
 ?>

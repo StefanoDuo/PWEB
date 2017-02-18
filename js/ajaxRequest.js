@@ -1,5 +1,5 @@
 // the callback will receive the responseText as the first parameter
-function ajaxRequest(url, method, queryString, successCallback, failureCallback) {
+function ajaxRequest(url, method, queryString, async, successCallback, failureCallback) {
 	method = method.toUpperCase();
 	var getString = '', postString = null;
 	if(method == 'GET')
@@ -38,7 +38,7 @@ function ajaxRequest(url, method, queryString, successCallback, failureCallback)
 		}
 	};
 	
-	request.open(method, url + getString, true);
+	request.open(method, url + getString, async);
 	if(method === 'POST')
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	request.send(postString);

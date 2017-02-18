@@ -1,6 +1,8 @@
 DROP PROCEDURE IF EXISTS getUser;
 DROP PROCEDURE IF EXISTS getLevels;
+DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
 DROP PROCEDURE IF EXISTS getLevel;
+DROP PROCEDURE IF EXISTS getScoresObtainedBy;
 DROP PROCEDURE IF EXISTS insertLevel;
 DROP PROCEDURE IF EXISTS insertUser;
 DROP PROCEDURE IF EXISTS insertScore;
@@ -20,12 +22,26 @@ BEGIN
     FROM Level L;
 END $$
 
+CREATE PROCEDURE getLevelsCreatedBy(IN _creatorNickname VARCHAR(50))
+BEGIN
+	SELECT L.name
+    FROM Level L
+    WHERE L.creatorNickname = _creatorNickname;
+END $$
+
 CREATE PROCEDURE getLevel(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
 BEGIN
 	SELECT L.*
     FROM Level L
     WHERE L.name = _levelName
 		AND L.creatorNickname = _creatorNickname;
+END $$
+
+CREATE PROCEDURE getScoresObtainedBy(IN _playerNickname VARCHAR(50))
+BEGIN
+	SELECT B.levelName, B.creatorNickname, B.score
+    FROM BeatenBy B
+    WHERE B._playerNickname = _playerNickname;
 END $$
 
 CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelObject BLOB)
@@ -41,10 +57,10 @@ BEGIN
 END $$
 
 CREATE PROCEDURE insertScore(IN _playerNickname VARCHAR(50), IN _levelCreatorNickname VARCHAR(50),
-	IN _levelName VARCHAR(50), IN _score INTEGER)
+	IN _levelName VARCHAR(50), IN _score INTEGER, IN _replay TEXT)
 BEGIN
-	INSERT INTO `BeatenBy`(`playerNickname`, `creatorNickname`, `levelName`, `score`)
-		VALUE (_playerNickname, _levelCreatorNickname, _levelName, _score);
+	INSERT INTO `BeatenBy`(`playerNickname`, `creatorNickname`, `levelName`, `score`, `replay`)
+		VALUE (_playerNickname, _levelCreatorNickname, _levelName, _score, _replay);
 END $$
 
 DELIMITER ;

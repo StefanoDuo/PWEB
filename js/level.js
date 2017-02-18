@@ -3,7 +3,7 @@ var GAMEFIELD_SIZE = 10;
 
 function start() {
    // initialize input object
-   translator = {};
+   var translator = {};
    translator[87] = 'UP';
    translator[65] = 'LEFT';
    translator[83] = 'DOWN';
@@ -12,11 +12,11 @@ function start() {
    translator[69] = 'UNDO';
    translator[82] = 'RESET';
 
-   input = new Input('body', new Queue(), translator);
+   var input = new Input('body', new Queue(), translator);
    input.addListeners();
 
    // initialize sketcher object
-   sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField', 'box');
+   var sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField', 'box');
 
    // retrieve levelObject from hidden input element
    var levelObject = document.getElementById('levelObject').value;
@@ -26,13 +26,27 @@ function start() {
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
    
    var matrix = new Matrix(GAMEFIELD_SIZE, GAMEFIELD_SIZE);
-
-   game = new Game(matrix, levelObject, Vector);
+   var game = new Game(matrix, levelObject, Vector);
 
    sketcher.drawGrid(game.getGrid());
 
-   game.intervalID = setInterval(function() {
+   var intervalID = setInterval(function() {
       game.update(input.getPriorityTranslation());
       sketcher.drawGrid(game.getGrid());
    }, 100);
+
+   game.setVictoryCallback(function(score, replay) {
+      console.log('VICTORY-CALLBACK');
+      var nickname = document.getElementById('nickname').firstChild.textContent;
+      if(nickname) {
+         var levelName = document.getElementById('levelName').firstChild.textContent;
+         var levelCreatorNickname = document.getElementById('levelCreatorNickname').firstChild.textContent;
+         replay = JSON.stringify(replay);
+         var queryString = 'playerNickname=' + nickname + '&levelName=' + levelName + '&levelCreatorNickname=' + levelCreatorNickname + '&score=' + score + '&replay=' + replay;
+         ajaxRequest('insertScore.php', 'GET', queryString, true);
+      } else {
+         // handling for non logged in user not implemented yet
+      }
+      window.clearInterval(intervalID);
+   });
 }

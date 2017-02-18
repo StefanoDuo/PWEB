@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<?php printHeader("levels", isset($_SESSION['nickname'])); ?>
+<?php printHeader("levels", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false); ?>
 
 <main class="yWrapper">
 	<?php printLevelList(new Database(connectToDB())); ?>

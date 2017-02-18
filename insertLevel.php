@@ -3,7 +3,7 @@ include "database.php";
 
 $db = new Database(connectToDB());
 
-$levelObject = htmlspecialchars($_GET['levelObject']);
+$levelObject = $_GET['levelObject'];
 $creatorNickname = $_GET['creatorNickname'];
 $levelName = $_GET['levelName'];
 

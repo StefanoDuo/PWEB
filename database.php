@@ -73,6 +73,18 @@ class Database {
 		return $result;
 	}
 
+	public function getLevelsCreatedBy($creatorNickname) {
+		$success = $this->mysqli->real_query("CALL getLevelsCreatedBy('$creatorNickname');");
+		if(!$success)
+			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
+		$queryResult = $this->mysqli->store_result();
+		if(!$queryResult)
+			return null;
+		$result = $this->fetchResultSet($queryResult);
+		$this->clearExtraResultSets();
+		return $result;
+	}
+
 	public function getLevel($levelName, $creatorNickname) {
 		$success = $this->mysqli->real_query("CALL getLevel('$creatorNickname', '$levelName');");
 		if(!$success)
@@ -81,6 +93,18 @@ class Database {
 		if(!$queryResult)
 			return null;
 		$result = $this->fetchResult($queryResult);
+		$this->clearExtraResultSets();
+		return $result;
+	}
+
+	public function getScoresObtainedBy($playerNickname) {
+		$success = $this->mysqli->real_query("CALL getScoresObtainedBy('$playerNickname');");
+		if(!$success)
+			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
+		$queryResult = $this->mysqli->store_result();
+		if(!$queryResult)
+			return null;
+		$result = $this->fetchResultSet($queryResult);
 		$this->clearExtraResultSets();
 		return $result;
 	}
@@ -106,8 +130,8 @@ class Database {
 		return true;
 	}
 
-	public function insertScore($playerNickname, $levelCreatorNickname, $levelName, $score) {
-		$success = $this->mysqli->real_query("CALL insertScore('$playerNickname', '$levelCreatorNickname', '$levelName', $score);");
+	public function insertScore($playerNickname, $levelCreatorNickname, $levelName, $score, $replay) {
+		$success = $this->mysqli->real_query("CALL insertScore('$playerNickname', '$levelCreatorNickname', '$levelName', $score, '$replay');");
 		if(!$success)
 			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
 		$result = $this->mysqli->store_result();

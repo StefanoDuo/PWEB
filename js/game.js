@@ -34,13 +34,19 @@ Game.prototype.initialize = function() {
    this.ballPosition = this.levelObject.ball;
    this.ballMovingDirection = this.levelObject.ballMovingDirection;
 
-   this.intervalID = null;
    this.score = 0;
+   this.replay = [];
    this.status = {
       hasHitWall: false,
       hasHitHole: false,
       hasHitRock: false
    };
+}
+
+// creating a method instead of initializing it in the constructor allows
+// put a callback that disables the setInterval used for the game loop
+Game.prototype.setVictoryCallback = function(victoryCallback) {
+   this.victoryCallback = victoryCallback;
 }
 
 
@@ -108,7 +114,8 @@ Game.prototype.getCurrentState = function() {
    return {
       playerPosition: this.playerPosition,
       ballPosition: this.ballPosition,
-      ballMovingDirection: this.ballMovingDirection
+      ballMovingDirection: this.ballMovingDirection,
+      score: this.score
    };
 }
 
@@ -116,6 +123,7 @@ Game.prototype.setCurrentState = function(state) {
    this.updatePlayerPosition(state.playerPosition);
    this.updateBallPosition(state.ballPosition);
    this.ballMovingDirection = state.ballMovingDirection;
+   this.score = state.score;
 }
 
 Game.prototype.undo = function() {
@@ -154,9 +162,11 @@ Game.prototype.update = function(action) {
       this.initialize();
       return;
    } else if(action === 'UNDO'){
+      this.replay.push(action);
       this.undo();
       return;
    } else if(action === 'REDO') {
+      this.replay.push(action);
       this.redo();
       return;
    } else if(!this.isBallMoving())
@@ -174,6 +184,7 @@ Game.prototype.update = function(action) {
       // you can redo action only while you're undo-ing, as soon
       // as you make a real move your redo stack is emptied
       this.redoStack = [];
+      this.replay.push(action);
       this.undoStack.push(this.getCurrentState());
       this.movePlayer(direction);
    }
@@ -196,9 +207,12 @@ Game.prototype.updateBallPosition = function(newPosition) {
 Game.prototype.moveBall = function() {
    if(this.isBallHittingHole()) {
       this.status.hasHitHole = true;
-      window.clearInterval(this.intervalID);
+      var replay = [];
+      var move;
+      while(move = this.replay.pop())
+         replay.push(move);
+      this.victoryCallback(this.score, replay);
    }
-
    if(this.isBallOutOfBounds() || this.isBallHittingRock()) {
       this.ballMovingDirection = this.ballMovingDirection.scalarMultiplication(0);
       if(this.isBallOutOfBounds()) this.status.hasHitWall = true;

@@ -1,16 +1,17 @@
 <?php
 	session_start();
-	include "utilities.php";
-	include "database.php";
-
-	$db = new Database(connectToDB());
 
 	$creatorNickname = $_GET['creatorNickname'];
 	$levelName = $_GET['levelName'];
 
-	if(!isset($creatorNickname) || !isset($levelName))
-		echo 'ERROR. One of the value is undefined' . PHP_EOL;
+	if(!isset($creatorNickname) || !isset($levelName)) {
+      header("Location: /PWEB/index.php");
+      exit();
+	}
 
+	include "utilities.php";
+	include "database.php";
+	$db = new Database(connectToDB());
 	try {
 		$result = $db->getLevel($levelName, $creatorNickname);
 	} catch(Exception $e) {
@@ -31,16 +32,21 @@
 	<script type="text/javascript" src="./js/game.js"></script>
 	<script type="text/javascript" src="./js/sketcher.js"></script>
 	<script type="text/javascript" src="./js/input.js"></script>
+	<script type="text/javascript" src="./js/ajaxRequest.js"></script>
 	<script type="text/javascript" src="./js/level.js"></script>
 </head>
 <body id="body" onLoad="start()">
 
 <?php
-	printHeader("", isset($_SESSION['nickname']));
-	echo '<input type="hidden" id="levelObject" value="' . $result['levelObject'] . '">';
+	printHeader("", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false);
+	echo '<input type="hidden" id="levelObject" value="' . htmlspecialchars($result['levelObject']) . '">';
 ?>
 
-<main class="xWrapper">
+<main class="yWrapper">
+	<h1> <?php
+		echo 'Level: <span id="levelName">' . $levelName . '</span>. ';
+		echo 'Created by <span id="levelCreatorNickname">' . $creatorNickname . '</span>'; ?>
+	</h1>
    <div id = "gameField" class="xWrapper"></div>
 </main>
 

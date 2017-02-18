@@ -2,7 +2,7 @@ var GAMEFIELD_SIDE = 10;
 
 
 // polyfill for String.prototype.includes() taken from MDN
-if (!String.prototype.includes) {
+if(!String.prototype.includes) {
    String.prototype.includes = function(search, start) {
       if (typeof start !== 'number') {
          start = 0;
@@ -107,9 +107,9 @@ function start() {
    buttons.save.addEventListener('click', function () {
       var levelObject = fetchLevelObject(grid);
       var levelName = document.getElementById('levelName').value;
-      var creatorNickname = document.getElementById('creatorNickname').value;
+      var creatorNickname = document.getElementById('nickname').firstChild.textContent;
       var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
       buttons.save.className = 'button disabled';
-      ajaxRequest('insertLevel.php', 'GET', queryString, function() { buttons.save.className = 'button gray';});
+      ajaxRequest('insertLevel.php', 'GET', queryString, true, function() { buttons.save.className = 'button gray';});
    });
 }

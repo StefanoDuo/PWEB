@@ -3,11 +3,9 @@
    	include "utilities.php";
 	checkPOST();
 
+	$nickname = $_POST['nickname'];
+	$password = $_POST['password'];
 	$db = new Database(connectToDB());
-
-	$nickname = htmlspecialchars($_POST['nickname']);
-	$password = htmlspecialchars($_POST['password']);
-
 	$result = $db->getUser($nickname);
 
 	// if the pair nickname password doesn't match one in the
@@ -32,7 +30,7 @@
 </head>
 <body onLoad="start()">
 
-<?php printHeader("login", isset($_SESSION['nickname'])); ?>
+<?php printHeader("login", isset($nickname) ? $nickname : false); ?>
 
 <p>Successfully logged in. You will be redirected in <strong id="counter">5</strong></p>
 

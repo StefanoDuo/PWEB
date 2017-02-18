@@ -1,6 +1,8 @@
 <?php
 	session_start();
-	if(isset($_SESSION['nickname'])) {
+	// sign up page can't be accessed by logged in user
+	$nickname = $_SESSION['nickname'];
+	if(isset($nickname)) {
 		header("Location: /PWEB/index.php");
 		exit();
 	}
@@ -11,13 +13,12 @@
 
 	$db = new Database(connectToDB());
 
-	$nickname = htmlspecialchars($_POST['nickname']);
-	$email = htmlspecialchars($_POST['email']);
-	$password = htmlspecialchars($_POST['password']);
+	$nickname = $_POST['nickname'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
 
 	try {
 		$result = $db->insertUser($nickname, $email, $password);
-		echo $result ? 'Success!' : 'Failure!';
 	} catch(Exception $e) {
 		echo $e->getMessage() . PHP_EOL;
 	}
@@ -34,10 +35,10 @@
 </head>
 <body onLoad="start()">
 
-<?php printHeader("levelCreation", isset($_SESSION['nickname'])); ?>
+<?php printHeader("levelCreation", isset($nickname) ? $nickname : false); ?>
 
 <p>You will be redirected in <strong id="counter">5</strong></p>
 
-<?php include "footer.php" ?>
+<?php include "footer.php"; ?>
 </body>
 </html>

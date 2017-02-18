@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<?php printHeader("index", isset($_SESSION['nickname'])); ?>
+<?php printHeader("index", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false); ?>
 
 <!-- will contain game "lore" and tutorial -->
 <h1>Soon&trade;</h1>

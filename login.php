@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<?php printHeader("login", isset($_SESSION['nickname'])); ?>
+<?php printHeader("login", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false); ?>
 
 <main class="yWrapper">
 	<form action="checkLogin.php" method="post">
