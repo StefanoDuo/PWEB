@@ -19,9 +19,9 @@
 <body onLoad="start()">
 
 <?php
-	printHeader("logout", isset($_SESSION['nickname']));
 	// resets the $_SESSION array
 	$_SESSION = array();
+	printHeader("logout", isset($_SESSION['nickname']));
 ?>
 
 <p>Successfully logged out. You will be redirected in <strong id="counter">5</strong></p>

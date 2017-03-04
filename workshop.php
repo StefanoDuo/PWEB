@@ -19,11 +19,11 @@
    <script type="text/javascript" src="./js/vector.js"></script>
    <script type="text/javascript" src="./js/sketcher.js"></script>
    <script type="text/javascript" src="./js/ajaxRequest.js"></script>
-   <script type="text/javascript" src="./js/levelCreation.js"></script>
+   <script type="text/javascript" src="./js/workshop.js"></script>
 </head>
 <body id="body" onLoad="start()">
 
-<?php printHeader("levelCreation", isset($nickname) ? $nickname : false); ?>
+<?php printHeader("workshop", isset($nickname) ? $nickname : false); ?>
 
 <main class="xWrapper">
    <div id="gameField" class="xWrapper"></div>

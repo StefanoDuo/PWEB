@@ -3,17 +3,18 @@ var GAMEFIELD_SIZE = 10;
 
 function start() {
    // initialize input object
-   var translator = {};
-   translator[87] = 'UP';
-   translator[65] = 'LEFT';
-   translator[83] = 'DOWN';
-   translator[68] = 'RIGHT';
-   translator[81] = 'REDO';
-   translator[69] = 'UNDO';
-   translator[82] = 'RESET';
+   var translator = {
+      87: 'UP',
+      65: 'LEFT',
+      83: 'DOWN',
+      68: 'RIGHT',
+      81: 'REDO',
+      69: 'UNDO',
+      82: 'RESET'
+   };
 
    var input = new Input('body', new Queue(), translator);
-   input.addListeners();
+   input.startListening();
 
    // initialize sketcher object
    var sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField', 'box');
@@ -37,16 +38,19 @@ function start() {
 
    game.setVictoryCallback(function(score, replay) {
       console.log('VICTORY-CALLBACK');
-      var nickname = document.getElementById('nickname').firstChild.textContent;
+      var nickname = document.getElementById('nickname');
       if(nickname) {
+         nickname = nickname.firstChild.textContent;
          var levelName = document.getElementById('levelName').firstChild.textContent;
          var levelCreatorNickname = document.getElementById('levelCreatorNickname').firstChild.textContent;
          replay = JSON.stringify(replay);
-         var queryString = 'playerNickname=' + nickname + '&levelName=' + levelName + '&levelCreatorNickname=' + levelCreatorNickname + '&score=' + score + '&replay=' + replay;
+         var queryString = 'playerNickname=' + nickname + '&levelName=' + levelName;
+         queryString += '&levelCreatorNickname=' + levelCreatorNickname + '&score=' + score + '&replay=' + replay;
          ajaxRequest('insertScore.php', 'GET', queryString, true);
       } else {
          // handling for non logged in user not implemented yet
       }
       window.clearInterval(intervalID);
+      // input.stopListening();
    });
 }

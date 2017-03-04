@@ -1,6 +1,5 @@
 var GAMEFIELD_SIDE = 10;
 
-
 // polyfill for String.prototype.includes() taken from MDN
 if(!String.prototype.includes) {
    String.prototype.includes = function(search, start) {
@@ -47,29 +46,32 @@ function fetchLevelObject(grid) {
 }
 
 function start() {
-   sketcher = new Sketcher(GAMEFIELD_SIDE, 'gameField', 'box');
-
-   var buttons = {};
-   buttons.player = document.getElementById('player');
-   buttons.ball = document.getElementById('ball');
-   buttons.hole = document.getElementById('hole');
-   buttons.rock = document.getElementById('rock');
-   buttons.reset = document.getElementById('reset');
-   buttons.save = document.getElementById('save');
+   var sketcher = new Sketcher(GAMEFIELD_SIDE, 'gameField', 'box');
 
    var pressedButton = null;
+   var buttons = { //remove this if it's not going to be used
+      player : document.getElementById('player'),
+      ball : document.getElementById('ball'),
+      hole : document.getElementById('hole'),
+      rock : document.getElementById('rock'),
+      reset : document.getElementById('player'),
+      save : document.getElementById('save')
+   };
 
    function releaseButton(button) {
       button.className = button.className.replace('pressed', '');
       button.removeAttribute('pressed');
       pressedButton = null;
    }
-
    function clickButton(button) {
       if(button.hasAttribute('pressed')) {
+         // the button is currently pressed we need to release it
          releaseButton(button)
       } else {
-         if(pressedButton) releaseButton(pressedButton);
+         // we need to press the button but first we release the
+         // pressed one (if it exists);
+         if(pressedButton)
+            releaseButton(pressedButton);
          button.setAttribute('pressed', '');
          button.className = button.className.replace(/(red)|(blue)|(green)/, 'pressed$&');
          pressedButton = button;
@@ -94,7 +96,7 @@ function start() {
             sketcher.drawBoxByCoordinates(j, i, '');
    });
 
-   grid = sketcher.getGrid();
+   var grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
          grid[i][j].addEventListener('click', function() {

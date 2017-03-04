@@ -3,6 +3,7 @@ DROP PROCEDURE IF EXISTS getLevels;
 DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
 DROP PROCEDURE IF EXISTS getLevel;
 DROP PROCEDURE IF EXISTS getScoresObtainedBy;
+DROP PROCEDURE IF EXISTS getReplay;
 DROP PROCEDURE IF EXISTS insertLevel;
 DROP PROCEDURE IF EXISTS insertUser;
 DROP PROCEDURE IF EXISTS insertScore;
@@ -42,6 +43,15 @@ BEGIN
 	SELECT B.levelName, B.creatorNickname, B.score
     FROM BeatenBy B
     WHERE B.playerNickname = _playerNickname;
+END $$
+
+CREATE PROCEDURE getReplay(IN _playerNickname VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
+BEGIN
+	SELECT B.replay	
+    FROM BeatenBy B
+    WHERE B.playerNickname = _playerNickname
+		AND B.creatorNickname = _creatorNickname
+        AND B.levelName = _levelName;
 END $$
 
 CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelObject BLOB)

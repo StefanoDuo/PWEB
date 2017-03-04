@@ -1,7 +1,7 @@
 <?php
 function printHeader($currentPage, $nickname) {
 	$index = $currentPage === 'index' ? 'active' : '';
-	$levelCreation = $currentPage === 'levelCreation' ? 'active' : '';
+	$workshop = $currentPage === 'workshop' ? 'active' : '';
 	$logout = $currentPage === 'logout' ? 'active' : '';
 	$login = $currentPage === 'login' ? 'active' : '';
 	$levels = $currentPage === 'levels' ? 'active' : '';
@@ -11,7 +11,7 @@ function printHeader($currentPage, $nickname) {
    	echo '<ul class="xWrapper navBar blue">';
     echo 	'<li><a href="index.php" class="' . $index . '">Home</a></li>';
     if($nickname)
-    	echo '<li><a href="levelCreation.php" class="' . $levelCreation . '">Workshop</a></li>';
+    	echo '<li><a href="workshop.php" class="' . $workshop . '">Workshop</a></li>';
     if($nickname)
     	echo '<li><a href="logout.php" class="' . $logout . '">LogOut</a></li>';
     else
@@ -47,8 +47,9 @@ function printScoresObtainedBy($playerNickname, $db) {
     $result = $db->getScoresObtainedBy($playerNickname);
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['levelName'] . '">';
-        echo $value['levelName'] . '</a> | Creator: ' . $value['creatorNickname'] . '| Score: ' . $value['score'] . '</li>';
+        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'];
+        echo '&levelName=' . $value['levelName'] . '">' . $value['levelName'] . '</a> | Creator: ' . $value['creatorNickname'];
+        echo '| Score: <a href="replay.php?creatorNickname='  . $value['creatorNickname'] . '&levelName=' . $value['levelName'] . '&playerNickname=' . $playerNickname . '">' . $value['score'] . '</a></li>';
     }
     echo '</ul>';
 }

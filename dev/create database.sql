@@ -6,7 +6,7 @@ USE `PWEB`;
 CREATE TABLE `User` (
 	`nickname` VARCHAR(50) NOT NULL,
 	`email` VARCHAR(50),
-  `password` VARCHAR(50),
+	`password` VARCHAR(50),
 
 	PRIMARY KEY (`nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -18,7 +18,7 @@ INSERT INTO `User` VALUES ('user1', 'email1', 'user1'), ('user2', 'email2', 'use
 CREATE TABLE `Level` (
 	`name` VARCHAR(50) NOT NULL,
 	`creatorNickname` VARCHAR(50) NOT NULL,
-  `levelObject` TEXT NOT NULL,
+	`levelObject` TEXT NOT NULL,
 
 	PRIMARY KEY (`name`, `creatorNickname`),
 	FOREIGN KEY (`creatorNickname`)
@@ -31,10 +31,10 @@ INSERT INTO `Level` VALUES ('level1', 'user1', '{"player":{"x":0,"y":0},"ball":{
 
 CREATE TABLE `BeatenBy` (
 	`playerNickname` VARCHAR(50) NOT NULL,
-  `creatorNickname` VARCHAR(50) NOT NULL,
+	`creatorNickname` VARCHAR(50) NOT NULL,
 	`levelName` VARCHAR(50) NOT NULL,
 	`score` INTEGER NOT NULL,
-  `replay` TEXT NOT NULL,
+	`replay` TEXT NOT NULL,
 
 	PRIMARY KEY (`playerNickname`, `creatorNickname`, `levelName`),
 	FOREIGN KEY (`playerNickname`)

@@ -11,6 +11,9 @@
  */
 
 function Input(whereToListen, inputQueue, translator) {
+   // need to use an object instead of a array otherwise accessing an integer
+   // index bigger than the current array size will change the size inserting
+   // undefined values
    this.pressedKeyCodes = {};
    this.whereToListen = document.getElementById(whereToListen);
    this.inputQueue = inputQueue;
@@ -52,28 +55,35 @@ Input.prototype.getPriorityTranslation = function() {
  * 3) pressedKeyCodes[keyCode] == false
  *    => keyCodes enqueued, pressedKeyCodes[keyCode]=true
  */
-Input.prototype.updateOnKeyDown = function(keyCode) {
+Input.prototype.pressKey = function(keyCode) {
    if(!this.pressedKeyCodes[keyCode]) {
       this.inputQueue.enqueue(keyCode);
       this.pressedKeyCodes[keyCode] = true;
    }
 }
 
-Input.prototype.updateOnKeyUp = function(keyCode) {
+Input.prototype.releaseKey = function(keyCode) {
    this.pressedKeyCodes[keyCode] = false;
 }
 
-Input.prototype.addListeners = function() {
+Input.prototype.startListening = function() {
    // have to bind the callback function otherwise
    // this refers to the whereToListen dom element
-   this.whereToListen.addEventListener('keydown', function(e) {
+   this.keyDownIntervalId = this.whereToListen.addEventListener('keydown', function(e) {
       e = e || window.event;
-      this.updateOnKeyDown(e.keyCode.toString());
+      this.pressKey(e.keyCode.toString());
       //can't use e.key not supported on Chrome
    }.bind(this), false);
 
-   this.whereToListen.addEventListener('keyup', function(e) {
+   this.keyUpIntervalId =  this.whereToListen.addEventListener('keyup', function(e) {
       e = e || window.event;
-      this.updateOnKeyUp(e.keyCode.toString());
+      this.releaseKey(e.keyCode.toString());
    }.bind(this), false);
+}
+
+Input.prototype.stopListening = function() {
+   if(!this.keyDownIntervalId || !this.keyUpIntervalId)
+      throw 'You need to start listening first.';
+   window.clearInterval(this.keyUpIntervalId);
+   window.clearInterval(this.keyDownIntervalId);
 }

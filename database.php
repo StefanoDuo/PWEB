@@ -26,7 +26,9 @@ class Database {
 		return $rows;
 	}
 
-	// used on query that can return only 1 row (condition on key)
+	// used on query that can return only 1 row (condition on primary key)
+	// this directly returns an associative array instead of an array of
+	// associative arrays with only 1 element
 	private function fetchResult($result) {
 		$row = $result->fetch_assoc();
 		$result->free_result();
@@ -109,6 +111,18 @@ class Database {
 		return $result;
 	}
 
+	public function getReplay($playerNickname, $creatorNickname, $levelName) {
+		$success = $this->mysqli->real_query("CALL getReplay('$playerNickname', '$creatorNickname', '$levelName');");
+		if(!$success)
+			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
+		$queryResult = $this->mysqli->store_result();
+		if(!$queryResult)
+			return null;
+		$result = $this->fetchResult($queryResult);
+		$this->clearExtraResultSets();
+		return $result;
+	}
+
 	public function insertLevel($levelName, $creatorNickname, $levelObject) {
 		$success = $this->mysqli->real_query("CALL insertLevel('$levelName', '$creatorNickname', '$levelObject');");
 		if(!$success)
@@ -140,9 +154,16 @@ class Database {
 }
 
 function connectToDB() {
+	// $fileContent = file_get_contents('./database.ini');
+	// parse_str($fileContent, $databaseIni);
+	// $hostname = $databaseIni['hostname'];
+	// $user = $databaseIni['user'];
+	// $password = $databaseIni['password'];
+	// $database = $databaseIni['database'];
+	
 	$hostname = "localhost";
 	$user = "root";
-	$password = "";
+	$password = "ciaociao";
 	$database = "PWEB";
 
 	$mysqli = new mysqli($hostname, $user, $password, $database);

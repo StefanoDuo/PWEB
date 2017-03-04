@@ -12,7 +12,6 @@ function Game(matrix, levelObject, vectorConstructor) {
    this.initialize();
 }
 
-
 // the initialization is done through a method so we can easily
 // reset the level during gameplay
 Game.prototype.initialize = function() {
@@ -207,11 +206,13 @@ Game.prototype.updateBallPosition = function(newPosition) {
 Game.prototype.moveBall = function() {
    if(this.isBallHittingHole()) {
       this.status.hasHitHole = true;
+      // creating another stack to invert the order of the moves
       var replay = [];
       var move;
       while(move = this.replay.pop())
          replay.push(move);
-      this.victoryCallback(this.score, replay);
+      if(this.victoryCallback)
+         this.victoryCallback(this.score, replay);
    }
    if(this.isBallOutOfBounds() || this.isBallHittingRock()) {
       this.ballMovingDirection = this.ballMovingDirection.scalarMultiplication(0);
