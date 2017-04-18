@@ -1,6 +1,6 @@
 * {
    color: inherit;
-   /*background-color: inherit;*/
+   background-color: inherit;
 }
 
 html {
@@ -19,6 +19,7 @@ body {
 }
 
 .xWrapper {
+   width: 100%;
    display: flex;
    /* establishes the main and cross axis defining the direction *
     * elements are placed inside the flex container              */
@@ -26,7 +27,7 @@ body {
    /* child elements will fit all in one line along the main axis */
    flex-wrap: wrap;
    /* specifies how extra space is distributed along the main axis */
-   justify-content: center;
+   justify-content: space-around;
    /* specifies how items are laid out along the cross axis in *
     * the current line                                         */
    align-items: center;
@@ -81,13 +82,35 @@ main {
    background-color: rgba(0,0,0,0.05);
 }
 
+.absolute {
+   position: absolute;
+}
+
+.relative {
+   position: relative;
+}
+
+.shadowDrop {
+   height: 100%;
+   width: 100%;
+   background-color: rgba(0, 0, 0, .3);
+   transition: background-color 5s;
+}
+
+.hidden {
+   display: none
+}
+
+.buttonMargin {
+   margin-left: 50px !important;
+}
+
 .button {
    border: none;
    border-radius: 2px;
    height: 36px;
    line-height: 36px;
    margin: 0;
-   margin-left: 50px;
    min-width: 88px;
    text-align: center;
    letter-spacing: .5px;
@@ -95,7 +118,6 @@ main {
    text-transform: uppercase;
    display: inline-block;
    cursor: pointer;
-
    transition: background-color 0.3s ease-in-out, box-shadow 0.1s ease-in-out;
    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 5px 2px -2px rgba(0, 0, 0, 0.2);
    /*text-decoration: none;*/
@@ -105,17 +127,17 @@ main {
    background: rgba(0,0,0,0);
 }
 
-.button:hover:not(.disabled) {
+.button:hover:not([disabled]) {
    background-color: rgba(0,0,0,.24);
    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
 
-.button:active:not(.disabled) {
+.button:active {
    background-color: rgba(0,0,0,.24);
    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.14), 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
 
-.disabled {
+:disabled {
    background-color: rgba(0,0,0,0.12);
    color: rgba(0,0,0,0.26);
    cursor: not-allowed;

@@ -1,40 +1,52 @@
 ---------------- FEATURES ----------------
 LEVEL PAGE
-1) after beating a level if the player isn't logged in save the score in the local storage and
+2) add visual undo, redo moves tracker
+
+"ADVANCED STUFF"
+
+PLAY PAGE
+1) allow saving current game status to resume gameplay later
+2) after beating a level if the player isn't logged in save the score in the local storage and
    show a message explaining to log in if willing to save the score, offering a link to login
    or register page that will redirect the user back to the level page after completing the task
-2) show next level button which pick 1 level that the player has yet to beat
-3) add visual score, undo, redo moves tracker
 
-REPLAY PAGE
-1) make PAUSE/START buttons unclickable when it makes sense
-2) add visual score, undo, redo moves tracker
+USER PAGE
+1) add the custom keybindings option
 
-GAME OBJECT
-1) allow saving current game status to resume gameplay later
-
-DATABASE
-1) modify beatenBy primary key adding a timestamp, so a player can save multiple scores for a single level
+WORKSHOP PAGE
+1)when submitting a level check if the level is beatable, initially the algorithm can even be a brute force method :
+	- mark the current location as visited
+	- move in every possible direction (recursion)
+	- if the ball eventually lands in the hole OK, otherwise the algorithm ends when all the possible location have
+		been visited --> returns false
 
 ---------------- REFACTORING ----------------
 GAME OBJECT
-1) create status object to send minimal information to the Sketcher object
-3) foreseeing the change on the sketching animation, instantly calculate the
-   ball ending position and apply it, leaving the motion to the transition
-   or transform animation, this fixes as well the problem with the ball and
-   player moving at the same time and the undo/redo actions
+1) refactor to implement the new sketching mechanic
 
-SKETCHER OBJECT
-2) rework how the drawing works, the rocks hole and basic grid in sketched
-   only once during the initialization,
-   the player and the ball instead are 2 divs which class gets changed
-   resulting in the moving with transitions and absolute positioning,
-   (probably needs parent element realitively positioned)
+SKETCHER OBJECT ---- BACKGROUNDSKETCHER
+1) the sketcher will only handle the static grid tiles (rocks and the hole)
+	and the level creation in the workshop page
+2) allow rectangular shapes (needed for the new object)
 
-MERGE REPLAY AND LEVEL PAGE
+NEW OBJECT ---- FOREGROUNDSKETCHER
+1) handles the player and ball tiles which are always the same divs
+	the movement is done by changing their css class with different
+	absolute positioning + transitions (probably needs parent element
+	realitively positioned)
+2) there's actually no need to create 2 different "classes" we can just instantiate
+	2 different objects, 1 for the background grid, one for the moving elements
+
+GAME OBJECT
+1) the getGrid() method is used to give the total layout of the grid (used by the
+	sketcher object to draw the grid initially)
+1) create a new method to send just the ball and player movements + other info
+	if needed (this will be used by the new object to animate them)
+3) instantly calculate the ball ending position and apply it, leaving the
+	motion to the transition or transform animation, this fixes as well the
+	problem with the ball and player moving at the same time and the undo/redo actions
+
+MERGE REPLAY AND LEVEL PAGE (probably no need to merge them)
 1) given that they do the same thing (only the source of input changes) think of a way to merge them without increasing
-the code complexity too much, so we don't need to duplicate our code
+the code complexity too much, so we don't need to duplicate our code --- BEST DONE AFTER SKETCHER + VISUAL REFACTORING
 2) otherwise think of a way to better modularize the code and keep them as 2 seprated pages
-
-DATABASE OBJECT
-3)add tests for the methods (getUser, insertLevel, insertUser done)

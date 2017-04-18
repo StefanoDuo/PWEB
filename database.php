@@ -43,7 +43,7 @@ class Database {
 		while($this->mysqli->more_results()) {
 		    $this->mysqli->next_result();
 		    if($result = $this->mysqli->store_result())
-		        $res->free_result(); 
+		        $res->free_result();
 		}
 	}
 
@@ -99,6 +99,18 @@ class Database {
 		return $result;
 	}
 
+	public function getUnbeatedLevel($playerNickname) {
+		$success = $this->mysqli->real_query("CALL getUnbeatedLevel('$playerNickname');");
+		if(!$success)
+			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
+		$queryResult = $this->mysqli->store_result();
+		if(!$queryResult)
+			return null;
+		$result = $this->fetchResult($queryResult);
+		$this->clearExtraResultSets();
+		return $result;
+	}
+
 	public function getScoresObtainedBy($playerNickname) {
 		$success = $this->mysqli->real_query("CALL getScoresObtainedBy('$playerNickname');");
 		if(!$success)
@@ -111,8 +123,8 @@ class Database {
 		return $result;
 	}
 
-	public function getReplay($playerNickname, $creatorNickname, $levelName) {
-		$success = $this->mysqli->real_query("CALL getReplay('$playerNickname', '$creatorNickname', '$levelName');");
+	public function getReplay($playerNickname, $stamp) {
+		$success = $this->mysqli->real_query("CALL getReplay('$playerNickname', '$stamp');");
 		if(!$success)
 			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
 		$queryResult = $this->mysqli->store_result();
@@ -154,13 +166,6 @@ class Database {
 }
 
 function connectToDB() {
-	// $fileContent = file_get_contents('./database.ini');
-	// parse_str($fileContent, $databaseIni);
-	// $hostname = $databaseIni['hostname'];
-	// $user = $databaseIni['user'];
-	// $password = $databaseIni['password'];
-	// $database = $databaseIni['database'];
-	
 	$hostname = "localhost";
 	$user = "root";
 	$password = "ciaociao";
@@ -169,7 +174,6 @@ function connectToDB() {
 	$mysqli = new mysqli($hostname, $user, $password, $database);
 	if ($mysqli->connect_errno)
 		throw "Failed to connect to MySQL: " . $mysqli->connect_error;
-
 	return $mysqli;
 }
 

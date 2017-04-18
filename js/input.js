@@ -18,6 +18,19 @@ function Input(whereToListen, inputQueue, translator) {
    this.whereToListen = document.getElementById(whereToListen);
    this.inputQueue = inputQueue;
    this.translator = translator;
+   // have to bind the callback function otherwise
+   // this refers to the whereToListen dom element
+   this.whereToListen.addEventListener('keydown', function(e) {
+      if(!this.isListening) return;
+      e = e || window.event;
+      this.pressKey(e.keyCode.toString());
+      //can't use e.key not supported on Chrome
+   }.bind(this), false);
+   this.whereToListen.addEventListener('keyup', function(e) {
+      if(!this.isListening) return;
+      e = e || window.event;
+      this.releaseKey(e.keyCode.toString());
+   }.bind(this), false);
 }
 
 Input.prototype.getPressedKeyCodes = function() {
@@ -45,6 +58,8 @@ Input.prototype.getPriorityTranslation = function() {
    return this.translator[this.getPriorityKeyCode()];
 }
 
+
+
 /* only 3 states are possible:
  * 1) first time the key has been pressed
  *    => pressedKeyCodes[keyCode] == undefined
@@ -66,24 +81,12 @@ Input.prototype.releaseKey = function(keyCode) {
    this.pressedKeyCodes[keyCode] = false;
 }
 
-Input.prototype.startListening = function() {
-   // have to bind the callback function otherwise
-   // this refers to the whereToListen dom element
-   this.keyDownIntervalId = this.whereToListen.addEventListener('keydown', function(e) {
-      e = e || window.event;
-      this.pressKey(e.keyCode.toString());
-      //can't use e.key not supported on Chrome
-   }.bind(this), false);
 
-   this.keyUpIntervalId =  this.whereToListen.addEventListener('keyup', function(e) {
-      e = e || window.event;
-      this.releaseKey(e.keyCode.toString());
-   }.bind(this), false);
+
+Input.prototype.startListening = function() {
+   this.isListening = true;
 }
 
 Input.prototype.stopListening = function() {
-   if(!this.keyDownIntervalId || !this.keyUpIntervalId)
-      throw 'You need to start listening first.';
-   window.clearInterval(this.keyUpIntervalId);
-   window.clearInterval(this.keyDownIntervalId);
+   this.isListening = false;
 }

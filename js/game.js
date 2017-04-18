@@ -8,7 +8,6 @@ function Game(matrix, levelObject, vectorConstructor) {
    this.levelObject.ballMovingDirection = new vectorConstructor(0, 0);
    this.gameField = matrix;
    this.vectorConstructor = vectorConstructor;
-
    this.initialize();
 }
 
@@ -21,29 +20,23 @@ Game.prototype.initialize = function() {
    this.gameField.setPosition(this.levelObject.player, 'player');
    this.gameField.setPosition(this.levelObject.ball, 'ball');
    this.gameField.setPosition(this.levelObject.hole, 'hole');
-
    // the second argument changes the forEach scope,
    // if not specified it default to the window object
    this.levelObject.rocks.forEach(function(element) {
       this.gameField.setPosition(element, 'rock');
    }, this);
-
    // storing player and ball positions to update them easily
    this.playerPosition = this.levelObject.player;
    this.ballPosition = this.levelObject.ball;
    this.ballMovingDirection = this.levelObject.ballMovingDirection;
-
    this.score = 0;
    this.replay = [];
-   this.status = {
-      hasHitWall: false,
-      hasHitHole: false,
-      hasHitRock: false
-   };
 }
 
 // creating a method instead of initializing it in the constructor allows
 // put a callback that disables the setInterval used for the game loop
+// this function will be called when the ball falls through the hole and
+// will receive the score and replay as first and second parameter
 Game.prototype.setVictoryCallback = function(victoryCallback) {
    this.victoryCallback = victoryCallback;
 }
@@ -55,19 +48,12 @@ Game.prototype.getGrid = function() {
    return this.gameField.matrix;
 }
 
-Game.prototype.resetStatus = function() {
-   this.status.hasHitWall = false;
-   this.status.hasHitHole = false;
-   this.status.hasHitRock = false;
-}
-
 
 
 // collision check logic
 Game.prototype.isOutOfBounds = function(entity, direction) {
    var newPosition = (entity === 'player') ? this.playerPosition : this.ballPosition;
    newPosition = newPosition.add(direction);
-
    return !newPosition.belongsToSquare(this.gameField.rowNumber - 1);
 }
 
@@ -122,7 +108,6 @@ Game.prototype.setCurrentState = function(state) {
    this.updatePlayerPosition(state.playerPosition);
    this.updateBallPosition(state.ballPosition);
    this.ballMovingDirection = state.ballMovingDirection;
-   this.score = state.score;
 }
 
 Game.prototype.undo = function() {
@@ -130,6 +115,8 @@ Game.prototype.undo = function() {
    // can't undo before the first action
    if(!previousState)
       return;
+   this.score++;
+   this.replay.unshift('UNDO');
    this.redoStack.push(this.getCurrentState());
    this.setCurrentState(previousState);
 }
@@ -139,6 +126,8 @@ Game.prototype.redo = function() {
    // if there wasn't an undo prior to the redo, undoStateStack will be empty
    if(!previousState)
       return;
+   this.score++;
+   this.replay.unshift('REDO');
    this.undoStack.push(this.getCurrentState());
    this.setCurrentState(previousState);
 }
@@ -147,7 +136,6 @@ Game.prototype.redo = function() {
 
 // interface to the input object or whatever we want to use
 Game.prototype.update = function(action) {
-   this.resetStatus();
    var direction;
    if(action === 'UP')
       direction = new this.vectorConstructor(0, -1);
@@ -159,20 +147,17 @@ Game.prototype.update = function(action) {
       direction = new this.vectorConstructor(1, 0);
    else if(action === 'RESET') {
       this.initialize();
-      return;
+      return this.score;
    } else if(action === 'UNDO'){
-      this.replay.push(action);
       this.undo();
-      return;
+      return this.score;
    } else if(action === 'REDO') {
-      this.replay.push(action);
       this.redo();
-      return;
+      return this.score;
    } else if(!this.isBallMoving())
       // if there's no action and the ball isn't moving
       // update doesn't need to do anything
-      return;
-
+      return this.score;
    // at the moment the ball and the player can't move at the same time
    // if we want to allow that in the future the ball movement must be
    // all computed at the same time otherwhise redo and undo action could
@@ -183,10 +168,11 @@ Game.prototype.update = function(action) {
       // you can redo action only while you're undo-ing, as soon
       // as you make a real move your redo stack is emptied
       this.redoStack = [];
-      this.replay.push(action);
+      this.replay.unshift(action);
       this.undoStack.push(this.getCurrentState());
       this.movePlayer(direction);
    }
+   return this.score;
 }
 
 
@@ -204,41 +190,30 @@ Game.prototype.updateBallPosition = function(newPosition) {
 }
 
 Game.prototype.moveBall = function() {
-   if(this.isBallHittingHole()) {
-      this.status.hasHitHole = true;
-      // creating another stack to invert the order of the moves
-      var replay = [];
-      var move;
-      while(move = this.replay.pop())
-         replay.push(move);
-      if(this.victoryCallback)
-         this.victoryCallback(this.score, replay);
+   if(this.isBallHittingHole() && this.victoryCallback) {
+         this.victoryCallback(this.score, this.replay);
    }
    if(this.isBallOutOfBounds() || this.isBallHittingRock()) {
-      this.ballMovingDirection = this.ballMovingDirection.scalarMultiplication(0);
-      if(this.isBallOutOfBounds()) this.status.hasHitWall = true;
-      if(this.isBallHittingRock()) this.status.hasHitRock = true;
+      this.ballMovingDirection = new this.vectorConstructor(0, 0);
       return;
    }
-
    this.updateBallPosition(this.ballPosition.add(this.ballMovingDirection));
 }
 
 Game.prototype.movePlayer = function(direction) {
-   if(direction.isEqual(new Vector(0,0)))
+   if(direction.isEqual(new this.vectorConstructor(0,0)))
       return;
    if(this.isPlayerOutOfBounds(direction) || this.isPlayerHittingRock(direction)) {
-      if(this.isPlayerOutOfBounds(direction)) this.status.hasHitWall = true;
-      if(this.isPlayerHittingRock(direction)) this.status.hasHitRock = true;
       return;
    }
-
    if(this.isPlayerHittingBall(direction)) {
+      var oldBallPosition = this.ballPosition;
       this.ballMovingDirection = direction;
       this.moveBall();
+      if(!oldBallPosition.isEqual(this.ballPosition))
+         this.score++;
       return;
    }
-
    this.score++;
    this.updatePlayerPosition(this.playerPosition.add(direction));
 }

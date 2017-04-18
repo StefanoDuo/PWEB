@@ -2,6 +2,7 @@ DROP PROCEDURE IF EXISTS getUser;
 DROP PROCEDURE IF EXISTS getLevels;
 DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
 DROP PROCEDURE IF EXISTS getLevel;
+DROP PROCEDURE IF EXISTS getUnbeatedLevel;
 DROP PROCEDURE IF EXISTS getScoresObtainedBy;
 DROP PROCEDURE IF EXISTS getReplay;
 DROP PROCEDURE IF EXISTS insertLevel;
@@ -38,20 +39,34 @@ BEGIN
 		AND L.creatorNickname = _creatorNickname;
 END $$
 
+CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(50))
+BEGIN
+	SELECT L.*
+    FROM Level L
+		LEFT OUTER JOIN (
+			SELECT BB.*
+            FROM BeatenBy BB
+            WHERE BB.playerNickname = _playerNickname
+        ) AS B ON L.name = B.levelName
+    WHERE B.levelName IS NULL
+    ORDER BY RAND()
+    LIMIT 1;
+END $$
+
 CREATE PROCEDURE getScoresObtainedBy(IN _playerNickname VARCHAR(50))
 BEGIN
-	SELECT B.levelName, B.creatorNickname, B.score
+	SELECT B.levelName, B.creatorNickname, B.score, B.stamp
     FROM BeatenBy B
     WHERE B.playerNickname = _playerNickname;
 END $$
 
-CREATE PROCEDURE getReplay(IN _playerNickname VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
+
+CREATE PROCEDURE getReplay(IN _playerNickname VARCHAR(50), IN _stamp TIMESTAMP)
 BEGIN
 	SELECT B.replay	
     FROM BeatenBy B
     WHERE B.playerNickname = _playerNickname
-		AND B.creatorNickname = _creatorNickname
-        AND B.levelName = _levelName;
+		AND B.stamp = _stamp;
 END $$
 
 CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelObject BLOB)

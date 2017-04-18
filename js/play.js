@@ -1,8 +1,5 @@
-var GAMEFIELD_SIZE = 10;
-
-
 function start() {
-   // initialize input object
+   var gameFieldSize = 10;
    var translator = {
       87: 'UP',
       65: 'LEFT',
@@ -12,32 +9,41 @@ function start() {
       69: 'UNDO',
       82: 'RESET'
    };
-
    var input = new Input('body', new Queue(), translator);
-   input.startListening();
-
-   // initialize sketcher object
-   var sketcher = new Sketcher(GAMEFIELD_SIZE, 'gameField', 'box');
-
-   // retrieve levelObject from hidden input element
+   var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
+   // retrieve levelObject from hidden input element, and transforms simple object into Vectors
    var levelObject = document.getElementById('levelObject').value;
    levelObject = JSON.parse(levelObject);
    levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-   
-   var matrix = new Matrix(GAMEFIELD_SIZE, GAMEFIELD_SIZE);
-   var game = new Game(matrix, levelObject, Vector);
-
+   var game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
+   input.startListening();
 
-   var intervalID = setInterval(function() {
-      game.update(input.getPriorityTranslation());
+   var score = document.getElementById('score');
+   var score2 = document.getElementById('score2').firstChild;
+   var shadowDrop = document.getElementById('shadowDrop');
+
+   function startGame() {
+      return setInterval(function() {
+         score2.textContent = score.value = game.update(input.getPriorityTranslation());
+         sketcher.drawGrid(game.getGrid());
+      }, 100);
+   }
+
+   document.getElementById('playAgain').addEventListener('click', function() {
+      shadowDrop.className += ' hidden';
+      game.initialize();
       sketcher.drawGrid(game.getGrid());
-   }, 100);
+      intervalID = startGame();
+      input.startListening();
+   }, false);
+
+   var intervalID = startGame();
 
    game.setVictoryCallback(function(score, replay) {
-      console.log('VICTORY-CALLBACK');
+      shadowDrop.className = shadowDrop.className.replace(' hidden', '');
       var nickname = document.getElementById('nickname');
       if(nickname) {
          nickname = nickname.firstChild.textContent;
@@ -47,10 +53,12 @@ function start() {
          var queryString = 'playerNickname=' + nickname + '&levelName=' + levelName;
          queryString += '&levelCreatorNickname=' + levelCreatorNickname + '&score=' + score + '&replay=' + replay;
          ajaxRequest('insertScore.php', 'GET', queryString, true);
+
+         // insert request to receive a link to a new level        
       } else {
          // handling for non logged in user not implemented yet
       }
       window.clearInterval(intervalID);
-      // input.stopListening();
+      input.stopListening();
    });
 }

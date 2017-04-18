@@ -17,7 +17,7 @@
    <link rel="stylesheet" href="./css/main.css" >
    <script type="text/javascript" src="./js/matrix.js"></script>
    <script type="text/javascript" src="./js/vector.js"></script>
-   <script type="text/javascript" src="./js/sketcher.js"></script>
+   <script type="text/javascript" src="./js/BackgroundSketcher.js"></script>
    <script type="text/javascript" src="./js/ajaxRequest.js"></script>
    <script type="text/javascript" src="./js/workshop.js"></script>
 </head>
@@ -29,12 +29,12 @@
    <div id="gameField" class="xWrapper"></div>
    <div class="yWrapper">
       <input type="text" id="levelName">
-      <a id="player" class="button gray">Player</a>
-      <a id="ball" class="button gray">Ball</a>
-      <a id="hole" class="button gray">Hole</a>
-      <a id="rock" class="button gray">Rock</a>
-      <a id="reset" class="button gray">Reset</a>
-      <a id="save" class="button gray">Save</a>
+      <button id="player" class="button gray">Player</button>
+      <button id="ball" class="button gray">Ball</button>
+      <button id="hole" class="button gray">Hole</button>
+      <button id="rock" class="button gray">Rock</button>
+      <button id="reset" class="button gray">Reset</button>
+      <button id="save" class="button gray">Save</button>
    </div>
 </main>
 

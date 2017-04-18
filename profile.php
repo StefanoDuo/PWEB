@@ -6,8 +6,6 @@
    }
    include "utilities.php";
    include "database.php";
-
-
 ?>
 
 <!DOCTYPE html>
@@ -24,12 +22,10 @@
    printHeader("profile", $_SESSION['nickname']);
    echo '<h1>Levels you created</h1>';
    $db = new Database(connectToDB());
-   printLevelCreatedBy($_SESSION['nickname'], $db);
+   printLevelsCreatedBy($_SESSION['nickname'], $db);
    echo '<h1>Levels you completed</h1>';
    printScoresObtainedBy($_SESSION['nickname'], $db);
 ?>
-
-
 
 <?php include "footer.php" ?>
 

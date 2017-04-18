@@ -25,31 +25,43 @@ function printHeader($currentPage, $nickname) {
 }
 
 function printLevelList($db) {
-    $result = $db->getLevels();
+    try {
+        $result = $db->getLevels();
+    } catch(Exception $e) {
+        echo $e . PHP_EOL;
+    }
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['name'] .'">';
+        echo '<li>Level name: <a href="play.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['name'] .'">';
         echo $value['name'] . '</a> | Creator: ' . $value['creatorNickname'] . '</li>';
     }
     echo '</ul>';
 }
 
-function printLevelCreatedBy($creatorNickname, $db) {
-    $result = $db->getLevelsCreatedBy($creatorNickname);
+function printLevelsCreatedBy($creatorNickname, $db) {
+    try {
+        $result = $db->getLevelsCreatedBy($creatorNickname);
+    } catch(Exception $e) {
+        echo $e . PHP_EOL;
+    }
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="level.php?creatorNickname=' . $creatorNickname .'&levelName=' . $value['name'] . '">' . $value['name'] . '</a></li>';
+        echo '<li>Level name: <a href="play.php?creatorNickname=' . $creatorNickname .'&levelName=' . $value['name'] . '">' . $value['name'] . '</a></li>';
     }
     echo '</ul>';
 }
 
 function printScoresObtainedBy($playerNickname, $db) {
-    $result = $db->getScoresObtainedBy($playerNickname);
+    try {
+        $result = $db->getScoresObtainedBy($playerNickname);
+    } catch(Exception $e) {
+        echo $e . PHP_EOL;
+    }
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="level.php?creatorNickname=' . $value['creatorNickname'];
+        echo '<li>Level name: <a href="play.php?creatorNickname=' . $value['creatorNickname'];
         echo '&levelName=' . $value['levelName'] . '">' . $value['levelName'] . '</a> | Creator: ' . $value['creatorNickname'];
-        echo '| Score: <a href="replay.php?creatorNickname='  . $value['creatorNickname'] . '&levelName=' . $value['levelName'] . '&playerNickname=' . $playerNickname . '">' . $value['score'] . '</a></li>';
+        echo '| Score: <a href="replay.php?creatorNickname='  . $value['creatorNickname'] . '&levelName=' . $value['levelName'] . '&playerNickname=' . $playerNickname . '&stamp=' . $value['stamp'] . '">' . $value['score'] . '</a></li>';
     }
     echo '</ul>';
 }

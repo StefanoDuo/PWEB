@@ -26,8 +26,8 @@ function fetchLevelObject(grid) {
 
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
-         //checks the classname of every element in the grid removing the substrings
-         //'box', ' ', 'firstOfRow' or any their(?) combination
+         // checks the classname of every element in the grid removing the substrings
+         // 'box', ' ', 'firstOfRow' or any their(?) combination
          string = grid[i][j].className.replace(/box|firstOfRow|\s/g, '');
          if(string !== '') {
             if(string === 'player' || string === 'ball' || string === 'hole') {
@@ -42,19 +42,23 @@ function fetchLevelObject(grid) {
          }
       }
    }
+   if(levelObject.player === null)
+      throw 'a player entity is needed';
+   if(levelObject.ball === null)
+      throw 'a ball entity is needed';
+   if(levelObject.hole === null)
+      throw 'a hole entity is needed';
    return levelObject;
 }
 
 function start() {
-   var sketcher = new Sketcher(GAMEFIELD_SIDE, 'gameField', 'box');
-
    var pressedButton = null;
-   var buttons = { //remove this if it's not going to be used
+   var buttons = {
       player : document.getElementById('player'),
       ball : document.getElementById('ball'),
       hole : document.getElementById('hole'),
       rock : document.getElementById('rock'),
-      reset : document.getElementById('player'),
+      reset : document.getElementById('reset'),
       save : document.getElementById('save')
    };
 
@@ -69,11 +73,11 @@ function start() {
          releaseButton(button)
       } else {
          // we need to press the button but first we release the
-         // pressed one (if it exists);
+         // pressed one if it exists
          if(pressedButton)
             releaseButton(pressedButton);
          button.setAttribute('pressed', '');
-         button.className = button.className.replace(/(red)|(blue)|(green)/, 'pressed$&');
+         button.className = button.className.replace(/(red)|(blue)|(green)|(gray)/, 'pressed$&');
          pressedButton = button;
       }
    }
@@ -95,7 +99,17 @@ function start() {
          for(var j = 0; j < grid[i].length; j++)
             sketcher.drawBoxByCoordinates(j, i, '');
    });
+   buttons.save.addEventListener('click', function () {
+      var levelObject = fetchLevelObject(grid);
+      var levelName = document.getElementById('levelName').value;
+      var creatorNickname = document.getElementById('nickname').firstChild.textContent;
+      var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
+      buttons.save.className = 'button disabled';
+      ajaxRequest('insertLevel.php', 'GET', queryString, true, function() { buttons.save.className = 'button gray';});
+   });
 
+
+   var sketcher = new BackgroundSketcher(GAMEFIELD_SIDE, 'gameField', 'box');
    var grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
@@ -105,13 +119,4 @@ function start() {
          })
       }
    }
-
-   buttons.save.addEventListener('click', function () {
-      var levelObject = fetchLevelObject(grid);
-      var levelName = document.getElementById('levelName').value;
-      var creatorNickname = document.getElementById('nickname').firstChild.textContent;
-      var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
-      buttons.save.className = 'button disabled';
-      ajaxRequest('insertLevel.php', 'GET', queryString, true, function() { buttons.save.className = 'button gray';});
-   });
 }
