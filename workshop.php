@@ -17,7 +17,7 @@
    <link rel="stylesheet" href="./css/main.css" >
    <script type="text/javascript" src="./js/matrix.js"></script>
    <script type="text/javascript" src="./js/vector.js"></script>
-   <script type="text/javascript" src="./js/BackgroundSketcher.js"></script>
+   <script type="text/javascript" src="./js/backgroundSketcher.js"></script>
    <script type="text/javascript" src="./js/ajaxRequest.js"></script>
    <script type="text/javascript" src="./js/workshop.js"></script>
 </head>

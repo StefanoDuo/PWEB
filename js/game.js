@@ -215,9 +215,8 @@ Game.prototype.updateBallPosition = function(newPosition) {
 }
 
 Game.prototype.moveBall = function() {
-   if(this.isBallHittingHole() && this.victoryCallback) {
+   if(this.isBallHittingHole() && this.victoryCallback)
          this.victoryCallback(this.score, this.replay);
-   }
    if(this.isBallOutOfBounds() || this.isBallHittingRock()) {
       this.ballMovingDirection = new this.vectorConstructor(0, 0);
       return;
@@ -228,21 +227,26 @@ Game.prototype.moveBall = function() {
 Game.prototype.movePlayer = function(direction) {
    if(direction.isEqual(new this.vectorConstructor(0,0)))
       return;
-   if(this.isPlayerOutOfBounds(direction) || this.isPlayerHittingRock(direction)) {
+   if(this.isPlayerOutOfBounds(direction) || this.isPlayerHittingRock(direction))
       return;
-   }
    if(this.isPlayerHittingBall(direction)) {
       var oldBallPosition = this.ballPosition;
       this.ballMovingDirection = direction;
       this.moveBall();
-      if(!oldBallPosition.isEqual(this.ballPosition))
+      if(!oldBallPosition.isEqual(this.ballPosition)) {
          // if the player is pushing the ball against a wall the
          // score doesn't increase
          this.score++;
+         this.replay.unshift(this.currentAction);
+         var currentState = this.getCurrentState();
+         currentState.ballPosition = oldBallPosition;
+         currentState.ballMovingDirection = new this.vectorConstructor(0, 0);
+         this.undoStack.push(currentState);
+      }
       return;
    }
    this.score++;
-   this.replay.unshift(this.action);
+   this.replay.unshift(this.currentAction);
    this.undoStack.push(this.getCurrentState());
    this.updatePlayerPosition(this.playerPosition.add(direction));
 }

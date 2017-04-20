@@ -20,7 +20,7 @@ function start() {
    levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-   var replay = JSON.parse(document.getElementById('replay').value);
+   replay = JSON.parse(document.getElementById('replay').value);
    var matrix = new Matrix(GAMEFIELD_SIZE, GAMEFIELD_SIZE);
    var game = new Game(matrix, levelObject, Vector);
    sketcher.drawGrid(game.getGrid());

@@ -17,7 +17,7 @@ function start() {
    levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-    game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
+   var game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
    input.startListening();
 
@@ -26,6 +26,12 @@ function start() {
    var shadowDrop = document.getElementById('shadowDrop');
    var undoDiv = document.getElementById('undo');
    var redoDiv = document.getElementById('redo');
+   var translateUndo = {
+      'RIGHT': 'LEFT',
+      'LEFT': 'RIGHT',
+      'UP': 'DOWN',
+      'DOWN': 'UP'
+   };
 
    function filterStack(element) {
       this.push(element.action);
@@ -36,18 +42,19 @@ function start() {
          element.removeChild(element.firstChild);
    }
 
+
    function drawStacks(redoStack, undoStack) {
       var redo = [], undo = [];
       redoStack.forEach(filterStack, redo);
       undoStack.forEach(filterStack, undo);
       removeChilds(undoDiv);
       removeChilds(redoDiv);
-      for (var i = undo.length - 1; i >= 0; i--) {
+      for (var i = undo.length - 1; i >=0 && i >= undo.length - 11; i--) {
          var element = document.createElement('li');
-         element.textContent = undo[i];
+         element.textContent = translateUndo[undo[i]];
          undoDiv.appendChild(element);
       }
-      for (var i = redo.length - 1; i >= 0; i--) {
+      for (var i = redo.length - 1; i >=0 && i >= redo.length - 11; i--) {
          var element = document.createElement('li');
          element.textContent = redo[i];
          redoDiv.appendChild(element);

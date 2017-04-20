@@ -1,6 +1,7 @@
 ---------------- FEATURES ----------------
-LEVEL PAGE
-1) translate moves based on them being on the redo and undo stack (e.g. redo needs to show the move, undo the opposite of the move)
+REPLAY PAGE
+1) fix next and previous function, when pressing next a collision check or a single ball movement
+	are accounted as a full action leading to buggy behaviour with numberOfMoves logic
 
 "ADVANCED STUFF"
 
