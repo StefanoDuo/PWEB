@@ -16,7 +16,7 @@
 	$db = new Database(connectToDB());
 	try {
 		$currentLevel = $db->getLevel($levelName, $creatorNickname);
-		$nextLevel = $db->getUnbeatedLevel($playerNickname);
+		$nextLevel = $db->getUnbeatedLevel($playerNickname, $levelName, $creatorNickname);
 	} catch(Exception $e) {
 		echo $e . PHP_EOL;
 	}
@@ -53,7 +53,7 @@
 		?>
 	</h1>
 	<div class="xWrapper">
-		<div id="undo"></div>
+		<ul id="undo"></ul>
    	<div id="gameField" class="xWrapper relative">
 			<div class="absolute hidden shadowDrop yWrapper" id="shadowDrop">
 				<h2>Congratulations</h2>
@@ -71,9 +71,9 @@
 				</div>
 			</div>
 		</div>
-		<div id="redo"></div>
+		<ul id="redo"></ul>
 	</div>
-	<input type="text" id="score" value="0">
+	<p id="score">0</p>
 </main>
 
 <?php include "footer.php" ?>

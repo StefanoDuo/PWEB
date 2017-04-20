@@ -14,6 +14,7 @@ function Game(matrix, levelObject, vectorConstructor) {
 // the initialization is done through a method so we can easily
 // reset the level during gameplay
 Game.prototype.initialize = function() {
+   this.currentAction = null;
    this.undoStack = [];
    this.redoStack = [];
    this.gameField.reset();
@@ -95,11 +96,19 @@ Game.prototype.isBallMoving = function() {
 
 
 // states logic
+Game.prototype.getFullState = function() {
+   var fullState = this.getCurrentState();
+   fullState.undoStack = this.undoStack;
+   fullState.redoStack = this.redoStack;
+   return fullState;
+}
+
 Game.prototype.getCurrentState = function() {
    return {
       playerPosition: this.playerPosition,
       ballPosition: this.ballPosition,
       ballMovingDirection: this.ballMovingDirection,
+      action: this.currentAction,
       score: this.score
    };
 }
@@ -110,6 +119,7 @@ Game.prototype.setCurrentState = function(state) {
    this.ballMovingDirection = state.ballMovingDirection;
 }
 
+
 Game.prototype.undo = function() {
    var previousState = this.undoStack.pop();
    // can't undo before the first action
@@ -117,7 +127,9 @@ Game.prototype.undo = function() {
       return;
    this.score++;
    this.replay.unshift('UNDO');
-   this.redoStack.push(this.getCurrentState());
+   var currentState = this.getCurrentState();
+   currentState.action = previousState.action;
+   this.redoStack.push(currentState);
    this.setCurrentState(previousState);
 }
 
@@ -128,7 +140,9 @@ Game.prototype.redo = function() {
       return;
    this.score++;
    this.replay.unshift('REDO');
-   this.undoStack.push(this.getCurrentState());
+   var currentState = this.getCurrentState();
+   currentState.action = previousState.action;
+   this.undoStack.push(currentState);
    this.setCurrentState(previousState);
 }
 
@@ -137,42 +151,53 @@ Game.prototype.redo = function() {
 // interface to the input object or whatever we want to use
 Game.prototype.update = function(action) {
    var direction;
-   if(action === 'UP')
-      direction = new this.vectorConstructor(0, -1);
-   else if(action === 'DOWN')
-      direction = new this.vectorConstructor(0, 1);
-   else if(action === 'LEFT')
-      direction = new this.vectorConstructor(-1, 0);
-   else if(action === 'RIGHT')
-      direction = new this.vectorConstructor(1, 0);
-   else if(action === 'RESET') {
-      this.initialize();
-      return this.score;
-   } else if(action === 'UNDO'){
-      this.undo();
-      return this.score;
-   } else if(action === 'REDO') {
-      this.redo();
-      return this.score;
-   } else if(!this.isBallMoving())
-      // if there's no action and the ball isn't moving
-      // update doesn't need to do anything
-      return this.score;
+   this.currentAction = action;
+   switch(action) {
+      case 'UP':
+         direction = new this.vectorConstructor(0, -1);
+         break;
+      case 'DOWN':
+         direction = new this.vectorConstructor(0, 1);
+         break;
+      case 'LEFT':
+         direction = new this.vectorConstructor(-1, 0);
+         break;
+      case 'RIGHT':
+         direction = new this.vectorConstructor(1, 0);
+         break;
+      case 'RESET':
+         this.initialize();
+         this.currentAction = null;
+         return;
+      case 'UNDO':
+         this.undo();
+         this.currentAction = null;
+         return;
+      case 'REDO':
+         this.redo();
+         this.currentAction = null;
+         return;
+      default:
+         // if there's no action but the ball is moving
+         // we need to update its position
+         this.moveBall();
+         this.currentAction = null;
+         return;
+   }
    // at the moment the ball and the player can't move at the same time
    // if we want to allow that in the future the ball movement must be
    // all computed at the same time otherwhise redo and undo action could
    // lead to buggy behaviour
-   if(this.isBallMoving())
+   if(this.isBallMoving()) {
       this.moveBall();
-   else {
-      // you can redo action only while you're undo-ing, as soon
-      // as you make a real move your redo stack is emptied
-      this.redoStack = [];
-      this.replay.unshift(action);
-      this.undoStack.push(this.getCurrentState());
-      this.movePlayer(direction);
+      this.currentAction = null;
+      return;
    }
-   return this.score;
+   // you can redo action only while you're undo-ing, as soon
+   // as you make a real move your redo stack is emptied
+   this.redoStack = [];
+   this.movePlayer(direction);
+   this.currentAction = null;
 }
 
 
@@ -211,9 +236,13 @@ Game.prototype.movePlayer = function(direction) {
       this.ballMovingDirection = direction;
       this.moveBall();
       if(!oldBallPosition.isEqual(this.ballPosition))
+         // if the player is pushing the ball against a wall the
+         // score doesn't increase
          this.score++;
       return;
    }
    this.score++;
+   this.replay.unshift(this.action);
+   this.undoStack.push(this.getCurrentState());
    this.updatePlayerPosition(this.playerPosition.add(direction));
 }

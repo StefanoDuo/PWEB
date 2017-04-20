@@ -99,8 +99,9 @@ class Database {
 		return $result;
 	}
 
-	public function getUnbeatedLevel($playerNickname) {
-		$success = $this->mysqli->real_query("CALL getUnbeatedLevel('$playerNickname');");
+	// the primary key of the current level is needed to avoid receiving the current level as the next
+	public function getUnbeatedLevel($playerNickname, $levelName, $creatorNickname) {
+		$success = $this->mysqli->real_query("CALL getUnbeatedLevel('$playerNickname', '$creatorNickname', '$levelName');");
 		if(!$success)
 			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
 		$queryResult = $this->mysqli->store_result();

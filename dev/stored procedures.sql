@@ -39,7 +39,8 @@ BEGIN
 		AND L.creatorNickname = _creatorNickname;
 END $$
 
-CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(50))
+CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(50), IN _creatorNickname VARCHAR(50),
+								  IN _levelName VARCHAR(50))
 BEGIN
 	SELECT L.*
     FROM Level L
@@ -49,7 +50,10 @@ BEGIN
             WHERE BB.playerNickname = _playerNickname
         ) AS B ON L.name = B.levelName
     WHERE B.levelName IS NULL
-    ORDER BY RAND()
+		AND (
+			L.creatorNickname <> _creatorNickname
+			OR L.name <> _levelName
+    ) ORDER BY RAND()
     LIMIT 1;
 END $$
 
@@ -69,20 +73,22 @@ BEGIN
 		AND B.stamp = _stamp;
 END $$
 
-CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50), IN _levelObject BLOB)
+CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50),
+							 IN _levelObject BLOB)
 BEGIN
 	INSERT INTO `Level`(`name`, `creatorNickname`, `levelObject`)
 		VALUE (_levelName, _creatorNickname, _levelObject);
 END $$
 
-CREATE PROCEDURE insertUser(IN _nickname VARCHAR(50), IN _email VARCHAR(50), IN _password VARCHAR(50))
+CREATE PROCEDURE insertUser(IN _nickname VARCHAR(50), IN _email VARCHAR(50),
+							IN _password VARCHAR(50))
 BEGIN
 	INSERT INTO `User`(`nickname`, `email`, `password`)
 		VALUE (_nickname, _email, _password);
 END $$
 
 CREATE PROCEDURE insertScore(IN _playerNickname VARCHAR(50), IN _levelCreatorNickname VARCHAR(50),
-	IN _levelName VARCHAR(50), IN _score INTEGER, IN _replay TEXT)
+							 IN _levelName VARCHAR(50), IN _score INTEGER, IN _replay TEXT)
 BEGIN
 	INSERT INTO `BeatenBy`(`playerNickname`, `creatorNickname`, `levelName`, `score`, `replay`)
 		VALUE (_playerNickname, _levelCreatorNickname, _levelName, _score, _replay);

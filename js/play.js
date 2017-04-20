@@ -17,17 +17,53 @@ function start() {
    levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-   var game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
+    game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
    input.startListening();
 
-   var score = document.getElementById('score');
-   var score2 = document.getElementById('score2').firstChild;
+   var scoreEl1 = document.getElementById('score').firstChild;
+   var scoreEl2 = document.getElementById('score2').firstChild;
    var shadowDrop = document.getElementById('shadowDrop');
+   var undoDiv = document.getElementById('undo');
+   var redoDiv = document.getElementById('redo');
+
+   function filterStack(element) {
+      this.push(element.action);
+   }
+
+   function removeChilds(element) {
+      while(element.firstChild)
+         element.removeChild(element.firstChild);
+   }
+
+   function drawStacks(redoStack, undoStack) {
+      var redo = [], undo = [];
+      redoStack.forEach(filterStack, redo);
+      undoStack.forEach(filterStack, undo);
+      removeChilds(undoDiv);
+      removeChilds(redoDiv);
+      for (var i = undo.length - 1; i >= 0; i--) {
+         var element = document.createElement('li');
+         element.textContent = undo[i];
+         undoDiv.appendChild(element);
+      }
+      for (var i = redo.length - 1; i >= 0; i--) {
+         var element = document.createElement('li');
+         element.textContent = redo[i];
+         redoDiv.appendChild(element);
+      }
+   }
+
+   function updateScore(score) {
+      scoreEl2.textContent = scoreEl1.textContent = score;
+   }
 
    function startGame() {
       return setInterval(function() {
-         score2.textContent = score.value = game.update(input.getPriorityTranslation());
+         game.update(input.getPriorityTranslation());
+         var currentState = game.getFullState();
+         updateScore(currentState.score);
+         drawStacks(currentState.redoStack, currentState.undoStack);
          sketcher.drawGrid(game.getGrid());
       }, 100);
    }

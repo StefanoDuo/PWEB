@@ -1,6 +1,6 @@
 ---------------- FEATURES ----------------
 LEVEL PAGE
-2) add visual undo, redo moves tracker
+1) translate moves based on them being on the redo and undo stack (e.g. redo needs to show the move, undo the opposite of the move)
 
 "ADVANCED STUFF"
 
