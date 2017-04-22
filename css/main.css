@@ -11,7 +11,7 @@ html, body {
    margin: 0px;
    border: 0px;
    background-color: #FFFFFF;
-   color: #00000087;
+   color: rgb(0,0,0);
 }
 
 body {
@@ -72,8 +72,14 @@ body {
 }
 
 main {
+   min-height: 500px;
+   margin: 3em;
+}
+
+.main {
    height: 500px;
    margin: 3em;
+   max-width: 1000px;
 }
 
 #gameField {

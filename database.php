@@ -169,7 +169,7 @@ class Database {
 function connectToDB() {
 	$hostname = "localhost";
 	$user = "root";
-	$password = "ciaociao";
+	$password = "";
 	$database = "PWEB";
 
 	$mysqli = new mysqli($hostname, $user, $password, $database);

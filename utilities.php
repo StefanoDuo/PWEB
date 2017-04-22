@@ -32,7 +32,7 @@ function printLevelList($db) {
     }
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="play.php?creatorNickname=' . $value['creatorNickname'] .'&levelName=' . $value['name'] .'">';
+        echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) .'&levelName=' . urlencode($value['name']) .'">';
         echo $value['name'] . '</a> | Creator: ' . $value['creatorNickname'] . '</li>';
     }
     echo '</ul>';
@@ -46,7 +46,8 @@ function printLevelsCreatedBy($creatorNickname, $db) {
     }
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="play.php?creatorNickname=' . $creatorNickname .'&levelName=' . $value['name'] . '">' . $value['name'] . '</a></li>';
+        echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($creatorNickname);
+        echo '&levelName=' . urlencode($value['name']) . '">' . $value['name'] . '</a></li>';
     }
     echo '</ul>';
 }
@@ -59,9 +60,12 @@ function printScoresObtainedBy($playerNickname, $db) {
     }
     echo '<ul>';
     foreach ($result as $key => $value) {
-        echo '<li>Level name: <a href="play.php?creatorNickname=' . $value['creatorNickname'];
-        echo '&levelName=' . $value['levelName'] . '">' . $value['levelName'] . '</a> | Creator: ' . $value['creatorNickname'];
-        echo '| Score: <a href="replay.php?creatorNickname='  . $value['creatorNickname'] . '&levelName=' . $value['levelName'] . '&playerNickname=' . $playerNickname . '&stamp=' . $value['stamp'] . '">' . $value['score'] . '</a></li>';
+        echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']);
+        echo '&levelName=' . urlencode($value['levelName']) . '">' . $value['levelName'];
+        echo '</a> | Creator: ' . $value['creatorNickname'];
+        echo '| Score: <a href="replay.php?creatorNickname=' . urlencode($value['creatorNickname']);
+        echo '&levelName=' . urlencode($value['levelName']) . '&playerNickname=' . urlencode($playerNickname);
+        echo '&stamp=' . urlencode($value['stamp']) . '">' . $value['score'] . '</a></li>';
     }
     echo '</ul>';
 }

@@ -1,15 +1,7 @@
----------------- FEATURES ----------------
-REPLAY PAGE
-1) fix next and previous function, when pressing next a collision check or a single ball movement
-	are accounted as a full action leading to buggy behaviour with numberOfMoves logic
+SIGNUP PAGE
+1) check with ajax if email user etc. alredy exists, if php gets error for duplicate key do not print
 
 "ADVANCED STUFF"
-
-PLAY PAGE
-1) allow saving current game status to resume gameplay later
-2) after beating a level if the player isn't logged in save the score in the local storage and
-   show a message explaining to log in if willing to save the score, offering a link to login
-   or register page that will redirect the user back to the level page after completing the task
 
 USER PAGE
 1) add the custom keybindings option
@@ -22,6 +14,9 @@ WORKSHOP PAGE
 		been visited --> returns false
 
 ---------------- REFACTORING ----------------
+JSON.PARSE
+1) implement a function or an object to simplify the parsing of a json string into vector, matrix, ... object directly
+
 GAME OBJECT
 1) refactor to implement the new sketching mechanic
 

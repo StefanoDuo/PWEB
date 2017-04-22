@@ -1,8 +1,7 @@
 <?php
 	session_start();
 	// sign up page can't be accessed by logged in user
-	$nickname = $_SESSION['nickname'];
-	if(isset($nickname)) {
+	if(isset($_SESSION['nickname'])) {
 		header("Location: /PWEB/index.php");
 		exit();
 	}

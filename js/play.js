@@ -1,4 +1,13 @@
 function start() {
+   var playerNickname = document.getElementById('nickname');
+   var levelName = document.getElementById('levelName').firstChild.textContent;
+   var levelCreatorNickname = document.getElementById('levelCreatorNickname').firstChild.textContent;
+   var localSaves = new LocalSaves(ajaxRequest);
+   if(playerNickname) {
+      playerNickname = playerNickname.firstChild.textContent;
+      localSaves.pushStoredScoreSaves(playerNickname);
+   }
+
    var gameFieldSize = 10;
    var translator = {
       87: 'UP',
@@ -9,18 +18,6 @@ function start() {
       69: 'UNDO',
       82: 'RESET'
    };
-   var input = new Input('body', new Queue(), translator);
-   var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
-   // retrieve levelObject from hidden input element, and transforms simple object into Vectors
-   var levelObject = document.getElementById('levelObject').value;
-   levelObject = JSON.parse(levelObject);
-   levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
-   levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
-   levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-   var game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
-   sketcher.drawGrid(game.getGrid());
-   input.startListening();
-
    var scoreEl1 = document.getElementById('score').firstChild;
    var scoreEl2 = document.getElementById('score2').firstChild;
    var shadowDrop = document.getElementById('shadowDrop');
@@ -30,10 +27,42 @@ function start() {
       'RIGHT': 'LEFT',
       'LEFT': 'RIGHT',
       'UP': 'DOWN',
-      'DOWN': 'UP'
+      'DOWN': 'UP',
+      'BALL RIGHT': 'BALL LEFT',
+      'BALL LEFT': 'BALL RIGHT',
+      'BALL UP': 'BALL DOWN',
+      'BALL DOWN': 'BALL UP'
    };
+   var input = new Input('body', new Queue(), translator);
+   var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
+   var game = localSaves.getResumeSave(levelCreatorNickname, levelName, playerNickname);
+   if(!game) {
+      // retrieve levelObject from hidden input element, and transforms simple object into Vectors
+      var levelObject = decodeURIComponent(document.getElementById('levelObject').value);
+      levelObject = JSON.parse(levelObject);
+      levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
+      levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
+      levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
+      levelObject.rocks.forEach(function(element, index, array) {
+            array[index] = new Vector(element.x, element.y);
+      });
+      game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
+   }
+   var currentState = game.getFullState();
+   updateScore(currentState.score);
+   drawStacks(currentState.redoStack, currentState.undoStack);
+   sketcher.drawGrid(game.getGrid());
+   input.startListening();
 
-   function filterStack(element) {
+   function filterUndo(element) {
+      var action = element.action;
+      if(element.hasBallMoved) {
+         action = 'BALL ' + action;
+      }
+      this.push(action);
+   }
+
+   function filterRedo(element) {
       this.push(element.action);
    }
 
@@ -45,16 +74,17 @@ function start() {
 
    function drawStacks(redoStack, undoStack) {
       var redo = [], undo = [];
-      redoStack.forEach(filterStack, redo);
-      undoStack.forEach(filterStack, undo);
+      var movesToShow = 5;
+      redoStack.forEach(filterRedo, redo);
+      undoStack.forEach(filterUndo, undo);
       removeChilds(undoDiv);
       removeChilds(redoDiv);
-      for (var i = undo.length - 1; i >=0 && i >= undo.length - 11; i--) {
+      for (var i = undo.length - 1; i >=0 && i >= undo.length - (movesToShow + 1); i--) {
          var element = document.createElement('li');
          element.textContent = translateUndo[undo[i]];
          undoDiv.appendChild(element);
       }
-      for (var i = redo.length - 1; i >=0 && i >= redo.length - 11; i--) {
+      for (var i = redo.length - 1; i >=0 && i >= redo.length - (movesToShow + 1); i--) {
          var element = document.createElement('li');
          element.textContent = redo[i];
          redoDiv.appendChild(element);
@@ -84,24 +114,25 @@ function start() {
    }, false);
 
    var intervalID = startGame();
+   var isLevelBeaten = false;
 
    game.setVictoryCallback(function(score, replay) {
       shadowDrop.className = shadowDrop.className.replace(' hidden', '');
-      var nickname = document.getElementById('nickname');
-      if(nickname) {
-         nickname = nickname.firstChild.textContent;
-         var levelName = document.getElementById('levelName').firstChild.textContent;
-         var levelCreatorNickname = document.getElementById('levelCreatorNickname').firstChild.textContent;
-         replay = JSON.stringify(replay);
-         var queryString = 'playerNickname=' + nickname + '&levelName=' + levelName;
-         queryString += '&levelCreatorNickname=' + levelCreatorNickname + '&score=' + score + '&replay=' + replay;
-         ajaxRequest('insertScore.php', 'GET', queryString, true);
-
-         // insert request to receive a link to a new level        
+      isLevelBeaten = true;
+      if(playerNickname) {
+         // if the user is logged in we directly push the level score to the database
+         localSaves.pushScoreSave(playerNickname, levelName, levelCreatorNickname, score, replay)
       } else {
-         // handling for non logged in user not implemented yet
+         // otherwise we save the score in the localStorage waiting for the user to log-in
+         localSaves.insertScoreSave(replay, score, levelCreatorNickname, levelName);
       }
       window.clearInterval(intervalID);
       input.stopListening();
    });
+
+   window.onbeforeunload = function(e) {
+      if(isLevelBeaten)
+         return;
+      localSaves.insertResumeSave(game, levelCreatorNickname, levelName, playerNickname);
+   }
 }
