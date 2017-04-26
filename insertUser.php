@@ -5,19 +5,19 @@
 		header("Location: /PWEB/index.php");
 		exit();
 	}
-
 	include "database.php";
-	checkPOST();
 	include "utilities.php";
-
 	$db = new Database(connectToDB());
-
-	$nickname = $_POST['nickname'];
-	$email = $_POST['email'];
-	$password = $_POST['password'];
+	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : null;
+	$email = isset($_POST['email']) ? $_POST['email'] : null;
+	$password = isset($_POST['password']) ? $_POST['password'] : null;
+	if(is_null($nickname) || is_null($email) || is_null($password)) {
+		header("Location: /PWEB/index.php");
+		exit();
+	}
 
 	try {
-		$result = $db->insertUser($nickname, $email, $password);
+		$db->insertUser($nickname, $email, $password);
 	} catch(Exception $e) {
 		echo $e->getMessage() . PHP_EOL;
 	}
@@ -34,7 +34,7 @@
 </head>
 <body onLoad="start()">
 
-<?php printHeader("levelCreation", isset($nickname) ? $nickname : false); ?>
+<?php printHeader("levelCreation", $nickname); ?>
 
 <p>You will be redirected in <strong id="counter">5</strong></p>
 

@@ -5,13 +5,13 @@ USE `PWEB`;
 
 CREATE TABLE `User` (
 	`nickname` VARCHAR(50) NOT NULL,
-	`email` VARCHAR(50),
+	`email` VARCHAR(50) UNIQUE,
 	`password` VARCHAR(50),
 
 	PRIMARY KEY (`nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `User` VALUES ('user1', 'email1', 'user1'), ('user2', 'email2', 'user2'), ('user3', 'email3', 'user3');
+INSERT INTO `User` VALUES ('user1', 'email1@gmail.com', 'user1'), ('user2', 'email2@gmail.com', 'user2'), ('user3', 'email3@gmail.com', 'user3');
 
 
 

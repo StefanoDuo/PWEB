@@ -1,6 +1,6 @@
 <?php
    session_start();
-   $nickname = $_SESSION['nickname'];
+   $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    if(!isset($nickname)) {
       header("Location: /PWEB/index.php");
       exit();
@@ -23,7 +23,7 @@
 </head>
 <body id="body" onLoad="start()">
 
-<?php printHeader("workshop", isset($nickname) ? $nickname : false); ?>
+<?php printHeader("workshop", $nickname); ?>
 
 <main class="xWrapper">
    <div id="gameField" class="xWrapper"></div>

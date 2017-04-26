@@ -47,9 +47,25 @@ class Database {
 		}
 	}
 
-	public function getUser($nickname) {
+	public function nicknameExists($nickname) {
 		// real_query() returns false if the query execution failed, true otherwise
-		$success = $this->mysqli->real_query("CALL getUser('$nickname');");
+		$success = $this->mysqli->real_query("CALL nicknameExists('$nickname');");
+		if(!$success)
+			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
+		// store_result() returns false if either the query didn't produce a result
+		// (eg. INSERT statement) or if the execution failed, that can't be happening
+		// for us because we check for execution fails with real_query()
+		$queryResult = $this->mysqli->store_result();
+		if(!$queryResult)
+			return null;
+		$result = $this->fetchResult($queryResult);
+		$this->clearExtraResultSets();
+		return $result;
+	}
+
+	public function emailExists($email) {
+		// real_query() returns false if the query execution failed, true otherwise
+		$success = $this->mysqli->real_query("CALL emailExists('$email');");
 		if(!$success)
 			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
 		// store_result() returns false if either the query didn't produce a result
@@ -171,17 +187,9 @@ function connectToDB() {
 	$user = "root";
 	$password = "";
 	$database = "PWEB";
-
 	$mysqli = new mysqli($hostname, $user, $password, $database);
 	if ($mysqli->connect_errno)
 		throw "Failed to connect to MySQL: " . $mysqli->connect_error;
 	return $mysqli;
-}
-
-function checkPOST() {
-	if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-		header("Location: /PWEB/index.php");
-		exit();
-	}
 }
 ?>

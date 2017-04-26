@@ -1,10 +1,14 @@
 <?php
 	session_start();
-	if(!isset($_SESSION['nickname'])){
+   $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
+	// only logged in users can access the logout page
+	if(is_null($nickname)){
 		header("Location: /PWEB/index.php");
 		exit();
 	}
 	include "utilities.php";
+	// resets the $_SESSION array
+	$_SESSION = array();
 ?>
 
 <!DOCTYPE html>
@@ -18,11 +22,7 @@
 </head>
 <body onLoad="start()">
 
-<?php
-	// resets the $_SESSION array
-	$_SESSION = array();
-	printHeader("logout", isset($_SESSION['nickname']));
-?>
+<?php printHeader("logout", $nickname); ?>
 
 <p>Successfully logged out. You will be redirected in <strong id="counter">5</strong></p>
 

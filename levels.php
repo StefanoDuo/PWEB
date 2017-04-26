@@ -2,6 +2,14 @@
 	session_start();
 	include "utilities.php";
 	include "database.php";
+   $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
+   $db = new Database(connectToDB());
+   try {
+      $levels = $db->getLevels();
+   } catch(Exception $e) {
+      $levels = null;
+      echo $e . PHP_EOL;
+   }
 ?>
 
 <!DOCTYPE html>
@@ -14,10 +22,10 @@
 </head>
 <body>
 
-<?php printHeader("levels", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false); ?>
+<?php printHeader("levels", $nickname); ?>
 
 <main class="yWrapper">
-	<?php printLevelList(new Database(connectToDB())); ?>
+	<?php printLevelList($levels); ?>
 </main>
 
 <?php include "footer.php" ?>

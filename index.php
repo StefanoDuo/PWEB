@@ -1,5 +1,6 @@
 <?php
 	session_start();
+   $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 	include "utilities.php";
 ?>
 
@@ -13,7 +14,7 @@
 </head>
 <body>
 
-<?php printHeader("index", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false); ?>
+<?php printHeader("index", $nickname); ?>
 
 <!-- will contain game "lore" and tutorial -->
 <h1>Soon&trade;</h1>

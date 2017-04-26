@@ -1,15 +1,62 @@
+function filterUndo(element) {
+   var action = element.action;
+   if(element.hasBallMoved) {
+      action = 'BALL ' + action;
+   }
+   this.push(action);
+}
+
+function filterRedo(element) {
+   this.push(element.action);
+}
+
+function removeChilds(element) {
+   while(element.firstChild)
+      element.removeChild(element.firstChild);
+}
+
+function drawStacks(redoStack, undoStack, undoContainer, redoContainer, translateUndo) {
+   var redo = [], undo = [];
+   var movesToShow = 5;
+   redoStack.forEach(filterRedo, redo);
+   undoStack.forEach(filterUndo, undo);
+   removeChilds(undoContainer);
+   removeChilds(redoContainer);
+   for (var i = undo.length - 1; i >=0 && i >= undo.length - (movesToShow + 1); i--) {
+      var element = document.createElement('li');
+      element.textContent = translateUndo[undo[i]];
+      undoContainer.appendChild(element);
+   }
+   for (var i = redo.length - 1; i >=0 && i >= redo.length - (movesToShow + 1); i--) {
+      var element = document.createElement('li');
+      element.textContent = redo[i];
+      redoContainer.appendChild(element);
+   }
+}
+
+function updateScore(score, scoreElements) {
+   scoreElements.forEach(function(element) {
+      element.textContent = score;
+   });
+}
+
 function start() {
    var playerNickname = document.getElementById('nickname');
    var levelName = document.getElementById('levelName').firstChild.textContent;
    var levelCreatorNickname = document.getElementById('levelCreatorNickname').firstChild.textContent;
+   var shadowDrop = document.getElementById('shadowDrop');
+   var undoContainer = document.getElementById('undo');
+   var redoContainer = document.getElementById('redo');
+   var scoreElements = [];
+   scoreElements.push(document.getElementById('score').firstChild);
+   scoreElements.push(document.getElementById('score2').firstChild);
    var localSaves = new LocalSaves(ajaxRequest);
    if(playerNickname) {
       playerNickname = playerNickname.firstChild.textContent;
       localSaves.pushStoredScoreSaves(playerNickname);
    }
-
    var gameFieldSize = 10;
-   var translator = {
+   var inputTranslator = {
       87: 'UP',
       65: 'LEFT',
       83: 'DOWN',
@@ -18,11 +65,6 @@ function start() {
       69: 'UNDO',
       82: 'RESET'
    };
-   var scoreEl1 = document.getElementById('score').firstChild;
-   var scoreEl2 = document.getElementById('score2').firstChild;
-   var shadowDrop = document.getElementById('shadowDrop');
-   var undoDiv = document.getElementById('undo');
-   var redoDiv = document.getElementById('redo');
    var translateUndo = {
       'RIGHT': 'LEFT',
       'LEFT': 'RIGHT',
@@ -33,7 +75,7 @@ function start() {
       'BALL UP': 'BALL DOWN',
       'BALL DOWN': 'BALL UP'
    };
-   var input = new Input('body', new Queue(), translator);
+   var input = new Input('body', new Queue(), inputTranslator);
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
    var game = localSaves.getResumeSave(levelCreatorNickname, levelName, playerNickname);
    if(!game) {
@@ -48,74 +90,24 @@ function start() {
       });
       game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
    }
+   // initial draw of the scene
    var currentState = game.getFullState();
-   updateScore(currentState.score);
-   drawStacks(currentState.redoStack, currentState.undoStack);
+   updateScore(currentState.score, scoreElements);
+   drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo);
    sketcher.drawGrid(game.getGrid());
    input.startListening();
-
-   function filterUndo(element) {
-      var action = element.action;
-      if(element.hasBallMoved) {
-         action = 'BALL ' + action;
-      }
-      this.push(action);
-   }
-
-   function filterRedo(element) {
-      this.push(element.action);
-   }
-
-   function removeChilds(element) {
-      while(element.firstChild)
-         element.removeChild(element.firstChild);
-   }
-
-
-   function drawStacks(redoStack, undoStack) {
-      var redo = [], undo = [];
-      var movesToShow = 5;
-      redoStack.forEach(filterRedo, redo);
-      undoStack.forEach(filterUndo, undo);
-      removeChilds(undoDiv);
-      removeChilds(redoDiv);
-      for (var i = undo.length - 1; i >=0 && i >= undo.length - (movesToShow + 1); i--) {
-         var element = document.createElement('li');
-         element.textContent = translateUndo[undo[i]];
-         undoDiv.appendChild(element);
-      }
-      for (var i = redo.length - 1; i >=0 && i >= redo.length - (movesToShow + 1); i--) {
-         var element = document.createElement('li');
-         element.textContent = redo[i];
-         redoDiv.appendChild(element);
-      }
-   }
-
-   function updateScore(score) {
-      scoreEl2.textContent = scoreEl1.textContent = score;
-   }
 
    function startGame() {
       return setInterval(function() {
          game.update(input.getPriorityTranslation());
          var currentState = game.getFullState();
-         updateScore(currentState.score);
-         drawStacks(currentState.redoStack, currentState.undoStack);
+         updateScore(currentState.score, scoreElements);
+         drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo);
          sketcher.drawGrid(game.getGrid());
       }, 100);
    }
-
-   document.getElementById('playAgain').addEventListener('click', function() {
-      shadowDrop.className += ' hidden';
-      game.initialize();
-      sketcher.drawGrid(game.getGrid());
-      intervalID = startGame();
-      input.startListening();
-   }, false);
-
    var intervalID = startGame();
    var isLevelBeaten = false;
-
    game.setVictoryCallback(function(score, replay) {
       shadowDrop.className = shadowDrop.className.replace(' hidden', '');
       isLevelBeaten = true;
@@ -135,4 +127,12 @@ function start() {
          return;
       localSaves.insertResumeSave(game, levelCreatorNickname, levelName, playerNickname);
    }
+   // it's the button that appears when the user completes the level
+   document.getElementById('playAgain').addEventListener('click', function() {
+      shadowDrop.className += ' hidden';
+      game.initialize();
+      sketcher.drawGrid(game.getGrid());
+      intervalID = startGame();
+      input.startListening();
+   }, false);
 }

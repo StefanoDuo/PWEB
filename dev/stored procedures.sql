@@ -1,4 +1,5 @@
-DROP PROCEDURE IF EXISTS getUser;
+DROP PROCEDURE IF EXISTS nicknameExists;
+DROP PROCEDURE IF EXISTS emailExists;
 DROP PROCEDURE IF EXISTS getLevels;
 DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
 DROP PROCEDURE IF EXISTS getLevel;
@@ -11,11 +12,18 @@ DROP PROCEDURE IF EXISTS insertScore;
 
 DELIMITER $$
 
-CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50))
+CREATE PROCEDURE nicknameExists(IN _userNickname VARCHAR(50))
 BEGIN
-	SELECT U.nickname
+    SELECT IF(U.nickname IS NULL, "false", "true") as nicknameExists
     FROM User U
     WHERE U.nickname = _userNickname;
+END $$
+
+CREATE PROCEDURE emailExists(IN _email VARCHAR(50))
+BEGIN
+    SELECT IF(U.email IS NULL, "false", "true") as emailExists
+    FROM User U
+    WHERE U.email = _email;
 END $$
 
 CREATE PROCEDURE getLevels()

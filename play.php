@@ -1,12 +1,9 @@
 <?php
 	session_start();
-
-	$creatorNickname = $_GET['creatorNickname'];
-	$levelName = $_GET['levelName'];
-
-	$playerNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : '';
-
-	if(!isset($creatorNickname) || !isset($levelName)) {
+	$creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
+	$levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
+	$playerNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
+	if(is_null($creatorNickname) || is_null($levelName)) {
       header("Location: /PWEB/index.php");
       exit();
 	}
@@ -16,9 +13,21 @@
 	$db = new Database(connectToDB());
 	try {
 		$currentLevel = $db->getLevel($levelName, $creatorNickname);
+	} catch(Exception $e) {
+		$currentLevel = null;
+		echo $e . PHP_EOL;
+	}
+	try {
 		$nextLevel = $db->getUnbeatedLevel($playerNickname, $levelName, $creatorNickname);
 	} catch(Exception $e) {
+		$nextLevel = null;
 		echo $e . PHP_EOL;
+	}
+	if(is_null($nextLevel))
+		$nextButton = '<button class="button gray" disabled>You\'ve beaten all levels</button>';
+	else {
+		$nextButton = '<a class="button gray" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
+		$nextButton .= '&levelName=' . $nextLevel['name'] .'">Next Level</a>';
 	}
 ?>
 
@@ -42,7 +51,7 @@
 <body id="body" onLoad="start()">
 
 <?php
-	printHeader("", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false);
+	printHeader('', $playerNickname);
 	echo '<input type="hidden" id="levelObject" value="' . urlencode($currentLevel['levelObject']) . '">';
 ?>
 
@@ -61,14 +70,7 @@
 					<h2>Congratulations</h2>
 					<p>Score <span id="score2">0</span></p>
 					<div class="xWrapper">
-						<?php
-							if(is_null($nextLevel))
-								echo '<button class="button gray" disabled>You\'ve beaten all levels</button>';
-							else {
-								echo '<a class="button gray" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
-								echo '&levelName=' . urlencode($nextLevel['name']) .'">Next Level</a>';
-							}
-						?>
+						<?php echo $nextButton ?>
 						<button class="button gray" id="playAgain">Play Again</button>
 					</div>
 				</div>

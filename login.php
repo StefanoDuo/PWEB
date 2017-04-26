@@ -1,6 +1,7 @@
 <?php
 	session_start();
-	if(isset($_SESSION['nickname'])) {
+   $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
+	if(!is_null($nickname)) {
 		header("Location: /PWEB/index.php");
 		exit();
 	}
@@ -14,10 +15,12 @@
 	<title>Login / Signup</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="./css/main.css">
+	<script type="text/javascript" src="./js/ajaxRequest.js"></script>
+	<script type="text/javascript" src="./js/login.js"></script>
 </head>
-<body>
+<body onLoad="start()">
 
-<?php printHeader("login", isset($_SESSION['nickname']) ? $_SESSION['nickname'] : false); ?>
+<?php printHeader("login", $nickname); ?>
 
 <main class="yWrapper">
 	<form action="checkLogin.php" method="post">
@@ -34,8 +37,8 @@
 	<form action="insertUser.php" method="post">
 	<fieldset>
 		<legend>Create your account</legend>
-		<label>Nickname <input type="text" required name="nickname"></label>
-		<label>Email <input type="email" name="email"></label>
+		<label>Nickname <input type="text" required name="nickname" id="nickname"></label>
+		<label>Email <input type="email" name="email" id="email"></label>
 		<label>Password <input type="password" required name="password"></label>
 	</fieldset>
 		<input type="submit" value="submit">

@@ -1,5 +1,5 @@
-SIGNUP PAGE
-1) check with ajax if email user etc. alredy exists, if php gets error for duplicate key do not print
+INSERT USER PAGE
+1) check if the insert had success or if the primary key specified was alredy used, etc.
 
 "ADVANCED STUFF"
 
@@ -14,11 +14,9 @@ WORKSHOP PAGE
 		been visited --> returns false
 
 ---------------- REFACTORING ----------------
-JSON.PARSE
-1) implement a function or an object to simplify the parsing of a json string into vector, matrix, ... object directly
-
-GAME OBJECT
-1) refactor to implement the new sketching mechanic
+PHP
+1) move all php logic at the beginning of the php page, once the html begins php can only print variables
+2) make the database class a singleton (private constructor + method which returns the instance of the class) and make it global?
 
 SKETCHER OBJECT ---- BACKGROUNDSKETCHER
 1) the sketcher will only handle the static grid tiles (rocks and the hole)
@@ -35,14 +33,7 @@ NEW OBJECT ---- FOREGROUNDSKETCHER
 
 GAME OBJECT
 1) the getGrid() method is used to give the total layout of the grid (used by the
-	sketcher object to draw the grid initially)
-1) create a new method to send just the ball and player movements + other info
-	if needed (this will be used by the new object to animate them)
-3) instantly calculate the ball ending position and apply it, leaving the
+	backgroundSketcher object to draw the grid initially)
+2) instantly calculate the ball ending position and apply it, leaving the
 	motion to the transition or transform animation, this fixes as well the
 	problem with the ball and player moving at the same time and the undo/redo actions
-
-MERGE REPLAY AND LEVEL PAGE (probably no need to merge them)
-1) given that they do the same thing (only the source of input changes) think of a way to merge them without increasing
-the code complexity too much, so we don't need to duplicate our code --- BEST DONE AFTER SKETCHER + VISUAL REFACTORING
-2) otherwise think of a way to better modularize the code and keep them as 2 seprated pages
