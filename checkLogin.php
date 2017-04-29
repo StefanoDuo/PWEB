@@ -1,10 +1,10 @@
 <?php
-	include "database.php";
-   include "utilities.php";
+	include 'database.php';
+   include 'utilities.php';
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : null;
 	$password = isset($_POST['password']) ? $_POST['password'] : null;
 	if(is_null($nickname) || is_null($password)) {
-		header("Location: /PWEB/index.php");
+		header("Location: /PWEB/index.php?error=0");
 		exit();
 	}
 	$db = new Database(connectToDB());
@@ -17,7 +17,7 @@
 	// if the pair nickname password doesn't match one in the
 	// database redirects the user to the login page
 	if(is_null($user) || is_null($user['nickname'])) {
-		header("Location: /PWEB/login.php");
+		header("Location: /PWEB/login.php?error=2");
 		exit();
 	}
 	session_start();
@@ -35,10 +35,10 @@
 </head>
 <body onLoad="start()">
 
-<?php printHeader("login", $nickname); ?>
+<?php printHeader('login', $nickname); ?>
 
 <p>Successfully logged in. You will be redirected in <strong id="counter">5</strong></p>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 </body>
 </html>

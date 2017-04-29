@@ -7,8 +7,8 @@ class Database {
 	// the constructor requires an initialized mysqli object
 	public function __construct($mysqliObject) {
 		$this->mysqli = $mysqliObject;
-      $this->errorString1 = "An error occurred executing the query." . PHP_EOL . "Error message: ";
-      $this->errorString2 = PHP_EOL . "Error number: ";
+      $this->errorString1 = 'An error occurred executing the query.' . PHP_EOL . 'Error message: ';
+      $this->errorString2 = PHP_EOL . 'Error number: ';
 	}
 
 	public function __destruct() {
@@ -45,6 +45,22 @@ class Database {
 		    if($result = $this->mysqli->store_result())
 		        $res->free_result();
 		}
+	}
+
+	public function getUser($nickname) {
+		// real_query() returns false if the query execution failed, true otherwise
+		$success = $this->mysqli->real_query("CALL getUser('$nickname');");
+		if(!$success)
+			throw new Exception($this->errorString1 . $this->mysqli->error . $this->errorString2 . $this->mysqli->errno . PHP_EOL);
+		// store_result() returns false if either the query didn't produce a result
+		// (eg. INSERT statement) or if the execution failed, that can't be happening
+		// for us because we check for execution fails with real_query()
+		$queryResult = $this->mysqli->store_result();
+		if(!$queryResult)
+			return null;
+		$result = $this->fetchResult($queryResult);
+		$this->clearExtraResultSets();
+		return $result;
 	}
 
 	public function nicknameExists($nickname) {
@@ -180,16 +196,5 @@ class Database {
 		$result = $this->mysqli->store_result();
 		return true;
 	}
-}
-
-function connectToDB() {
-	$hostname = "localhost";
-	$user = "root";
-	$password = "";
-	$database = "PWEB";
-	$mysqli = new mysqli($hostname, $user, $password, $database);
-	if ($mysqli->connect_errno)
-		throw "Failed to connect to MySQL: " . $mysqli->connect_error;
-	return $mysqli;
 }
 ?>

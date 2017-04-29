@@ -1,12 +1,13 @@
 <?php
    session_start();
+   include 'utilities.php';
+   include 'database.php';
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    if(is_null($nickname)) {
       header("Location: /PWEB/index.php");
       exit();
    }
-   include "utilities.php";
-   include "database.php";
+
    $db = new Database(connectToDB());
    try {
       $levels = $db->getLevelsCreatedBy($nickname);
@@ -33,14 +34,14 @@
 <body>
 
 <?php
-   printHeader("profile", $nickname);
+   printHeader('profile', $nickname);
    echo '<h1>Levels you created</h1>';
    printLevelsCreatedBy($nickname, $levels);
    echo '<h1>Levels you completed</h1>';
    printScoresObtainedBy($nickname, $scores);
 ?>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 
 </body>
 </html>

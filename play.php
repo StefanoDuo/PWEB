@@ -1,15 +1,15 @@
 <?php
 	session_start();
+   include 'utilities.php';
+   include 'database.php';
 	$creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
 	$levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
 	$playerNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
-	if(is_null($creatorNickname) || is_null($levelName)) {
-      header("Location: /PWEB/index.php");
+	if(isNull($creatorNickname) || isNull($levelName)) {
+      header('Location: /PWEB/index.php');
       exit();
 	}
 
-	include "utilities.php";
-	include "database.php";
 	$db = new Database(connectToDB());
 	try {
 		$currentLevel = $db->getLevel($levelName, $creatorNickname);
@@ -29,6 +29,8 @@
 		$nextButton = '<a class="button gray" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
 		$nextButton .= '&levelName=' . $nextLevel['name'] .'">Next Level</a>';
 	}
+	$levelTitle = 'Level: <span id="levelName">' . $levelName . '</span>. ' .
+		'Created by <span id="levelCreatorNickname">' . $creatorNickname . '</span>';
 ?>
 
 <!DOCTYPE html>
@@ -59,12 +61,7 @@
 	<div class="xWrapper">
 		<ul id="undo"></ul>
 		<div class="yWrapper">
-			<h1>
-				<?php
-					echo 'Level: <span id="levelName">' . $levelName . '</span>. ';
-					echo 'Created by <span id="levelCreatorNickname">' . $creatorNickname . '</span>';
-				?>
-			</h1>
+			<h1><?php echo $levelTitle?></h1>
 			<div id="gameField" class="xWrapper relative">
 				<div class="absolute hidden shadowDrop yWrapper" id="shadowDrop">
 					<h2>Congratulations</h2>
@@ -81,7 +78,7 @@
 	</div>
 </main>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 
 </body>
 </html>

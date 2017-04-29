@@ -36,8 +36,11 @@ function start() {
          action = replay.pop();
          numberOfMoves++;
       }
-      if(numberOfMoves !== 0 && !buttons.start.disabled)
+      if(numberOfMoves !== 0 && !buttons.start.disabled) {
          buttons.previous.disabled = false;
+         if(intervalId === null)
+            buttons.reset.disabled = false;
+      }
       game.update(action);
       sketcher.drawGrid(game.getGrid());
    }
@@ -45,10 +48,11 @@ function start() {
       // we need to subtract 2 instead of 1 because at the end we call nextMove which will increment
       // numberOfMoves by 1 even if it's actually going back by one action (doing an undo)
       numberOfMoves -= 2;
-      if(numberOfMoves <= 0)
+      buttons.reset.disabled = false;
+      if(numberOfMoves <= 0) {
          buttons.previous.disabled = true;
-      else
-         buttons.previous.disabled = false;
+         buttons.reset.disabled = true;
+      }
       // by pushing REDO and UNDO in this order the first pop will undo the last action
       // the second will redo the action undone by the undo
       replay.push('REDO');
@@ -76,9 +80,11 @@ function start() {
    }
    function resetReplay() {
       game.initialize();
+      numberOfMoves = 0;
       replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
       sketcher.drawGrid(game.getGrid());
       buttons.reset.disabled = true;
+      buttons.previous.disabled = true;
    }
 
    buttons.start.addEventListener('click', startReplay, false);

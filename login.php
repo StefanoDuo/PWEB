@@ -1,11 +1,23 @@
 <?php
 	session_start();
+	include 'utilities.php';
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 	if(!is_null($nickname)) {
-		header("Location: /PWEB/index.php");
+		header('Location: /PWEB/index.php');
 		exit();
 	}
-	include "utilities.php";
+	$errors = array(
+		0 => 'One field was empty.',
+		1 => 'Something went wrong.',
+		2 => "User doesn't exists or the password doesn't match"
+	);
+	$errorNumber = isset($_GET['error']) ? $_GET['error'] : null;
+	if(isNull($errorNumber))
+		$errorMessage = '';
+	else if(isset($errors[$errorNumber]))
+		$errorMessage = '<p>' . $errors[$errorNumber] . '</p>';
+	else
+		$errorMessage = '';
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +32,7 @@
 </head>
 <body onLoad="start()">
 
-<?php printHeader("login", $nickname); ?>
+<?php printHeader('login', $nickname); ?>
 
 <main class="yWrapper">
 	<form action="checkLogin.php" method="post">
@@ -37,15 +49,16 @@
 	<form action="insertUser.php" method="post">
 	<fieldset>
 		<legend>Create your account</legend>
-		<label>Nickname <input type="text" required name="nickname" id="nickname"></label>
-		<label>Email <input type="email" name="email" id="email"></label>
+		<label>Nickname <input type="text" name="nickname" id="nickname" required></label>
+		<label>Email <input type="email" name="email" id="email" required></label>
 		<label>Password <input type="password" required name="password"></label>
 	</fieldset>
 		<input type="submit" value="submit">
 	</form>
+	<?php echo $errorMessage ?>
 </main>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 
 </body>
 </html>

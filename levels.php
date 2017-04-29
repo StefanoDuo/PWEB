@@ -1,7 +1,7 @@
 <?php
 	session_start();
-	include "utilities.php";
-	include "database.php";
+	include 'utilities.php';
+	include 'database.php';
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    $db = new Database(connectToDB());
    try {
@@ -22,13 +22,13 @@
 </head>
 <body>
 
-<?php printHeader("levels", $nickname); ?>
+<?php printHeader('levels', $nickname); ?>
 
 <main class="yWrapper">
 	<?php printLevelList($levels); ?>
 </main>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 
 </body>
 </html>

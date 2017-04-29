@@ -1,7 +1,7 @@
 <?php
 	session_start();
+	include 'utilities.php';
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
-	include "utilities.php";
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +19,7 @@
 <!-- will contain game "lore" and tutorial -->
 <h1>Soon&trade;</h1>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 
 </body>
 </html>

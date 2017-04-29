@@ -1,11 +1,11 @@
 <?php
    session_start();
+   include 'utilities.php';
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    if(!isset($nickname)) {
-      header("Location: /PWEB/index.php");
+      header('Location: /PWEB/index.php');
       exit();
    }
-   include "utilities.php";
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
    </div>
 </main>
 
-<?php include "footer.php" ?>
+<?php include 'footer.php' ?>
 
 </body>
 </html>

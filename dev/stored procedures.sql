@@ -1,4 +1,4 @@
-DROP PROCEDURE IF EXISTS nicknameExists;
+DROP PROCEDURE IF EXISTS getUser;
 DROP PROCEDURE IF EXISTS emailExists;
 DROP PROCEDURE IF EXISTS getLevels;
 DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
@@ -11,6 +11,13 @@ DROP PROCEDURE IF EXISTS insertUser;
 DROP PROCEDURE IF EXISTS insertScore;
 
 DELIMITER $$
+
+CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50))
+BEGIN
+    SELECT U.*
+    FROM User U
+    WHERE U.nickname = _userNickname;
+END $$
 
 CREATE PROCEDURE nicknameExists(IN _userNickname VARCHAR(50))
 BEGIN

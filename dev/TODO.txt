@@ -1,5 +1,5 @@
-INSERT USER PAGE
-1) check if the insert had success or if the primary key specified was alredy used, etc.
+DATABASE ACCESS
+1) sanitize inputs
 
 "ADVANCED STUFF"
 

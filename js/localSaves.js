@@ -35,7 +35,7 @@ LocalSaves.prototype.pushStoredScoreSaves = function(playerNickname) {
 
 LocalSaves.prototype.pushScoreSave = function(playerNickname, levelName, levelCreatorNickname, score, replay) {
    var queryString = 'playerNickname=' + playerNickname + '&levelName=' + levelName + '&levelCreatorNickname=';
-   queryString += levelCreatorNickname + '&score=' + score + '&replay=' + replay;
+   queryString += levelCreatorNickname + '&score=' + score + '&replay=' + JSON.stringify(replay);
    this.ajaxRequest('insertScore.php', 'GET', queryString, true);
 }
 

@@ -1,4 +1,28 @@
 <?php
+function getDBConnectionInfo($fileLocation) {
+    $credentials = array();
+    $configString = file_get_contents($fileLocation);
+    $lines = explode(PHP_EOL, $configString);
+    foreach($lines as $value) {
+        $option = explode('=', $value);
+        $credentials[$option[0]] = $option[1];
+    }
+    return $credentials;
+}
+
+function connectToDB() {
+    $fileLocation = 'db.conf';
+    $credentials = getDBConnectionInfo($fileLocation);
+    $mysqli = new mysqli($credentials['hostname'], $credentials['user'], $credentials['password'], $credentials['database']);
+    if($mysqli->connect_errno)
+        throw new Exception('Failed to connect to MySQL: ' . $mysqli->connect_error);
+    return $mysqli;
+}
+
+function isNull($variable, $checkEmptyString = true) {
+    return is_null($variable) || ($checkEmptyString && $variable === '');
+}
+
 function printHeader($currentPage, $nickname) {
     $classes = array(
         'index' => '',
