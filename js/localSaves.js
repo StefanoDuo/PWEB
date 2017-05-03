@@ -18,7 +18,6 @@ LocalSaves.prototype.insertScoreSave = function(replay, score, levelCreatorNickn
    localStorage.setItem(this.scoreSaveKey, JSON.stringify(currentSaves));
 }
 
-
 LocalSaves.prototype.getScoreSaves = function() {
    var saves = JSON.parse(localStorage.getItem(this.scoreSaveKey));
    if(!saves)

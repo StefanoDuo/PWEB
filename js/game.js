@@ -128,8 +128,7 @@ Game.prototype.undo = function() {
    var previousState = this.undoStack.pop();
    // can't undo before the first action
    if(!previousState)
-      return;
-   this.score++;
+      return false;;
    this.replay.shift();
    var currentState = this.getCurrentState();
    // instead of showing undo we show the action that has been undone
@@ -137,20 +136,21 @@ Game.prototype.undo = function() {
    currentState.hasBallMoved = previousState.hasBallMoved;
    this.redoStack.push(currentState);
    this.setCurrentState(previousState);
+   return true;
 }
 
 Game.prototype.redo = function() {
    var previousState = this.redoStack.pop();
    // if there wasn't an undo prior to the redo, undoStateStack will be empty
    if(!previousState)
-      return;
-   this.score++;
+      return false;;
    this.replay.unshift(previousState.action);
    var currentState = this.getCurrentState();
    currentState.action = previousState.action;
    currentState.hasBallMoved = previousState.hasBallMoved;
    this.undoStack.push(currentState);
    this.setCurrentState(previousState);
+   return true;
 }
 
 
@@ -160,6 +160,7 @@ Game.prototype.update = function(action) {
    var direction;
    this.currentAction = action;
    this.hasBallMoved = false;
+   this.score++;
    switch(action) {
       case 'UP':
          direction = new this.vectorConstructor(0, -1);
@@ -177,14 +178,17 @@ Game.prototype.update = function(action) {
          this.initialize();
          return;
       case 'UNDO':
-         this.undo();
+         if(!this.undo())
+            this.score--;
          return;
       case 'REDO':
-         this.redo();
+         if(!this.redo())
+            this.score--;
          return;
       default:
          // if there's no action but the ball is moving
          // we need to update its position
+         this.score--;
          this.moveBall();
          return;
    }
@@ -217,13 +221,19 @@ Game.prototype.updateBallPosition = function(newPosition) {
 }
 
 Game.prototype.moveBall = function() {
-   if(this.isBallHittingHole() && this.victoryCallback)
-         this.victoryCallback(this.score, this.replay);
+   var hasHitHole = false;
+   if(this.isBallHittingHole() && this.victoryCallback) {
+      this.victoryCallback(this.score, this.replay);
+      hasHitHole = true;
+   }
    if(this.isBallOutOfBounds() || this.isBallHittingRock()) {
       this.ballMovingDirection = new this.vectorConstructor(0, 0);
       return;
    }
    this.updateBallPosition(this.ballPosition.add(this.ballMovingDirection));
+   if(hasHitHole) {
+      this.ballMovingDirection = new this.vectorConstructor(0, 0);
+   }
 }
 
 Game.prototype.movePlayer = function(direction) {
@@ -238,7 +248,6 @@ Game.prototype.movePlayer = function(direction) {
       if(!oldBallPosition.isEqual(this.ballPosition)) {
          // if the player is pushing the ball against a wall the
          // score doesn't increase
-         this.score++;
          this.replay.unshift(this.currentAction);
          this.hasBallMoved = true;
          var currentState = this.getCurrentState();
@@ -247,7 +256,6 @@ Game.prototype.movePlayer = function(direction) {
       }
       return;
    }
-   this.score++;
    this.replay.unshift(this.currentAction);
    this.undoStack.push(this.getCurrentState());
    this.updatePlayerPosition(this.playerPosition.add(direction));

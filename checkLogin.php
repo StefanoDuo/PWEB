@@ -4,12 +4,12 @@
 	$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : null;
 	$password = isset($_POST['password']) ? $_POST['password'] : null;
 	if(is_null($nickname) || is_null($password)) {
-		header("Location: /PWEB/index.php?error=0");
+		header("Location: /PWEB/login.php?error=0");
 		exit();
 	}
 	$db = new Database(connectToDB());
 	try {
-		$user = $db->getUser($nickname);
+		$user = $db->getUser($nickname, $password);
 	} catch(Exception $e) {
 		$user = null;
 	   echo $e . PHP_EOL;
@@ -33,7 +33,7 @@
 	<link rel="stylesheet" href="./css/main.css">
 	<script type="text/javascript" src="./js/redirect.js"></script>
 </head>
-<body onLoad="start()">
+<body onLoad="">
 
 <?php printHeader('login', $nickname); ?>
 

@@ -1,5 +1,6 @@
 DROP PROCEDURE IF EXISTS getUser;
 DROP PROCEDURE IF EXISTS emailExists;
+DROP PROCEDURE IF EXISTS nicknameExists;
 DROP PROCEDURE IF EXISTS getLevels;
 DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
 DROP PROCEDURE IF EXISTS getLevel;
@@ -12,25 +13,38 @@ DROP PROCEDURE IF EXISTS insertScore;
 
 DELIMITER $$
 
-CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50))
+CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50), IN _password VARCHAR(50))
 BEGIN
-    SELECT U.*
+    SELECT U.nickname
     FROM User U
-    WHERE U.nickname = _userNickname;
+    WHERE U.nickname = _userNickname
+        AND U.password = _password;
 END $$
 
 CREATE PROCEDURE nicknameExists(IN _userNickname VARCHAR(50))
 BEGIN
-    SELECT IF(U.nickname IS NULL, "false", "true") as nicknameExists
-    FROM User U
-    WHERE U.nickname = _userNickname;
+    SELECT *
+    FROM (
+        SELECT true as nicknameExists
+        FROM User U
+        WHERE U.nickname = _userNickname
+        UNION
+            SELECT false as nicknameExists
+    ) AS T
+    LIMIT 1;
 END $$
 
 CREATE PROCEDURE emailExists(IN _email VARCHAR(50))
 BEGIN
-    SELECT IF(U.email IS NULL, "false", "true") as emailExists
-    FROM User U
-    WHERE U.email = _email;
+    SELECT *
+    FROM (
+        SELECT true as emailExists
+        FROM User U
+        WHERE U.email = _email
+        UNION
+            SELECT false as emailExists
+    ) AS T
+    LIMIT 1;
 END $$
 
 CREATE PROCEDURE getLevels()
@@ -57,17 +71,17 @@ END $$
 CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(50), IN _creatorNickname VARCHAR(50),
 								  IN _levelName VARCHAR(50))
 BEGIN
-	SELECT L.*
+    SELECT L.*
     FROM Level L
-		LEFT OUTER JOIN (
-			SELECT BB.*
-            FROM BeatenBy BB
-            WHERE BB.playerNickname = _playerNickname
-        ) AS B ON L.name = B.levelName
+    LEFT OUTER JOIN (
+        SELECT BB.*
+        FROM BeatenBy BB
+        WHERE BB.playerNickname = _playerNickname
+    ) AS B ON L.name = B.levelName
     WHERE B.levelName IS NULL
-		AND (
-			L.creatorNickname <> _creatorNickname
-			OR L.name <> _levelName
+    AND (
+        L.creatorNickname <> _creatorNickname
+        OR L.name <> _levelName
     ) ORDER BY RAND()
     LIMIT 1;
 END $$

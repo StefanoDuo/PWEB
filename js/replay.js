@@ -20,28 +20,28 @@ function start() {
    levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-   var replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
+    replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
    var matrix = new Matrix(gameFieldSize, gameFieldSize);
    var game = new Game(matrix, levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
 
    function nextMove() {
       var action;
-      // temporary hack, usually while the ball is moving inputs to the game.update() methods
-      // get ignored but if we ignore a movement of a replay the end result will be different
-      // so we need to pop a move only if we're sure that the game object is ready to accept it
-      if(game.isBallMoving())
-         action = null
-      else {
-         action = replay.pop();
-         numberOfMoves++;
-      }
+      numberOfMoves++;
       if(numberOfMoves !== 0 && !buttons.start.disabled) {
          buttons.previous.disabled = false;
          if(intervalId === null)
             buttons.reset.disabled = false;
       }
-      game.update(action);
+      // temporary hack, usually while the ball is moving inputs to the game.update() method
+      // is ignored but if we ignore a movement of a replay the end result will be different
+      // so we move the ball untile it stops during a single redraw
+      if(game.isBallMoving())
+         game.moveBall();
+      else {
+         action = replay.pop();
+         game.update(action);
+      }
       sketcher.drawGrid(game.getGrid());
    }
    function previousMove() {
@@ -84,6 +84,8 @@ function start() {
       replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
       sketcher.drawGrid(game.getGrid());
       buttons.reset.disabled = true;
+      buttons.start.disabled = false;
+      buttons.next.disabled = false;
       buttons.previous.disabled = true;
    }
 
@@ -98,9 +100,12 @@ function start() {
    });
 
    game.setVictoryCallback(function(score, replay) {
-      if(!intervalId)
-         return;
       window.clearInterval(intervalId);
       intervalId = null;
+      buttons.reset.disabled = false;
+      buttons.pause.disabled = true;
+      buttons.previous.disabled = true;
+      buttons.start.disabled = true;
+      buttons.next.disabled = true;
    });
 }

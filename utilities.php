@@ -13,10 +13,10 @@ function getDBConnectionInfo($fileLocation) {
 function connectToDB() {
     $fileLocation = 'db.conf';
     $credentials = getDBConnectionInfo($fileLocation);
-    $mysqli = new mysqli($credentials['hostname'], $credentials['user'], $credentials['password'], $credentials['database']);
-    if($mysqli->connect_errno)
-        throw new Exception('Failed to connect to MySQL: ' . $mysqli->connect_error);
-    return $mysqli;
+    $hostname = $credentials['hostname'];
+    $database = $credentials['database'];
+    $pdo = new PDO("mysql:host=$hostname;dbname=$database;charset=utf8mb4", $credentials['user']);
+    return $pdo;
 }
 
 function isNull($variable, $checkEmptyString = true) {

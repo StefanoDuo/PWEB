@@ -14,7 +14,7 @@ try {
    echo $e . PHP_EOL;
 }
 
-if(isset($result['emailExists']))
+if($result['emailExists'])
    echo '{"emailExists":true,"error":false}';
 else
    echo '{"emailExists":false,"error":false}';

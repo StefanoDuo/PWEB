@@ -113,11 +113,6 @@ function start() {
       isLevelBeaten = true;
       if(playerNickname) {
          // if the user is logged in we directly push the level score to the database
-         // console.log(playerNickname);
-         // console.log(levelName);
-         // console.log(levelCreatorNickname);
-         // console.log(score);
-         // console.log(JSON.stringify(replay));
          localSaves.pushScoreSave(playerNickname, levelName, levelCreatorNickname, score, replay)
       } else {
          // otherwise we save the score in the localStorage waiting for the user to log-in

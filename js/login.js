@@ -8,6 +8,7 @@ function start() {
       var queryString = 'nickname=' + nickname.value;
       var async = true;
       var successCallback = function(response) {
+         console.log(response);
          response = JSON.parse(response);
          if(response.nicknameExists)
             nickname.setCustomValidity('Nickname alredy taken, please change it.');

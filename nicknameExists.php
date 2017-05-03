@@ -15,7 +15,7 @@ try {
    echo $e . PHP_EOL;
 }
 
-if(isset($result['nicknameExists']))
+if($result['nicknameExists'])
    echo '{"nicknameExists":true,"error":false}';
 else
    echo '{"nicknameExists":false,"error":false}';

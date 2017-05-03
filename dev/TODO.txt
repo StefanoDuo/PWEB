@@ -1,22 +1,19 @@
-DATABASE ACCESS
-1) sanitize inputs
+GAME OBJECT
+1) add the ballMovingDirection vector to the state object so when undoing during ball movements and then redoing the ball will start moving again
+
+REPLAY PAGE
+1) fix the replay previous button
+2) the ball keeps moving even when pressing the previous button because if isBallMoving() returns true the input isn't read, actually not even extracted from the stack
 
 "ADVANCED STUFF"
 
 USER PAGE
 1) add the custom keybindings option
 
-WORKSHOP PAGE
-1)when submitting a level check if the level is beatable, initially the algorithm can even be a brute force method :
-	- mark the current location as visited
-	- move in every possible direction (recursion)
-	- if the ball eventually lands in the hole OK, otherwise the algorithm ends when all the possible location have
-		been visited --> returns false
-
 ---------------- REFACTORING ----------------
-PHP
-1) move all php logic at the beginning of the php page, once the html begins php can only print variables
-2) make the database class a singleton (private constructor + method which returns the instance of the class) and make it global?
+GAME OBJECT
+1) refactor the collision logic, just make 1 single method that receives a position and a moving direction, it returns false if nothing has been hit and the name of the object hit if something is hit
+
 
 SKETCHER OBJECT ---- BACKGROUNDSKETCHER
 1) the sketcher will only handle the static grid tiles (rocks and the hole)
@@ -30,10 +27,3 @@ NEW OBJECT ---- FOREGROUNDSKETCHER
 	realitively positioned)
 2) there's actually no need to create 2 different "classes" we can just instantiate
 	2 different objects, 1 for the background grid, one for the moving elements
-
-GAME OBJECT
-1) the getGrid() method is used to give the total layout of the grid (used by the
-	backgroundSketcher object to draw the grid initially)
-2) instantly calculate the ball ending position and apply it, leaving the
-	motion to the transition or transform animation, this fixes as well the
-	problem with the ball and player moving at the same time and the undo/redo actions
