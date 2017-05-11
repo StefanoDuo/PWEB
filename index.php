@@ -1,6 +1,6 @@
 <?php
-	session_start();
 	include 'utilities.php';
+	session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 ?>
 

@@ -3,20 +3,32 @@ include 'utilities.php';
 include 'database.php';
 $nickname = isset($_GET['nickname']) ? $_GET['nickname'] : null;
 if(isNull($nickname)){
-   echo '{"nicknameExists":true,"error":"Nickname field empty."}';
+	echo '{
+   	"success":false,
+   	"errorMessage":"Nickname field empty",
+   	"nicknameExists":null
+	}';
    exit();
 }
 
 $db = new Database(connectToDB());
 try {
-   $result = $db->nicknameExists($nickname);
-} catch(Exception $e) {
+   $result = $db->getUser($nickname);
+} catch(PDOException $e) {
    $result = null;
-   echo $e . PHP_EOL;
+   echo $e->getMessage() . PHP_EOL;
 }
 
-if($result['nicknameExists'])
-   echo '{"nicknameExists":true,"error":false}';
+if($result)
+	echo '{
+   	"success":true,
+   	"errorMessage":null,
+   	"nicknameExists":true
+	}';
 else
-   echo '{"nicknameExists":false,"error":false}';
+	echo '{
+   	"success":true,
+   	"errorMessage":null,
+   	"nicknameExists":false
+	}';
 ?>

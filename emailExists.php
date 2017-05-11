@@ -3,19 +3,31 @@ include 'utilities.php';
 include 'database.php';
 $email = isset($_GET['email']) ? $_GET['email'] : null;
 if(isNull($email)){
-   echo '{"emailExists":false,"error":"Email field empty."}';
+   echo '{
+   	"success":false,
+   	"emailExists":false,
+   	"errorMessage":"Email field empty"
+   }';
    exit();
 }
 $db = new Database(connectToDB());
 try {
    $result = $db->emailExists($email);
-} catch(Exception $e) {
+} catch(PDOException $e) {
    $result = false;
-   echo $e . PHP_EOL;
+   echo $e->getMessage() . PHP_EOL;
 }
 
 if($result['emailExists'])
-   echo '{"emailExists":true,"error":false}';
+   echo '{
+   	"success":true,
+   	"emailExists":true,
+   	"errorMessage":null
+	}';
 else
-   echo '{"emailExists":false,"error":false}';
+   echo '{
+   	"success":true,
+   	"emailExists":false,
+   	"errorMessage":null
+   }';
 ?>

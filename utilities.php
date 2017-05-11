@@ -10,12 +10,22 @@ function getDBConnectionInfo($fileLocation) {
     return $credentials;
 }
 
+function getDefaultResponse() {
+    return array(
+       'success' => false,
+       'errorMessage' => 'Something went wrong',
+       'scores' => null,
+       'creatorNickname' => null,
+       'levelName' => null
+    );
+}
+
 function connectToDB() {
     $fileLocation = 'db.conf';
     $credentials = getDBConnectionInfo($fileLocation);
     $hostname = $credentials['hostname'];
     $database = $credentials['database'];
-    $pdo = new PDO("mysql:host=$hostname;dbname=$database;charset=utf8mb4", $credentials['user']);
+    $pdo = new PDO("mysql:dbname=$database;host=$hostname", $credentials['user'], $credentials['password']);
     return $pdo;
 }
 
@@ -45,17 +55,18 @@ function printHeader($currentPage, $nickname) {
     	echo '<li><a href="login.php" class="' . $classes['login'] . '">LogIn / SignUp</a></li>';
     echo 	'<li><a href="levels.php" class="' . $classes['levels'] . '">Levels</a></li>';
     if($nickname)
-        echo '<li><a href="profile.php" id="nickname" class="' . $classes['profile'] . '">' . $nickname . '</a></li>';
+        echo '<li><a href="profile.php" id="nickname" class="' . $classes['profile'] . '">' . htmlspecialchars($nickname) . '</a></li>';
     echo '</ul>';
 	echo '</nav>';
 	echo '</header>';
 }
 
-function printLevelList($levels) {
+function printLevelsList($levels) {
     echo '<ul>';
     foreach ($levels as $key => $value) {
         echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) .'&levelName=' . urlencode($value['name']) .'">';
-        echo $value['name'] . '</a> | Creator: ' . $value['creatorNickname'] . '</li>';
+        echo htmlspecialchars($value['name']) . '</a> | Creator: ' . htmlspecialchars($value['creatorNickname']);
+        echo ' <button class="button gray" id="' . htmlspecialchars($value['creatorNickname']) .'-' . htmlspecialchars($value['name']) . '">Show scores</button></li>';
     }
     echo '</ul>';
 }
@@ -64,17 +75,18 @@ function printLevelsCreatedBy($creatorNickname, $levels) {
     echo '<ul>';
     foreach ($levels as $key => $value) {
         echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($creatorNickname);
-        echo '&levelName=' . urlencode($value['name']) . '">' . $value['name'] . '</a></li>';
+        echo '&levelName=' . urlencode($value['name']) . '">' . htmlspecialchars($value['name']) . '</a> | ';
+        echo '<a href="deleteLevel.php?levelName=' . urlencode($value['name']) . '&creatorNickname=' . urlencode($creatorNickname) . '">Delete</a></li>';
     }
     echo '</ul>';
 }
 
-function printScoresObtainedBy($playerNickname, $scores) {
+function printUserScores($playerNickname, $scores) {
     echo '<ul>';
     foreach ($scores as $key => $value) {
         echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']);
-        echo '&levelName=' . urlencode($value['levelName']) . '">' . $value['levelName'];
-        echo '</a> | Creator: ' . $value['creatorNickname'];
+        echo '&levelName=' . urlencode($value['levelName']) . '">' . htmlspecialchars($value['levelName']);
+        echo '</a> | Creator: ' . htmlspecialchars($value['creatorNickname']);
         echo '| Score: <a href="replay.php?creatorNickname=' . urlencode($value['creatorNickname']);
         echo '&levelName=' . urlencode($value['levelName']) . '&playerNickname=' . urlencode($playerNickname);
         echo '&stamp=' . urlencode($value['stamp']) . '">' . $value['score'] . '</a></li>';

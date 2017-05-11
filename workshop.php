@@ -1,8 +1,8 @@
 <?php
-   session_start();
    include 'utilities.php';
+   session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
-   if(!isset($nickname)) {
+   if(isNull($nickname)) {
       header('Location: /PWEB/index.php');
       exit();
    }
@@ -14,7 +14,7 @@
    <meta charset="utf-8">
    <title>Level Creation</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-   <link rel="stylesheet" href="./css/main.css" >
+   <link rel="stylesheet" href="./css/main.css">
    <script type="text/javascript" src="./js/matrix.js"></script>
    <script type="text/javascript" src="./js/vector.js"></script>
    <script type="text/javascript" src="./js/backgroundSketcher.js"></script>
@@ -28,13 +28,14 @@
 <main class="xWrapper">
    <div id="gameField" class="xWrapper"></div>
    <div class="yWrapper">
-      <input type="text" id="levelName">
+      Level Name <input type="text" id="levelName" required>
       <button id="player" class="button gray">Player</button>
       <button id="ball" class="button gray">Ball</button>
       <button id="hole" class="button gray">Hole</button>
       <button id="rock" class="button gray">Rock</button>
       <button id="reset" class="button gray">Reset</button>
       <button id="save" class="button gray">Save</button>
+      <p id="errorMessage"></p>
    </div>
 </main>
 

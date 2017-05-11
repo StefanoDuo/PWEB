@@ -1,5 +1,3 @@
-var GAMEFIELD_SIDE = 10;
-
 // polyfill for String.prototype.includes() taken from MDN
 if(!String.prototype.includes) {
    String.prototype.includes = function(search, start) {
@@ -42,24 +40,29 @@ function fetchLevelObject(grid) {
          }
       }
    }
-   if(levelObject.player === null)
+   if(levelObject.player === null) {
       throw 'a player entity is needed';
-   if(levelObject.ball === null)
+   }
+   if(levelObject.ball === null) {
       throw 'a ball entity is needed';
-   if(levelObject.hole === null)
+   }
+   if(levelObject.hole === null) {
       throw 'a hole entity is needed';
+   }
    return levelObject;
 }
 
 function start() {
+   var errorMessage = document.getElementById('errorMessage');
+   var gamefieldSize = 10;
    var pressedButton = null;
    var buttons = {
-      player : document.getElementById('player'),
-      ball : document.getElementById('ball'),
-      hole : document.getElementById('hole'),
-      rock : document.getElementById('rock'),
-      reset : document.getElementById('reset'),
-      save : document.getElementById('save')
+      player: document.getElementById('player'),
+      ball: document.getElementById('ball'),
+      hole: document.getElementById('hole'),
+      rock: document.getElementById('rock'),
+      reset: document.getElementById('reset'),
+      save: document.getElementById('save')
    };
 
    function releaseButton(button) {
@@ -99,17 +102,33 @@ function start() {
          for(var j = 0; j < grid[i].length; j++)
             sketcher.drawBoxByCoordinates(j, i, '');
    });
-   buttons.save.addEventListener('click', function () {
-      var levelObject = fetchLevelObject(grid);
+   buttons.save.addEventListener('click', function() {
+      errorMessage.textContent = '';
+      try {
+         var levelObject = fetchLevelObject(grid);
+      } catch(exception) {
+         errorMessage.textContent = exception;
+         return;
+      }
       var levelName = document.getElementById('levelName').value;
+      if(!levelName) {
+         errorMessage.textContent = "Level name can't be empty";
+         return;
+      }
       var creatorNickname = document.getElementById('nickname').firstChild.textContent;
       var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
       buttons.save.className = 'button disabled';
-      ajaxRequest('insertLevel.php', 'GET', queryString, true, function() { buttons.save.className = 'button gray';});
+      ajaxRequest('insertLevel.php', 'GET', queryString, true, function(responseText) {
+         buttons.save.className = 'button gray';
+         responseText = JSON.parse(responseText);
+         if(responseText.success)
+            window.location.href = "play.php?creatorNickname=" + creatorNickname + "&levelName=" + levelName;
+         else
+            errorMessage.textContent = responseText.errorMessage;
+      });
    });
 
-
-   var sketcher = new BackgroundSketcher(GAMEFIELD_SIDE, 'gameField', 'box');
+   var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box');
    var grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {

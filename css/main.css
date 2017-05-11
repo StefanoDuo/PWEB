@@ -129,6 +129,10 @@ main {
    /*text-decoration: none;*/
 }
 
+.success {
+   background-color: green !important;
+}
+
 .button::selection, .navbar a::selection {
    background: rgba(0,0,0,0);
 }

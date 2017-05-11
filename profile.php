@@ -1,7 +1,7 @@
 <?php
-   session_start();
    include 'utilities.php';
    include 'database.php';
+   session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    if(is_null($nickname)) {
       header("Location: /PWEB/index.php");
@@ -11,16 +11,56 @@
    $db = new Database(connectToDB());
    try {
       $levels = $db->getLevelsCreatedBy($nickname);
-   } catch(Exception $e) {
+   } catch(PDOException $e) {
       $levels = null;
-      echo $e . PHP_EOL;
+      echo $e->getMessage() . PHP_EOL;
    }
    try {
-      $scores = $db->getScoresObtainedBy($nickname);
-   } catch(Exception $e) {
+      $scores = $db->getUserScores($nickname);
+   } catch(PDOException $e) {
       $scores = null;
-      echo $e . PHP_EOL;
+      echo $e->getMessage() . PHP_EOL;
    }
+   try {
+      $user = $db->getUser($nickname);
+   } catch(PDOException $e) {
+      $user = null;
+      echo $e->getMessage() . PHP_EOL;
+   }
+
+   $emailErrors = array(
+      0 => "That's your current email"
+   );
+   $passwordErrors = array(
+      0 => "That's your current password"
+   );
+   $levelErrors = array(
+      0 => "Somebody alredy played that level, therefore it can't be deleted"
+   );
+
+   $passwordErrorNumber = isset($_GET['passwordError']) ? $_GET['passwordError'] : null;
+   if(isNull($passwordErrorNumber))
+      $passwordErrorMessage = '';
+   else if(isset($passwordErrors[$passwordErrorNumber]))
+      $passwordErrorMessage = '<p>' . $passwordErrors[$passwordErrorNumber] . '</p>';
+   else
+      $passwordErrorMessage = '';
+
+   $emailErrorNumber = isset($_GET['emailError']) ? $_GET['emailError'] : null;
+   if(isNull($emailErrorNumber))
+      $emailErrorMessage = '';
+   else if(isset($passwordErrors[$emailErrorNumber]))
+      $emailErrorMessage = '<p>' . $passwordErrors[$emailErrorNumber] . '</p>';
+   else
+      $emailErrorMessage = '';
+
+   $levelErrorNumber = isset($_GET['levelError']) ? $_GET['levelError'] : null;
+   if(isNull($levelErrorNumber))
+      $levelErrorMessage = '';
+   else if(isset($levelErrors[$levelErrorNumber]))
+      $levelErrorMessage = '<p>' . $levelErrors[$levelErrorNumber] . '</p>';
+   else
+      $levelErrorMessage = '';
 ?>
 
 <!DOCTYPE html>
@@ -29,19 +69,35 @@
    <meta charset="utf-8">
    <title>Your profile</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <script type="text/javascript" src="./js/ajaxRequest.js"></script>
+   <script type="text/javascript" src="./js/profile.js"></script>
    <link rel="stylesheet" href="./css/main.css" >
 </head>
 <body>
-
-<?php
-   printHeader('profile', $nickname);
-   echo '<h1>Levels you created</h1>';
-   printLevelsCreatedBy($nickname, $levels);
-   echo '<h1>Levels you completed</h1>';
-   printScoresObtainedBy($nickname, $scores);
-?>
-
+   <?php
+      printHeader('profile', $nickname);
+      echo '<h1>Levels created</h1>';
+      printLevelsCreatedBy($nickname, $levels);
+      echo $levelErrorMessage;
+      echo '<h1>Levels completed</h1>';
+      printUserScores($nickname, $scores);
+   ?>
+   <form action="updateEmail.php" method="post">
+      <fieldset>
+         <legend>Update your email</legend>
+         <label>Email <input type="email" name="email" id="email" required value="<?php echo htmlspecialchars($user['email']); ?>"></label>
+         <input type="submit" value="submit" id="updateEmail">
+      </fieldset>
+   </form>
+      <?php echo $emailErrorMessage; ?>
+   <form action="updatePassword.php" method="post">
+      <fieldset>
+         <legend>Update your password</legend>
+         <label>Password <input type="password" name="password" id="password" required></label>
+         <input type="submit" value="submit" id="updatePassword">
+      </fieldset>
+   </form>
+      <?php echo $passwordErrorMessage; ?>
 <?php include 'footer.php' ?>
-
 </body>
 </html>

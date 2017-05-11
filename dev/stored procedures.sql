@@ -1,39 +1,42 @@
-DROP PROCEDURE IF EXISTS getUser;
-DROP PROCEDURE IF EXISTS emailExists;
-DROP PROCEDURE IF EXISTS nicknameExists;
-DROP PROCEDURE IF EXISTS getLevels;
-DROP PROCEDURE IF EXISTS getLevelsCreatedBy;
-DROP PROCEDURE IF EXISTS getLevel;
-DROP PROCEDURE IF EXISTS getUnbeatedLevel;
-DROP PROCEDURE IF EXISTS getScoresObtainedBy;
-DROP PROCEDURE IF EXISTS getReplay;
-DROP PROCEDURE IF EXISTS insertLevel;
-DROP PROCEDURE IF EXISTS insertUser;
-DROP PROCEDURE IF EXISTS insertScore;
-
 DELIMITER $$
 
-CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50), IN _password VARCHAR(50))
+DROP PROCEDURE IF EXISTS getUser $$
+CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50))
 BEGIN
-    SELECT U.nickname
+    SELECT U.*
     FROM User U
-    WHERE U.nickname = _userNickname
-        AND U.password = _password;
+    WHERE U.nickname = _userNickname;
 END $$
 
-CREATE PROCEDURE nicknameExists(IN _userNickname VARCHAR(50))
+
+DROP PROCEDURE IF EXISTS updateEmail $$
+CREATE PROCEDURE updateEmail(IN _userNickname VARCHAR(50), IN _email VARCHAR(50))
 BEGIN
-    SELECT *
-    FROM (
-        SELECT true as nicknameExists
-        FROM User U
-        WHERE U.nickname = _userNickname
-        UNION
-            SELECT false as nicknameExists
-    ) AS T
-    LIMIT 1;
+    UPDATE User U
+    SET U.email = _email
+    WHERE U.nickname = _userNickname;
 END $$
 
+
+DROP PROCEDURE IF EXISTS updatePassword $$
+CREATE PROCEDURE updatePassword(IN _userNickname VARCHAR(50), IN _password VARCHAR(50))
+BEGIN
+    UPDATE `User`
+    SET `password` = _password
+    WHERE `nickname` = _userNickname;
+END $$
+
+
+DROP PROCEDURE IF EXISTS deleteLevel $$
+CREATE PROCEDURE deleteLevel(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
+BEGIN
+	DELETE FROM `Level`
+    WHERE creatorNickname = _creatorNickname
+		AND name = _levelName;
+END $$
+
+
+DROP PROCEDURE IF EXISTS emailExists $$
 CREATE PROCEDURE emailExists(IN _email VARCHAR(50))
 BEGIN
     SELECT *
@@ -47,12 +50,16 @@ BEGIN
     LIMIT 1;
 END $$
 
+
+DROP PROCEDURE IF EXISTS getLevels $$
 CREATE PROCEDURE getLevels()
 BEGIN
 	SELECT L.name, L.creatorNickname, L.levelObject
     FROM Level L;
 END $$
 
+
+DROP PROCEDURE IF EXISTS getLevelsCreatedBy $$
 CREATE PROCEDURE getLevelsCreatedBy(IN _creatorNickname VARCHAR(50))
 BEGIN
 	SELECT L.name
@@ -60,6 +67,8 @@ BEGIN
     WHERE L.creatorNickname = _creatorNickname;
 END $$
 
+
+DROP PROCEDURE IF EXISTS getLevel $$
 CREATE PROCEDURE getLevel(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
 BEGIN
 	SELECT L.*
@@ -68,6 +77,8 @@ BEGIN
 		AND L.creatorNickname = _creatorNickname;
 END $$
 
+
+DROP PROCEDURE IF EXISTS getUnbeatedLevel $$
 CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(50), IN _creatorNickname VARCHAR(50),
 								  IN _levelName VARCHAR(50))
 BEGIN
@@ -86,7 +97,9 @@ BEGIN
     LIMIT 1;
 END $$
 
-CREATE PROCEDURE getScoresObtainedBy(IN _playerNickname VARCHAR(50))
+
+DROP PROCEDURE IF EXISTS getUserScores $$
+CREATE PROCEDURE getUserScores(IN _playerNickname VARCHAR(50))
 BEGIN
 	SELECT B.levelName, B.creatorNickname, B.score, B.stamp
     FROM BeatenBy B
@@ -94,6 +107,20 @@ BEGIN
 END $$
 
 
+DROP PROCEDURE IF EXISTS getLevelScores $$
+CREATE PROCEDURE getLevelScores(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50),
+								IN _resultLimit INT)
+BEGIN
+    SELECT B.playerNickname, B.score, B.stamp
+    FROM BeatenBy B
+    WHERE B.creatorNickname = _creatorNickname
+        AND B.levelName = _levelName
+	ORDER BY B.score ASC
+	LIMIT _resultLimit;
+END $$
+
+
+DROP PROCEDURE IF EXISTS getReplay $$
 CREATE PROCEDURE getReplay(IN _playerNickname VARCHAR(50), IN _stamp TIMESTAMP)
 BEGIN
 	SELECT B.replay	
@@ -102,6 +129,8 @@ BEGIN
 		AND B.stamp = _stamp;
 END $$
 
+
+DROP PROCEDURE IF EXISTS insertLevel $$
 CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50),
 							 IN _levelObject BLOB)
 BEGIN
@@ -109,6 +138,8 @@ BEGIN
 		VALUE (_levelName, _creatorNickname, _levelObject);
 END $$
 
+
+DROP PROCEDURE IF EXISTS insertUser $$
 CREATE PROCEDURE insertUser(IN _nickname VARCHAR(50), IN _email VARCHAR(50),
 							IN _password VARCHAR(50))
 BEGIN
@@ -116,6 +147,8 @@ BEGIN
 		VALUE (_nickname, _email, _password);
 END $$
 
+
+DROP PROCEDURE IF EXISTS insertScore $$
 CREATE PROCEDURE insertScore(IN _playerNickname VARCHAR(50), IN _levelCreatorNickname VARCHAR(50),
 							 IN _levelName VARCHAR(50), IN _score INTEGER, IN _replay TEXT)
 BEGIN

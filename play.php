@@ -1,7 +1,7 @@
 <?php
-	session_start();
    include 'utilities.php';
    include 'database.php';
+	session_start();
 	$creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
 	$levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
 	$playerNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
@@ -13,15 +13,15 @@
 	$db = new Database(connectToDB());
 	try {
 		$currentLevel = $db->getLevel($levelName, $creatorNickname);
-	} catch(Exception $e) {
+	} catch(PDOException $e) {
 		$currentLevel = null;
-		echo $e . PHP_EOL;
+		echo $e->getMessage() . PHP_EOL;
 	}
 	try {
 		$nextLevel = $db->getUnbeatedLevel($playerNickname, $levelName, $creatorNickname);
-	} catch(Exception $e) {
+	} catch(PDOException $e) {
 		$nextLevel = null;
-		echo $e . PHP_EOL;
+		echo $e->getMessage() . PHP_EOL;
 	}
 	if(is_null($nextLevel))
 		$nextButton = '<button class="button gray" disabled>You\'ve beaten all levels</button>';
@@ -29,14 +29,15 @@
 		$nextButton = '<a class="button gray" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
 		$nextButton .= '&levelName=' . $nextLevel['name'] .'">Next Level</a>';
 	}
-	$levelTitle = 'Level: <span id="levelName">' . $levelName . '</span>. ' .
-		'Created by <span id="levelCreatorNickname">' . $creatorNickname . '</span>';
+	$levelTitle = 'Level: <span id="levelName">' . htmlspecialchars($levelName) . '</span>. ' .
+		'Created by <span id="levelCreatorNickname">' . htmlspecialchars($creatorNickname) . '</span>';
+	$levelObject = '<input type="hidden" id="levelObject" value="' . urlencode($currentLevel['levelObject']) . '">';
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Level: <?php echo $levelName ?></title>
+	<title>Level: <?php echo htmlspecialchars($levelName) ?></title>
 	<meta charset="utf-8">
   	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="./css/main.css" >
@@ -54,7 +55,7 @@
 
 <?php
 	printHeader('', $playerNickname);
-	echo '<input type="hidden" id="levelObject" value="' . urlencode($currentLevel['levelObject']) . '">';
+	echo $levelObject;
 ?>
 
 <main class="yWrapper">

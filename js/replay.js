@@ -1,8 +1,7 @@
 function start() {
    var gameFieldSize = 10;
    var rangeElement = document.getElementById('replaySpeed');
-   // used to remember if there are previous action to undo
-   var numberOfMoves = 0;
+   var numberOfMoves = 0;  // used to remember if there are previous action to undo
    var intervalId = null;
    buttons = {
       'start': document.getElementById('start'),
@@ -11,7 +10,6 @@ function start() {
       'previous': document.getElementById('previous'),
       'reset': document.getElementById('reset')
    };
-
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
    // we need to store the JSON.stringify encoded as an URI otherwise the value attribute
    // of the input elements will be messed up by the json double quotes
@@ -20,29 +18,35 @@ function start() {
    levelObject.player = new Vector(levelObject.player.x, levelObject.player.y);
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
-    replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
+   var replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
    var matrix = new Matrix(gameFieldSize, gameFieldSize);
    var game = new Game(matrix, levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
 
    function nextMove() {
       var action;
-      numberOfMoves++;
-      if(numberOfMoves !== 0 && !buttons.start.disabled) {
-         buttons.previous.disabled = false;
-         if(intervalId === null)
-            buttons.reset.disabled = false;
-      }
       // temporary hack, usually while the ball is moving inputs to the game.update() method
       // is ignored but if we ignore a movement of a replay the end result will be different
       // so we move the ball untile it stops during a single redraw
-      if(game.isBallMoving())
+      action = replay.pop();
+      if(action === 'REDO' || action === 'UNDO') {
+         numberOfMoves++;
+         game.update(action);
+      }
+      else if(game.isBallMoving()) {
+         replay.push(action);
          game.moveBall();
+      }
       else {
-         action = replay.pop();
+         numberOfMoves++;
          game.update(action);
       }
       sketcher.drawGrid(game.getGrid());
+      if(numberOfMoves !== 0 && !buttons.start.disabled) {
+         buttons.previous.disabled = false;
+         //if(intervalId === null)
+            buttons.reset.disabled = false;
+      }
    }
    function previousMove() {
       // we need to subtract 2 instead of 1 because at the end we call nextMove which will increment

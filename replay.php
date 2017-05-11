@@ -1,7 +1,7 @@
 <?php
-	session_start();
    include 'utilities.php';
    include 'database.php';
+	session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 	$creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
 	$levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
@@ -15,24 +15,26 @@
 	$db = new Database(connectToDB());
    try {
       $levelObject = $db->getLevel($levelName, $creatorNickname)['levelObject'];
-   } catch(Exception $e) {
+   } catch(PDOException $e) {
       $levelObject = null;
-      echo $e . PHP_EOL;
+      echo $e->getMessage() . PHP_EOL;
    }
 	try {
 		$replay = $db->getReplay($playerNickname, $stamp)['replay'];
-	} catch(Exception $e) {
+	} catch(PDOException $e) {
       $replay = null;
-		echo $e . PHP_EOL;
+		echo $e->getMessage() . PHP_EOL;
 	}
-	$levelTitle = 'Level: <span id="levelName">' . $levelName . '</span>. ' .
-		'Created by <span id="levelCreatorNickname">' . $creatorNickname . '</span>';
+	$levelTitle = 'Level: <span id="levelName">' . htmlspecialchars($levelName) . '</span>. ' .
+		'Created by <span id="levelCreatorNickname">' . htmlspecialchars($creatorNickname) . '</span>';
+	$levelObject = '<input type="hidden" id="levelObject" value="' . urlencode($levelObject) . '">';
+	$replay = '<input type="hidden" id="replay" value="' . urlencode($replay) . '">';
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Level: <?php echo $levelName ?></title>
+	<title>Level: <?php echo htmlspecialchars($levelName); ?></title>
 	<meta charset="utf-8">
   	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="./css/main.css" >
@@ -49,8 +51,8 @@
 
 <?php
 	printHeader('', $nickname);
-	echo '<input type="hidden" id="levelObject" value="' . urlencode($levelObject) . '">';
-	echo '<input type="hidden" id="replay" value="' . urlencode($replay) . '">';
+	echo $levelObject;
+	echo $replay;
 ?>
 
 <main class="xWrapper">

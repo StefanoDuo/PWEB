@@ -1,18 +1,18 @@
-GAME OBJECT
-1) add the ballMovingDirection vector to the state object so when undoing during ball movements and then redoing the ball will start moving again
+LOGIN PAGE
+1) hash passwords
 
-REPLAY PAGE
-1) fix the replay previous button
-2) the ball keeps moving even when pressing the previous button because if isBallMoving() returns true the input isn't read, actually not even extracted from the stack
+PROFILE PAGE
+1) move to POST method to delete levels
 
-"ADVANCED STUFF"
+SAVED SCORE
+1) fix the problem with multiple saved scores, using the timestamp as primary key gives error when inserting multiple
+	scores at the same time, this happens if we have more than 1 save (fix on db changing stamp to autoinc id?)
 
-USER PAGE
-1) add the custom keybindings option
+JSON RESPONSES
+1) start using the JsonResponse Class
 
----------------- REFACTORING ----------------
-GAME OBJECT
-1) refactor the collision logic, just make 1 single method that receives a position and a moving direction, it returns false if nothing has been hit and the name of the object hit if something is hit
+
+----------------------------------------------------------------------------------------------------------------------------
 
 
 SKETCHER OBJECT ---- BACKGROUNDSKETCHER
