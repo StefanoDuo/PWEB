@@ -5,7 +5,7 @@ class JsonResponse {
 	public function __construct($successIdentifier = 'success', $errorMessageIdentifier = 'errorMessage') {
 		$this->responseObject = array(
 			$successIdentifier => true,
-			$errorMessageIdentifier => 'Something went wrong'
+			$errorMessageIdentifier => 'Something went wrong',
 		);
 	}
 
@@ -22,7 +22,7 @@ class JsonResponse {
 	}
 
 	public function getElement($key, $value) {
-		if(array_key_exists($key, $this->responseObject)
+		if(array_key_exists($key, $this->responseObject))
 			return $this->responseObject[$key];
 		else
 			return null;
@@ -32,5 +32,4 @@ class JsonResponse {
 		return json_encode($this->responseObject);
 	}
 }
-
 ?>

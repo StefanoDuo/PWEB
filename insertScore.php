@@ -1,49 +1,49 @@
 <?php
 include 'database.php';
 include 'utilities.php';
+include 'jsonResponse.php'
 session_start();
+$jsonResponse = new JsonResponse();
 if(!isset($_SESSION['nickname'])) {
-	echo '{
-   	"success":false,
-   	"errorMessage":"You need to be logged in"
-	}';
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('You need to be logged in');
+   echo $jsonResponse->getJsonEncoding();
    exit();
 }
-$db = new Database(connectToDB());
+
 $levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
 $levelCreatorNickname = isset($_GET['levelCreatorNickname']) ? $_GET['levelCreatorNickname'] : null;
 $playerNickname = isset($_GET['playerNickname']) ? $_GET['playerNickname'] : null;
 if($playerNickname !== $_SESSION['nickname']) {
-	echo '{
-   	"success":false,
-   	"errorMessage":"Your identity does\'t match the parameter received"
-	}';
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('Your identity does\'t match the parameter received');
+   echo $jsonResponse->getJsonEncoding();
    exit();
 }
+
 $score = isset($_GET['score']) ? $_GET['score'] : null;
 $replay = isset($_GET['replay']) ? $_GET['replay'] : null;
 if(isNull($levelName) || isNull($levelCreatorNickname) || isNull($playerNickname) |
    isNull($score) || isNull($replay)) {
-	echo '{
-   	"success":false,
-   	"errorMessage":"One or more fields are empty"
-	}';
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('One or more fields are empty');
+   echo $jsonResponse->getJsonEncoding();
    exit();
 }
+
+$db = new Database(connectToDB());
 try {
    $result = $db->insertScore($playerNickname, $levelCreatorNickname, $levelName, $score, $replay);
 } catch (PDOException $e) {
 	$result = false;
    echo $e->getMessage() . PHP_EOL;
 }
-if($result)
-	echo '{
-   	"success":true,
-   	"errorMessage":null
-	}';
-else
-	echo '{
-   	"success":false,
-   	"errorMessage":"Something went wrong"
-	}';
+if($result) {
+   $jsonResponse->setOperationSuccess(true);
+   $jsonResponse->setErrorMessage(null);
+} else {
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('Something went wrong');
+}
+echo $jsonResponse->getJsonEnconding();
 ?>

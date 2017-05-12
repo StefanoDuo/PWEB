@@ -1,13 +1,14 @@
 <?php
 include 'utilities.php';
 include 'database.php';
+include 'jsonResponse.php';
+$jsonResponse = new JsonResponse();
+$jsonResponse->setElement('nicknameExists', null);
 $nickname = isset($_GET['nickname']) ? $_GET['nickname'] : null;
 if(isNull($nickname)){
-	echo '{
-   	"success":false,
-   	"errorMessage":"Nickname field empty",
-   	"nicknameExists":null
-	}';
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('Nickname field empty');
+   echo $jsonResponse->getJsonEncoding();
    exit();
 }
 
@@ -19,16 +20,8 @@ try {
    echo $e->getMessage() . PHP_EOL;
 }
 
-if($result)
-	echo '{
-   	"success":true,
-   	"errorMessage":null,
-   	"nicknameExists":true
-	}';
-else
-	echo '{
-   	"success":true,
-   	"errorMessage":null,
-   	"nicknameExists":false
-	}';
+$jsonResponse->setOperationSuccess(true);
+$jsonResponse->setErrorMessage(null);
+$jsonResponse->setElement('nicknameExists', (bool)$result);
+echo $jsonResponse->getJsonEncoding();
 ?>

@@ -14,9 +14,9 @@ function start() {
       response = JSON.parse(response);
       if(response.success)
          if(response.emailExists)
-            nickname.setCustomValidity('Email alredy associated with another account, please change it');
+            email.setCustomValidity('Email alredy associated with another account, please change it');
          else
-            nickname.setCustomValidity('');
+            email.setCustomValidity('');
    }
 
    nickname.addEventListener('change', function() {

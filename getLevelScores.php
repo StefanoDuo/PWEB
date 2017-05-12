@@ -1,20 +1,22 @@
 <?php
 include 'database.php';
 include 'utilities.php';
+include 'jsonResponse.php';
 $creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
 $levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
-$jsonResponse = getDefaultResponse();
-$jsonResponse['scores'] = null;
-$jsonResponse['creatorNickname'] = null;
-$jsonResponse['levelName'] = null;
+$jsonResponse = new JsonResponse();
+$jsonResponse->setElement('scores', null);
+$jsonResponse->setElement('creatorNickname', null);
+$jsonResponse->setElement('levelName', null);
 
 if(isNull($creatorNickname) || isNull($levelName)) {
-   $jsonResponse['errorMessage'] = 'One or more fields are empty';
-	echo json_encode($jsonResponse);
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('One or more fields are empty');
+	echo $jsonResponse->getJsonEncoding();
 	exit();
 }
-$jsonResponse['creatorNickname'] = htmlspecialchars($creatorNickname);
-$jsonResponse['levelName'] = htmlspecialchars($levelName);
+$jsonResponse->setElement('creatorNickname', htmlspecialchars($creatorNickname));
+$jsonResponse->setElement('levelName', htmlspecialchars($levelName));
 
 $db = new Database(connectToDB());
 try {
@@ -25,14 +27,13 @@ try {
 }
 
 if($scores) {
-   $jsonResponse['success'] = true;
-   $jsonResponse['errorMessage'] = null;
-   $jsonResponse['scores'] = $scores;
+   $jsonResponse->setOperationSuccess(true);
+   $jsonResponse->setErrorMessage(null);
+   $jsonResponse->setElement('scores', $scores);
+} else {
+   $jsonResponse->setOperationSuccess(false);
+   $jsonResponse->setErrorMessage('No scores');
+   $jsonResponse->setElement('scores', null);
 }
-else {
-   $jsonResponse['success'] = false;
-   $jsonResponse['errorMessage'] = 'No scores';
-   $jsonResponse['scores'] = null;
-}
-echo json_encode($jsonResponse);
+echo $jsonResponse->getJsonEncoding();
 ?>
