@@ -17,16 +17,6 @@ function getDBConnectionInfo($fileLocation) {
     return $credentials;
 }
 
-function getDefaultResponse() {
-    return array(
-       'success' => false,
-       'errorMessage' => 'Something went wrong',
-       'scores' => null,
-       'creatorNickname' => null,
-       'levelName' => null
-    );
-}
-
 function connectToDB() {
     $fileLocation = 'db.conf';
     $credentials = getDBConnectionInfo($fileLocation);
@@ -81,9 +71,12 @@ function printLevelsList($levels) {
 function printLevelsCreatedBy($creatorNickname, $levels) {
     echo '<ul>';
     foreach ($levels as $key => $value) {
+        echo '<form action="deleteLevel.php" method="post">';
         echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($creatorNickname);
-        echo '&levelName=' . urlencode($value['name']) . '">' . htmlspecialchars($value['name']) . '</a> | ';
-        echo '<a href="deleteLevel.php?levelName=' . urlencode($value['name']) . '&creatorNickname=' . urlencode($creatorNickname) . '">Delete</a></li>';
+        echo '&levelName=' . urlencode($value['name']) . '">' . htmlspecialchars($value['name']) . '</a>';
+        echo '<input type="checkbox" name="levelName" required value="' . $value['name'] . '">';
+        echo '<input type="submit" value="delete" id="updatePassword">';
+        echo '</form>';
     }
     echo '</ul>';
 }
@@ -94,9 +87,7 @@ function printUserScores($playerNickname, $scores) {
         echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']);
         echo '&levelName=' . urlencode($value['levelName']) . '">' . htmlspecialchars($value['levelName']);
         echo '</a> | Creator: ' . htmlspecialchars($value['creatorNickname']);
-        echo '| Score: <a href="replay.php?creatorNickname=' . urlencode($value['creatorNickname']);
-        echo '&levelName=' . urlencode($value['levelName']) . '&playerNickname=' . urlencode($playerNickname);
-        echo '&stamp=' . urlencode($value['stamp']) . '">' . $value['score'] . '</a></li>';
+        echo '| Score: <a href="replay.php?id=' . urlencode($value['id']) . '">' . $value['score'] . '</a></li>';
     }
     echo '</ul>';
 }

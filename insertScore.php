@@ -1,7 +1,7 @@
 <?php
 include 'database.php';
 include 'utilities.php';
-include 'jsonResponse.php'
+include 'jsonResponse.php';
 session_start();
 $jsonResponse = new JsonResponse();
 if(!isset($_SESSION['nickname'])) {
@@ -45,5 +45,5 @@ if($result) {
    $jsonResponse->setOperationSuccess(false);
    $jsonResponse->setErrorMessage('Something went wrong');
 }
-echo $jsonResponse->getJsonEnconding();
+echo $jsonResponse->getJsonEncoding();
 ?>

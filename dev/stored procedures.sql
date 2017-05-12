@@ -101,7 +101,7 @@ END $$
 DROP PROCEDURE IF EXISTS getUserScores $$
 CREATE PROCEDURE getUserScores(IN _playerNickname VARCHAR(50))
 BEGIN
-	SELECT B.levelName, B.creatorNickname, B.score, B.stamp
+	SELECT B.levelName, B.creatorNickname, B.score, B.id
     FROM BeatenBy B
     WHERE B.playerNickname = _playerNickname;
 END $$
@@ -111,7 +111,7 @@ DROP PROCEDURE IF EXISTS getLevelScores $$
 CREATE PROCEDURE getLevelScores(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50),
 								IN _resultLimit INT)
 BEGIN
-    SELECT B.playerNickname, B.score, B.stamp
+    SELECT B.playerNickname, B.score, B.id
     FROM BeatenBy B
     WHERE B.creatorNickname = _creatorNickname
         AND B.levelName = _levelName
@@ -121,12 +121,11 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS getReplay $$
-CREATE PROCEDURE getReplay(IN _playerNickname VARCHAR(50), IN _stamp TIMESTAMP)
+CREATE PROCEDURE getReplay(IN _id CHAR(36))
 BEGIN
-	SELECT B.replay	
+	SELECT B.replay, B.levelName, B.creatorNickname
     FROM BeatenBy B
-    WHERE B.playerNickname = _playerNickname
-		AND B.stamp = _stamp;
+    WHERE B.id = _id;
 END $$
 
 
@@ -152,8 +151,8 @@ DROP PROCEDURE IF EXISTS insertScore $$
 CREATE PROCEDURE insertScore(IN _playerNickname VARCHAR(50), IN _levelCreatorNickname VARCHAR(50),
 							 IN _levelName VARCHAR(50), IN _score INTEGER, IN _replay TEXT)
 BEGIN
-	INSERT INTO `BeatenBy`(`playerNickname`, `creatorNickname`, `levelName`, `score`, `replay`)
-		VALUE (_playerNickname, _levelCreatorNickname, _levelName, _score, _replay);
+	INSERT INTO `BeatenBy`(`playerNickname`, `id`, `creatorNickname`, `levelName`, `score`, `replay`)
+		VALUE (_playerNickname, UUID(),_levelCreatorNickname, _levelName, _score, _replay);
 END $$
 
 DELIMITER ;

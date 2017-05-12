@@ -24,7 +24,7 @@ function getScores() {
 		if(errorMessage) {
 		 	buttonElement.textContent = 'Show scores';
 			errorMessage.remove();
-			return
+			return;
 		}
 
 		// then we create the new one
@@ -46,8 +46,7 @@ function getScores() {
 			scoreElement.textContent = 'Player: ' + score.playerNickname + ' | Score: ' + score.score;
 			scoreElement.textContent += ' | ';
 			var replay = document.createElement('a');
-			replay.href = 'replay.php?creatorNickname=' + parsedResponse.creatorNickname + '&levelName=' + parsedResponse.levelName + '\
-				&playerNickname=' + score.playerNickname + '&stamp=' + score.stamp;
+			replay.href = 'replay.php?id=' + score.id;
 			replay.textContent = 'Replay';
 			scoreElement.appendChild(replay)
 			scoresList.appendChild(scoreElement);

@@ -105,10 +105,9 @@ class Database {
 		return $rows;
 	}
 
-	public function getReplay($playerNickname, $stamp) {
-		$query = $this->pdo->prepare('CALL getReplay(:playerNickname, :stamp);');
-		$query->bindValue(':playerNickname', $playerNickname, PDO::PARAM_STR);
-		$query->bindValue(':stamp', $stamp, PDO::PARAM_STR);
+	public function getReplay($id) {
+		$query = $this->pdo->prepare('CALL getReplay(:id);');
+		$query->bindValue(':id', $id, PDO::PARAM_STR);
 		$query->execute();
 		$rows = $query->fetchAll();
 		return isset($rows[0]) ? $rows[0] : null;

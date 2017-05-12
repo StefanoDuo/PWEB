@@ -3,32 +3,32 @@
    include 'database.php';
 	session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
-	$creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
-	$levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
-	$playerNickname = isset($_GET['playerNickname']) ? $_GET['playerNickname'] : null;
-	$stamp = isset($_GET['stamp']) ? $_GET['stamp'] : null;
-	if(isNull($creatorNickname) || isNull($levelName) || isNull($playerNickname) || isNull($stamp)) {
+   $id = isset($_GET['id']) ? $_GET['id'] : null;
+	if(isNull($id)) {
       header('Location: /PWEB/index.php');
       exit();
    }
 
 	$db = new Database(connectToDB());
+	try {
+		$replay = $db->getReplay($id);
+	} catch(PDOException $e) {
+      $replay = null;
+		echo $e->getMessage() . PHP_EOL;
+	}
+	$levelName = $replay['levelName'];
+	$creatorNickname = $replay['creatorNickname'];
    try {
       $levelObject = $db->getLevel($levelName, $creatorNickname)['levelObject'];
    } catch(PDOException $e) {
       $levelObject = null;
       echo $e->getMessage() . PHP_EOL;
    }
-	try {
-		$replay = $db->getReplay($playerNickname, $stamp)['replay'];
-	} catch(PDOException $e) {
-      $replay = null;
-		echo $e->getMessage() . PHP_EOL;
-	}
+	
 	$levelTitle = 'Level: <span id="levelName">' . htmlspecialchars($levelName) . '</span>. ' .
 		'Created by <span id="levelCreatorNickname">' . htmlspecialchars($creatorNickname) . '</span>';
 	$levelObject = '<input type="hidden" id="levelObject" value="' . urlencode($levelObject) . '">';
-	$replay = '<input type="hidden" id="replay" value="' . urlencode($replay) . '">';
+	$replay = '<input type="hidden" id="replay" value="' . urlencode($replay['replay']) . '">';
 ?>
 
 <!DOCTYPE html>

@@ -31,13 +31,13 @@ INSERT INTO `Level` VALUES ('The Maze', 'user1', '{"player":{"x":0,"y":0},"ball"
 
 CREATE TABLE `BeatenBy` (
 	`playerNickname` VARCHAR(50) NOT NULL,
-    `stamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `id` CHAR(36) NOT NULL,
 	`creatorNickname` VARCHAR(50) NOT NULL,
 	`levelName` VARCHAR(50) NOT NULL,
 	`score` INTEGER NOT NULL,
 	`replay` TEXT NOT NULL,
 
-	PRIMARY KEY (`playerNickname`, `stamp`),
+	PRIMARY KEY (`id`),
 	FOREIGN KEY (`playerNickname`)
 		REFERENCES User(`nickname`),
 	FOREIGN KEY (`creatorNickname`, `levelName`)

@@ -1,17 +1,3 @@
-PROFILE PAGE
-1) move to POST method to delete levels
-
-SAVED SCORE
-1) fix the problem with multiple saved scores, using the timestamp as primary key gives error when inserting multiple
-	scores at the same time, this happens if we have more than 1 save (fix on db changing stamp to autoinc id?)
-
-JSON RESPONSES
-1) start using the JsonResponse Class
-
-
-----------------------------------------------------------------------------------------------------------------------------
-
-
 SKETCHER OBJECT ---- BACKGROUNDSKETCHER
 1) the sketcher will only handle the static grid tiles (rocks and the hole)
 	and the level creation in the workshop page
