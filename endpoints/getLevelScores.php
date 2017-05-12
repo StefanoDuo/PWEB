@@ -1,7 +1,8 @@
 <?php
-include 'database.php';
-include 'utilities.php';
-include 'jsonResponse.php';
+require '../config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
+require ROOT_DIR . '/utilities/php/jsonResponse.php';
 $creatorNickname = isset($_GET['creatorNickname']) ? $_GET['creatorNickname'] : null;
 $levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
 $jsonResponse = new JsonResponse();
@@ -18,7 +19,7 @@ if(isNull($creatorNickname) || isNull($levelName)) {
 $jsonResponse->setElement('creatorNickname', htmlspecialchars($creatorNickname));
 $jsonResponse->setElement('levelName', htmlspecialchars($levelName));
 
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
    $scores = $db->getLevelScores($creatorNickname, $levelName);
 } catch(PDOException $e) {

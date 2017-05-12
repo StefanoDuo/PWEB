@@ -1,5 +1,6 @@
 <?php
-	include 'utilities.php';
+   require 'config.php';
+   require ROOT_DIR . '/utilities/php/utilities.php';
 	session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 	if(!is_null($nickname)) {
@@ -9,7 +10,7 @@
 	$errors = array(
 		0 => 'One field was empty',
 		1 => 'Something went wrong',
-		2 => "User doesn't exists or the password doesn't match"
+		2 => "User doesn't exists or the password doesn't match",
 	);
 	$errorNumber = isset($_GET['error']) ? $_GET['error'] : null;
 	if(isNull($errorNumber))
@@ -26,9 +27,9 @@
 	<meta charset="utf-8">
 	<title>Login / Signup</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link rel="stylesheet" href="./css/main.css">
-	<script type="text/javascript" src="./js/ajaxRequest.js"></script>
-	<script type="text/javascript" src="./js/login.js"></script>
+	<link rel="stylesheet" href="./resources/css/main.css" >
+	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
+	<script type="text/javascript" src="./resources/js/login.js"></script>
 </head>
 <body onLoad="start()">
 

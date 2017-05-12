@@ -6,7 +6,7 @@ function getScores() {
 	var method = 'GET';
 	var queryString = 'levelName=' + levelName + '&creatorNickname=' + creatorNickname;
 	var async = true;
-	var url = 'getLevelScores.php';
+	var url = 'endpoints/getLevelScores.php';
 
 	ajaxRequest(url, method, queryString, async, function(textResponse) {
 		var parsedResponse = JSON.parse(textResponse);

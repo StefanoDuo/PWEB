@@ -20,7 +20,7 @@ function start() {
    }
 
    nickname.addEventListener('change', function() {
-      var url = 'nicknameExists.php';
+      var url = 'endpoints/nicknameExists.php';
       var method = 'GET';
       var queryString = 'nickname=' + nickname.value;
       var async = true;
@@ -28,7 +28,7 @@ function start() {
    }, false);
 
    email.addEventListener('change', function() {
-      var url = 'emailExists.php';
+      var url = 'endpoints/emailExists.php';
       var method = 'GET';
       var queryString = 'email=' + email.value;
       var async = true;

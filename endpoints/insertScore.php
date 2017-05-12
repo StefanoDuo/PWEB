@@ -1,7 +1,8 @@
 <?php
-include 'database.php';
-include 'utilities.php';
-include 'jsonResponse.php';
+require '../config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
+require ROOT_DIR . '/utilities/php/jsonResponse.php';
 session_start();
 $jsonResponse = new JsonResponse();
 if(!isset($_SESSION['nickname'])) {
@@ -31,7 +32,7 @@ if(isNull($levelName) || isNull($levelCreatorNickname) || isNull($playerNickname
    exit();
 }
 
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
    $result = $db->insertScore($playerNickname, $levelCreatorNickname, $levelName, $score, $replay);
 } catch (PDOException $e) {

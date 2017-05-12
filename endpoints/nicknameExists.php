@@ -1,7 +1,8 @@
 <?php
-include 'utilities.php';
-include 'database.php';
-include 'jsonResponse.php';
+require '../config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
+require ROOT_DIR . '/utilities/php/jsonResponse.php';
 $jsonResponse = new JsonResponse();
 $jsonResponse->setElement('nicknameExists', null);
 $nickname = isset($_GET['nickname']) ? $_GET['nickname'] : null;
@@ -12,7 +13,7 @@ if(isNull($nickname)){
    exit();
 }
 
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
    $result = $db->getUser($nickname);
 } catch(PDOException $e) {

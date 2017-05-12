@@ -1,7 +1,8 @@
 <?php
-include 'utilities.php';
-include 'database.php';
-include 'jsonResponse.php';
+require '../config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
+require ROOT_DIR . '/utilities/php/jsonResponse.php';
 $email = isset($_GET['email']) ? $_GET['email'] : null;
 $jsonResponse = new JsonResponse();
 $jsonResponse->setElement('emailExists', false);
@@ -12,7 +13,7 @@ if(isNull($email)){
    exit();
 }
 
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
    $result = $db->emailExists($email);
 } catch(PDOException $e) {

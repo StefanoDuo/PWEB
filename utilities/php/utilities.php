@@ -17,8 +17,7 @@ function getDBConnectionInfo($fileLocation) {
     return $credentials;
 }
 
-function connectToDB() {
-    $fileLocation = 'db.conf';
+function connectToDB($fileLocation) {
     $credentials = getDBConnectionInfo($fileLocation);
     $hostname = $credentials['hostname'];
     $database = $credentials['database'];

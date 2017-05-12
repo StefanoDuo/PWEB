@@ -1,6 +1,7 @@
 <?php
-include 'database.php';
-include 'utilities.php';
+require 'config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
 session_start();
 // this page can't be accessed by users alredy logged in
 if(isset($_SESSION['nickname'])) {
@@ -13,7 +14,7 @@ if(isNull($nickname) || isNull($password)) {
 	header("Location: /PWEB/login.php?error=0");
 	exit();
 }
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
 	$user = $db->getUser($nickname);
 } catch(PDOException $e) {

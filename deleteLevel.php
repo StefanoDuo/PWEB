@@ -1,6 +1,7 @@
 <?php
-include 'database.php';
-include 'utilities.php';
+require 'config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
 session_start();
 $creatorNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 $levelName = isset($_POST['levelName']) ? $_POST['levelName'] : null;
@@ -9,7 +10,7 @@ if(isNull($creatorNickname) || isNull($levelName)) {
    exit();
 }
 
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
    $level = $db->getLevel($levelName, $creatorNickname);
 } catch(PDOException $e) {

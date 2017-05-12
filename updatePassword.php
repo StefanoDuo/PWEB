@@ -1,6 +1,7 @@
 <?php
-include 'database.php';
-include 'utilities.php';
+require 'config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
 session_start();
 if(!isset($_SESSION['nickname'])) {
 	header('Location: /PWEB/index.php');
@@ -13,7 +14,7 @@ if(isNull($password)) {
    exit();
 }
 $password = hashPassword($password);
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
    $affectedRows = $db->updatePassword($nickname, $password);
 } catch(PDOException $e) {

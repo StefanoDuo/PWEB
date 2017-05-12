@@ -1,6 +1,7 @@
 <?php
-   include 'utilities.php';
-   include 'database.php';
+   require 'config.php';
+   require ROOT_DIR . '/utilities/php/utilities.php';
+   require ROOT_DIR . '/utilities/php/database.php';
 	session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -9,7 +10,7 @@
       exit();
    }
 
-	$db = new Database(connectToDB());
+	$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 	try {
 		$replay = $db->getReplay($id);
 	} catch(PDOException $e) {
@@ -37,15 +38,15 @@
 	<title>Level: <?php echo htmlspecialchars($levelName); ?></title>
 	<meta charset="utf-8">
   	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link rel="stylesheet" href="./css/main.css" >
-	<script type="text/javascript" src="./js/vector.js"></script>
-	<script type="text/javascript" src="./js/matrix.js"></script>
-	<script type="text/javascript" src="./js/queue.js"></script>
-	<script type="text/javascript" src="./js/game.js"></script>
-	<script type="text/javascript" src="./js/backgroundSketcher.js"></script>
-	<script type="text/javascript" src="./js/input.js"></script>
-	<script type="text/javascript" src="./js/ajaxRequest.js"></script>
-	<script type="text/javascript" src="./js/replay.js"></script>
+   <link rel="stylesheet" href="./resources/css/main.css" >
+	<script type="text/javascript" src="./utilities/js/vector.js"></script>
+	<script type="text/javascript" src="./utilities/js/matrix.js"></script>
+	<script type="text/javascript" src="./utilities/js/queue.js"></script>
+	<script type="text/javascript" src="./utilities/js/game.js"></script>
+	<script type="text/javascript" src="./utilities/js/backgroundSketcher.js"></script>
+	<script type="text/javascript" src="./utilities/js/input.js"></script>
+	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
+	<script type="text/javascript" src="./resources/js/replay.js"></script>
 </head>
 <body id="body" onLoad="start()">
 

@@ -118,7 +118,7 @@ function start() {
       var creatorNickname = document.getElementById('nickname').firstChild.textContent;
       var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
       buttons.save.className = 'button disabled';
-      ajaxRequest('insertLevel.php', 'GET', queryString, true, function(responseText) {
+      ajaxRequest('endpoints/insertLevel.php', 'GET', queryString, true, function(responseText) {
          buttons.save.className = 'button gray';
          responseText = JSON.parse(responseText);
          if(responseText.success)

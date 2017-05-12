@@ -3,7 +3,7 @@ function start() {
    var rangeElement = document.getElementById('replaySpeed');
    var numberOfMoves = 0;  // used to remember if there are previous action to undo
    var intervalId = null;
-   buttons = {
+   var buttons = {
       'start': document.getElementById('start'),
       'pause': document.getElementById('pause'),
       'next': document.getElementById('next'),

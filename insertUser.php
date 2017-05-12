@@ -1,6 +1,7 @@
 <?php
-include 'database.php';
-include 'utilities.php';
+require 'config.php';
+require ROOT_DIR . '/utilities/php/utilities.php';
+require ROOT_DIR . '/utilities/php/database.php';
 session_start();
 // sign up page can't be accessed by logged in user
 if(isset($_SESSION['nickname'])) {
@@ -16,7 +17,7 @@ if(isNull($nickname) || isNull($email) || isNull($password)) {
 }
 
 $password = hashPassword($password);
-$db = new Database(connectToDB());
+$db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
 try {
 	$affectedRows = $db->insertUser($nickname, $email, $password);
 } catch(PDOException $e) {

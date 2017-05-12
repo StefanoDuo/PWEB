@@ -1,6 +1,7 @@
 <?php
-   include 'utilities.php';
-   include 'database.php';
+   require 'config.php';
+   require ROOT_DIR . '/utilities/php/utilities.php';
+   require ROOT_DIR . '/utilities/php/database.php';
    session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    if(is_null($nickname)) {
@@ -8,7 +9,7 @@
       exit();
    }
 
-   $db = new Database(connectToDB());
+   $db = new Database(connectToDB(ROOT_DIR . '/utilities/php/db.conf'));
    try {
       $levels = $db->getLevelsCreatedBy($nickname);
    } catch(PDOException $e) {
@@ -29,13 +30,13 @@
    }
 
    $emailErrors = array(
-      0 => "That's your current email"
+      0 => "That's your current email",
    );
    $passwordErrors = array(
-      0 => "That's your current password"
+      0 => "Something went wrong",
    );
    $levelErrors = array(
-      0 => "Somebody alredy played that level, therefore it can't be deleted"
+      0 => "Somebody alredy played that level, therefore it can't be deleted",
    );
 
    $passwordErrorNumber = isset($_GET['passwordError']) ? $_GET['passwordError'] : null;
@@ -49,8 +50,8 @@
    $emailErrorNumber = isset($_GET['emailError']) ? $_GET['emailError'] : null;
    if(isNull($emailErrorNumber))
       $emailErrorMessage = '';
-   else if(isset($passwordErrors[$emailErrorNumber]))
-      $emailErrorMessage = '<p>' . $passwordErrors[$emailErrorNumber] . '</p>';
+   else if(isset($emailErrors[$emailErrorNumber]))
+      $emailErrorMessage = '<p>' . $emailErrors[$emailErrorNumber] . '</p>';
    else
       $emailErrorMessage = '';
 
@@ -69,9 +70,9 @@
    <meta charset="utf-8">
    <title>Your profile</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-   <script type="text/javascript" src="./js/ajaxRequest.js"></script>
-   <script type="text/javascript" src="./js/profile.js"></script>
-   <link rel="stylesheet" href="./css/main.css" >
+   <link rel="stylesheet" href="./resources/css/main.css" >
+   <script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
+   <script type="text/javascript" src="./resources/js/profile.js"></script>
 </head>
 <body>
    <?php
