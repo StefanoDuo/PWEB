@@ -7,14 +7,15 @@ if(isset($_SESSION['nickname'])) {
 	header("Location: /PWEB/index.php");
 	exit();
 }
-$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : null;
-$email = isset($_GET['email']) ? $_GET['email'] : null;
-$password = isset($_GET['password']) ? $_GET['password'] : null;
+$nickname = isset($_POST['nickname']) ? $_POST['nickname'] : null;
+$email = isset($_POST['email']) ? $_POST['email'] : null;
+$password = isset($_POST['password']) ? $_POST['password'] : null;
 if(isNull($nickname) || isNull($email) || isNull($password)) {
 	header("Location: /PWEB/login.php?error=0");
 	exit();
 }
 
+$password = hashPassword($password);
 $db = new Database(connectToDB());
 try {
 	$affectedRows = $db->insertUser($nickname, $email, $password);

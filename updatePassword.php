@@ -12,6 +12,7 @@ if(isNull($password)) {
 	header('Location: /PWEB/index.php');
    exit();
 }
+$password = hashPassword($password);
 $db = new Database(connectToDB());
 try {
    $affectedRows = $db->updatePassword($nickname, $password);

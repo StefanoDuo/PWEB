@@ -19,7 +19,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS updatePassword $$
-CREATE PROCEDURE updatePassword(IN _userNickname VARCHAR(50), IN _password VARCHAR(50))
+CREATE PROCEDURE updatePassword(IN _userNickname VARCHAR(50), IN _password VARCHAR(255))
 BEGIN
     UPDATE `User`
     SET `password` = _password
@@ -141,7 +141,7 @@ END $$
 
 DROP PROCEDURE IF EXISTS insertUser $$
 CREATE PROCEDURE insertUser(IN _nickname VARCHAR(50), IN _email VARCHAR(50),
-							IN _password VARCHAR(50))
+							IN _password VARCHAR(255))
 BEGIN
 	INSERT INTO `User`(`nickname`, `email`, `password`)
 		VALUE (_nickname, _email, _password);

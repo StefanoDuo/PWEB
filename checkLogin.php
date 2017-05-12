@@ -22,7 +22,7 @@ try {
 }
 // if the pair nickname password doesn't match one in the
 // database redirects the user to the login page
-if(is_null($user) || is_null($user['nickname']) || $user['password'] !== $password) {
+if(isNull($user) || isNull($user['nickname']) || !verifyPassword($password, $user['password'])) {
 	header("Location: /PWEB/login.php?error=2");
 	exit();
 }
