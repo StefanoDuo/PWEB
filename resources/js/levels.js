@@ -12,13 +12,14 @@ function getScores() {
 		var parsedResponse = JSON.parse(textResponse);
 		var buttonID = parsedResponse.creatorNickname + '-' + parsedResponse.levelName;
 		var buttonElement = document.getElementById(buttonID);
-		var scoresList = document.getElementById(buttonID + '-' + 'scoresList');
+		var scoresTable = document.getElementById(buttonID + '-' + 'scoresTable');
 		var errorMessage = document.getElementById(buttonID + '-' + 'errorMessage');
 		var parentListElement = document.getElementById(buttonID).parentElement;
+
 		// first we remove the old generated content
-		if(scoresList) {
+		if(scoresTable) {
 		 	buttonElement.textContent = 'Show scores';
-			scoresList.remove();
+			scoresTable.remove();
 			return;
 		}
 		if(errorMessage) {
@@ -36,21 +37,49 @@ function getScores() {
 			parentListElement.appendChild(errorMessage);
 			return;
 		}
-		scoresList = document.createElement('ul');
-		scoresList.id = buttonID + '-' + 'scoresList';
+
+		scoresTable = document.createElement('table');
+		scoresTable.id = buttonID + '-' + 'scoresTable';
+
+		var body = document.createElement('thead');
+		var row = document.createElement('tr');
+		var cell = document.createElement('th');
+		cell.textContent = 'Nickname';
+		row.appendChild(cell);
+		cell = document.createElement('th');
+		cell.textContent = 'Score';
+		row.appendChild(cell);
+		scoresTable.appendChild(row);
+		var cell = document.createElement('th');
+		row.appendChild(cell);
+		body.appendChild(row);
+		scoresTable.appendChild(body);
+
 	 	buttonElement.textContent = 'Hide scores';
-		parentListElement.appendChild(scoresList);
+		body = document.createElement('tbody');
 		for(var i = 0; i < parsedResponse.scores.length; i++) {
 			var score = parsedResponse.scores[i];
-			var scoreElement = document.createElement('li');
-			scoreElement.textContent = 'Player: ' + score.playerNickname + ' | Score: ' + score.score;
-			scoreElement.textContent += ' | ';
+			row = document.createElement('tr');
+			cell = document.createElement('td');
+			cell.textContent = score.playerNickname;
+			row.appendChild(cell);
+
+			cell = document.createElement('td');
+			cell.textContent = score.score;
+			row.appendChild(cell);
+
+			cell = document.createElement('td');
 			var replay = document.createElement('a');
 			replay.href = 'replay.php?id=' + score.id;
 			replay.textContent = 'Replay';
-			scoreElement.appendChild(replay)
-			scoresList.appendChild(scoreElement);
+			replay.className = 'flatButton'
+			cell.appendChild(replay);
+			row.appendChild(cell);
+
+			body.appendChild(row);
 		}
+		scoresTable.appendChild(body);
+		parentListElement.appendChild(scoresTable);
 	});
 
 }

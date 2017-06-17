@@ -25,13 +25,13 @@
 		echo $e->getMessage() . PHP_EOL;
 	}
 	if(is_null($nextLevel))
-		$nextButton = '<button class="button gray" disabled>You\'ve beaten all levels</button>';
+		$nextButton = '<button class="raisedButton secondaryDark" disabled>You\'ve beaten all levels</button>';
 	else {
-		$nextButton = '<a class="button gray" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
+		$nextButton = '<a class="raisedButton secondaryDark" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
 		$nextButton .= '&levelName=' . $nextLevel['name'] .'">Next Level</a>';
 	}
-	$levelTitle = 'Level: <span id="levelName">' . htmlspecialchars($levelName) . '</span>. ' .
-		'Created by <span id="levelCreatorNickname">' . htmlspecialchars($creatorNickname) . '</span>';
+	$levelTitle = '<span id="levelName">' . htmlspecialchars($levelName) . '</span>' .
+	$levelCreator = '<input type="hidden" id="levelCreatorNickname" value="' . htmlspecialchars($creatorNickname) . '">';
 	$levelObject = '<input type="hidden" id="levelObject" value="' . urlencode($currentLevel['levelObject']) . '">';
 ?>
 
@@ -40,7 +40,7 @@
 <head>
 	<title>Level: <?php echo htmlspecialchars($levelName) ?></title>
 	<meta charset="utf-8">
-  	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
 	<link rel="stylesheet" href="./resources/css/main.css" >
 	<script type="text/javascript" src="./utilities/js/vector.js"></script>
 	<script type="text/javascript" src="./utilities/js/matrix.js"></script>
@@ -60,23 +60,30 @@
 ?>
 
 <main class="yWrapper">
-	<div class="xWrapper">
-		<ul id="undo"></ul>
+	<div class="xWrapper alignTop">
+		<div class="yWrapper movesContainer">
+			<p>UNDO</p>
+			<ul id="undo" class="movesTracker"></ul>
+		</div>
 		<div class="yWrapper">
 			<h1><?php echo $levelTitle?></h1>
-			<div id="gameField" class="xWrapper relative">
+			<?php echo $levelCreator ?>
+			<div class="relative">
+			<div id="gameField" class="xWrapper"></div>
 				<div class="absolute hidden shadowDrop yWrapper" id="shadowDrop">
 					<h2>Congratulations</h2>
-					<p>Score <span id="score2">0</span></p>
 					<div class="xWrapper">
 						<?php echo $nextButton ?>
-						<button class="button gray" id="playAgain">Play Again</button>
+						<button class="raisedButton secondaryDark" id="playAgain">Play Again</button>
 					</div>
 				</div>
 			</div>
-			<p id="score">0</p>
+			<p id="score" class="bigText">0</p>
 		</div>
-		<ul id="redo"></ul>
+		<div class="yWrapper movesContainer">
+			<p>REDO</p>
+			<ul id="redo" class="movesTracker"></ul>
+		</div>
 	</div>
 </main>
 

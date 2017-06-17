@@ -14,7 +14,7 @@
 <head>
    <meta charset="utf-8">
    <title>Level Creation</title>
-   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
    <link rel="stylesheet" href="./resources/css/main.css" >
    <script type="text/javascript" src="./utilities/js/matrix.js"></script>
    <script type="text/javascript" src="./utilities/js/vector.js"></script>
@@ -26,18 +26,22 @@
 
 <?php printHeader("workshop", $nickname); ?>
 
-<main class="xWrapper">
-   <div id="gameField" class="xWrapper"></div>
-   <div class="yWrapper">
-      Level Name <input type="text" id="levelName" required>
-      <button id="player" class="button gray">Player</button>
-      <button id="ball" class="button gray">Ball</button>
-      <button id="hole" class="button gray">Hole</button>
-      <button id="rock" class="button gray">Rock</button>
-      <button id="reset" class="button gray">Reset</button>
-      <button id="save" class="button gray">Save</button>
-      <p id="errorMessage"></p>
+<main>
+   <div class="xWrapper">
+      <div class="yWrapper">
+         <input type="text" id="levelName" required placeholder="Level name" maxlength="30">
+         <div id="gameField" class="xWrapper"></div>
+      </div>
+      <div class="yWrapper">
+         <button id="player" class="raisedButton secondaryDark">Player</button>
+         <button id="ball" class="raisedButton secondaryDark">Ball</button>
+         <button id="hole" class="raisedButton secondaryDark">Hole</button>
+         <button id="rock" class="raisedButton secondaryDark">Rock</button>
+         <button id="reset" class="raisedButton secondaryDark">Reset</button>
+         <button id="save" class="raisedButton secondaryDark">Save</button>
+      </div>
    </div>
+   <p id="errorMessage"></p>
 </main>
 
 <?php include 'footer.php' ?>

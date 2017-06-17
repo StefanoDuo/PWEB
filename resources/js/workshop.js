@@ -22,11 +22,12 @@ function fetchLevelObject(grid) {
    };
    var string = '';
 
+   console.log(grid.length);
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
          // checks the classname of every element in the grid removing the substrings
          // 'box', ' ', 'firstOfRow' or any their(?) combination
-         string = grid[i][j].className.replace(/box|firstOfRow|\s/g, '');
+         string = grid[i][j].className.replace(/box|borders|\s/g, '');
          if(string !== '') {
             if(string === 'player' || string === 'ball' || string === 'hole') {
                if(levelObject[string] !== null) {
@@ -54,7 +55,7 @@ function fetchLevelObject(grid) {
 
 function start() {
    var errorMessage = document.getElementById('errorMessage');
-   var gamefieldSize = 10;
+   var gamefieldSize = 20;
    var pressedButton = null;
    var buttons = {
       player: document.getElementById('player'),
@@ -66,7 +67,7 @@ function start() {
    };
 
    function releaseButton(button) {
-      button.className = button.className.replace('pressed', '');
+      button.className = button.className.replace('primary', 'secondaryDark');
       button.removeAttribute('pressed');
       pressedButton = null;
    }
@@ -80,7 +81,7 @@ function start() {
          if(pressedButton)
             releaseButton(pressedButton);
          button.setAttribute('pressed', '');
-         button.className = button.className.replace(/(red)|(blue)|(green)|(gray)/, 'pressed$&');
+         button.className = button.className.replace('secondaryDark', 'primary');
          pressedButton = button;
       }
    }
@@ -117,9 +118,9 @@ function start() {
       }
       var creatorNickname = document.getElementById('nickname').firstChild.textContent;
       var queryString = 'levelObject=' + JSON.stringify(levelObject) + '&levelName=' + levelName + '&creatorNickname=' +creatorNickname;
-      buttons.save.className = 'button disabled';
+      buttons.save.disabled = true;
       ajaxRequest('endpoints/insertLevel.php', 'GET', queryString, true, function(responseText) {
-         buttons.save.className = 'button gray';
+         buttons.save.disabled = false;
          responseText = JSON.parse(responseText);
          if(responseText.success)
             window.location.href = "play.php?creatorNickname=" + creatorNickname + "&levelName=" + levelName;
@@ -128,7 +129,7 @@ function start() {
       });
    });
 
-   var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box');
+   var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box borders');
    var grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {

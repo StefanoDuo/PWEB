@@ -17,7 +17,7 @@ function BackgroundSketcher(gridSize, whereToDraw, tileBaseClass) {
       this.grid[i] = new Array(this.gridSize);
       for(var j = 0; j < this.gridSize; j++) {
          this.grid[i][j] = document.createElement('div');
-         this.grid[i][j].id = '' + (i * 10 + j);
+         this.grid[i][j].id = '' + (i * this.gridSize + j);
          this.whereToDraw.appendChild(this.grid[i][j]);
       }
    }

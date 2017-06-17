@@ -37,7 +37,7 @@
 <head>
 	<title>Level: <?php echo htmlspecialchars($levelName); ?></title>
 	<meta charset="utf-8">
-  	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
    <link rel="stylesheet" href="./resources/css/main.css" >
 	<script type="text/javascript" src="./utilities/js/vector.js"></script>
 	<script type="text/javascript" src="./utilities/js/matrix.js"></script>
@@ -62,12 +62,12 @@
 	   <div id = "gameField" class="xWrapper"></div>
    </div>
    <div class="yWrapper">
-      <input type="range" min=100 max=500 id="replaySpeed">
-      <button id="start" class="button gray">Start</button>
-      <button id="pause" class="button gray" disabled>Pause</button>
-      <button id="reset" class="button gray" disabled>Reset</button>
-      <button id="previous" class="button gray" disabled>Previous</button>
-      <button id="next" class="button gray">Next</button>
+      <input type="range" min="100" max="500" step="100" id="replaySpeed">
+      <button id="start" class="raisedButton secondaryDark">Start</button>
+      <button id="pause" class="raisedButton secondaryDark" disabled>Pause</button>
+      <button id="next" class="raisedButton secondaryDark">Next</button>
+      <button id="previous" class="raisedButton secondaryDark" disabled>Back</button>
+      <button id="reset" class="raisedButton secondaryDark" disabled>Reset</button>
    </div>
 </main>
 

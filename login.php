@@ -26,7 +26,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Login / Signup</title>
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
 	<link rel="stylesheet" href="./resources/css/main.css" >
 	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
 	<script type="text/javascript" src="./resources/js/login.js"></script>
@@ -36,27 +36,26 @@
 <?php printHeader('login', $nickname); ?>
 
 <main class="yWrapper">
+	<div class="card">
+	<h1>Login</h1>
 	<form action="checkLogin.php" method="post">
-	<fieldset>
-		<legend>Login</legend>
-		<label>Nickname <input type="text" required autofocus name="nickname"></label>
-		<label>Password <input type="password" required name="password"></label>
-		<input type="submit" value="submit">
-	</fieldset>
+		<input type="text" required autofocus name="nickname" placeholder="Nickname">
+		<input type="password" required name="password" placeholder="Password">
+		<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
 	</form>
+	<? echo $errorMessage ?>
+	</div>
 
-	<p id="error"></p>
-
+	<div class="card">
+	<h1>Signup</h1>
 	<form action="insertUser.php" method="post">
-	<fieldset>
-		<legend>Create your account</legend>
-		<label>Nickname <input type="text" name="nickname" id="nickname" required></label>
-		<label>Email <input type="email" name="email" id="email" required></label>
-		<label>Password <input type="password" required name="password"></label>
-		<input type="submit" value="submit">
-	</fieldset>
+		<input type="text" name="nickname" id="nickname" required placeholder="Nickname">
+		<input type="email" name="email" id="email" required placeholder="Email">
+		<input type="password" required name="password" placeholder="Password">
+		<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
 	</form>
 	<?php echo $errorMessage ?>
+	</div>
 </main>
 
 <?php include 'footer.php' ?>

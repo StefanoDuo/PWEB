@@ -1,6 +1,7 @@
 function start() {
-   var gameFieldSize = 10;
+   var gameFieldSize = 20;
    var rangeElement = document.getElementById('replaySpeed');
+   var rangeValue = 500 + 100;
    var numberOfMoves = 0;  // used to remember if there are previous action to undo
    var intervalId = null;
    var buttons = {
@@ -69,7 +70,7 @@ function start() {
       buttons.reset.disabled = true;
       buttons.next.disabled = true;
       buttons.previous.disabled = true;
-      intervalId = setInterval(nextMove, rangeElement.value);
+      intervalId = setInterval(nextMove, rangeValue - rangeElement.value);
    }
    function stopReplay() {
       if(!intervalId) return;

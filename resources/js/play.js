@@ -15,7 +15,7 @@ function removeChilds(element) {
       element.removeChild(element.firstChild);
 }
 
-function drawStacks(redoStack, undoStack, undoContainer, redoContainer, translateUndo) {
+function drawStacks(redoStack, undoStack, undoContainer, redoContainer, translateUndo, translateRedo) {
    var redo = [], undo = [];
    var movesToShow = 5;
    redoStack.forEach(filterRedo, redo);
@@ -23,14 +23,24 @@ function drawStacks(redoStack, undoStack, undoContainer, redoContainer, translat
    removeChilds(undoContainer);
    removeChilds(redoContainer);
    for (var i = undo.length - 1; i >=0 && i >= undo.length - (movesToShow + 1); i--) {
-      var element = document.createElement('li');
-      element.textContent = translateUndo[undo[i]];
-      undoContainer.appendChild(element);
+      var liElement = document.createElement('li');
+      var divElement = document.createElement('div');
+      divElement.className = 'kbd';
+      var kbdElement = document.createElement('kbd');
+      kbdElement.textContent = translateUndo[undo[i]];
+      divElement.appendChild(kbdElement);
+      liElement.appendChild(divElement);
+      undoContainer.appendChild(liElement);
    }
    for (var i = redo.length - 1; i >=0 && i >= redo.length - (movesToShow + 1); i--) {
-      var element = document.createElement('li');
-      element.textContent = redo[i];
-      redoContainer.appendChild(element);
+      var liElement = document.createElement('li');
+      var divElement = document.createElement('div');
+      divElement.className = 'kbd';
+      var kbdElement = document.createElement('kbd');
+      kbdElement.textContent = translateRedo[redo[i]];
+      divElement.appendChild(kbdElement);
+      liElement.appendChild(divElement);
+      redoContainer.appendChild(liElement);
    }
 }
 
@@ -43,38 +53,50 @@ function updateScore(score, scoreElements) {
 function start() {
    var playerNickname = document.getElementById('nickname');
    var levelName = document.getElementById('levelName').firstChild.textContent;
-   var levelCreatorNickname = document.getElementById('levelCreatorNickname').firstChild.textContent;
+   var levelCreatorNickname = document.getElementById('levelCreatorNickname').value;
    var shadowDrop = document.getElementById('shadowDrop');
+   var gamefield = document.getElementById('gameField');
    var undoContainer = document.getElementById('undo');
    var redoContainer = document.getElementById('redo');
    var scoreElements = [];
    scoreElements.push(document.getElementById('score').firstChild);
-   scoreElements.push(document.getElementById('score2').firstChild);
+   //scoreElements.push(document.getElementById('score2').firstChild);
    var localSaves = new LocalSaves(ajaxRequest);
    if(playerNickname) {
       playerNickname = playerNickname.firstChild.textContent;
       localSaves.pushStoredScoreSaves(playerNickname);
    }
-   var gameFieldSize = 10;
+   var gameFieldSize = 20;
    var inputTranslator = {
       87: 'UP',
       65: 'LEFT',
       83: 'DOWN',
       68: 'RIGHT',
-      81: 'REDO',
-      69: 'UNDO',
+      81: 'UNDO',
+      69: 'REDO',
       82: 'RESET'
    };
-   var translateUndo = {
-      'RIGHT': 'LEFT',
-      'LEFT': 'RIGHT',
-      'UP': 'DOWN',
-      'DOWN': 'UP',
-      'BALL RIGHT': 'BALL LEFT',
-      'BALL LEFT': 'BALL RIGHT',
-      'BALL UP': 'BALL DOWN',
-      'BALL DOWN': 'BALL UP'
+   var translateRedo = {
+      'LEFT': '←',
+      'RIGHT': '→',
+      'DOWN': '↓',
+      'UP': '↑',
+      'BALL LEFT': '←',
+      'BALL RIGHT': '→',
+      'BALL DOWN': '↓',
+      'BALL UP': '↑'
    };
+   var translateUndo = {
+      'LEFT': '→',
+      'RIGHT': '←',
+      'DOWN': '↑',
+      'UP': '↓',
+      'BALL LEFT': '→',
+      'BALL RIGHT': '←',
+      'BALL DOWN': '↑',
+      'BALL UP': '↓'
+   };
+
    var input = new Input('body', new Queue(), inputTranslator);
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
    var game = localSaves.getResumeSave(levelCreatorNickname, levelName, playerNickname);
@@ -93,7 +115,7 @@ function start() {
    // initial draw of the scene
    var currentState = game.getFullState();
    updateScore(currentState.score, scoreElements);
-   drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo);
+   drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo, translateRedo);
    sketcher.drawGrid(game.getGrid());
    input.startListening();
 
@@ -102,7 +124,7 @@ function start() {
          game.update(input.getPriorityTranslation());
          var currentState = game.getFullState();
          updateScore(currentState.score, scoreElements);
-         drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo);
+         drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo, translateRedo);
          sketcher.drawGrid(game.getGrid());
       }, 100);
    }
@@ -110,6 +132,7 @@ function start() {
    var isLevelBeaten = false;
    game.setVictoryCallback(function(score, replay) {
       shadowDrop.className = shadowDrop.className.replace(' hidden', '');
+      gamefield.className += ' blurred';
       isLevelBeaten = true;
       if(playerNickname) {
          // if the user is logged in we directly push the level score to the database
@@ -130,6 +153,7 @@ function start() {
    // it's the button that appears when the user completes the level
    document.getElementById('playAgain').addEventListener('click', function() {
       shadowDrop.className += ' hidden';
+      gamefield.className = gamefield.className.replace(' blurred', '');
       game.initialize();
       sketcher.drawGrid(game.getGrid());
       intervalID = startGame();

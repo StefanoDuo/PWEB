@@ -18,7 +18,7 @@
 <head>
    <meta charset="utf-8">
    <title>Levels list</title>
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
    <script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
    <script type="text/javascript" src="./resources/js/levels.js"></script>
    <link rel="stylesheet" href="./resources/css/main.css" >
@@ -27,7 +27,7 @@
 
 <?php printHeader('levels', $nickname); ?>
 
-<main class="yWrapper">
+<main>
 	<?php printLevelsList($levels); ?>
 </main>
 

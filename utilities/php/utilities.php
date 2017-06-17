@@ -38,15 +38,15 @@ function printHeader($currentPage, $nickname) {
         'levels' => '',
         'profile' => ''
     );
-	$classes[$currentPage] = 'active';
+	$classes[$currentPage] = 'secondaryDark';
 	echo '<header>';
-	echo '<nav>';
-   	echo '<ul class="xWrapper navBar blue">';
+	echo '<nav class="primary">';
+   	echo '<ul class="xWrapper navBar">';
     echo 	'<li><a href="index.php" class="' . $classes['index'] . '">Home</a></li>';
     if($nickname)
     	echo '<li><a href="workshop.php" class="' . $classes['workshop'] . '">Workshop</a></li>';
     if($nickname)
-    	echo '<li><a href="logout.php" class="' . $classes['logout'] . '">LogOut</a></li>';
+    	echo '<li><a href="logout.php" class="' . $classes['logout'] . '">Logout</a></li>';
     else
     	echo '<li><a href="login.php" class="' . $classes['login'] . '">LogIn / SignUp</a></li>';
     echo 	'<li><a href="levels.php" class="' . $classes['levels'] . '">Levels</a></li>';
@@ -60,34 +60,67 @@ function printHeader($currentPage, $nickname) {
 function printLevelsList($levels) {
     echo '<ul>';
     foreach ($levels as $key => $value) {
-        echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) .'&levelName=' . urlencode($value['name']) .'">';
-        echo htmlspecialchars($value['name']) . '</a> | Creator: ' . htmlspecialchars($value['creatorNickname']);
-        echo ' <button class="button gray" id="' . htmlspecialchars($value['creatorNickname']) .'-' . htmlspecialchars($value['name']) . '">Show scores</button></li>';
+        echo '<li class="card">';
+            echo '<p class="bigText">' . htmlspecialchars($value['name']) . '</p>';
+            echo '<p class="smallText">Created by ' . htmlspecialchars($value['creatorNickname']) . '</p>';
+            echo '<a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) . '&levelName='
+                . urlencode($value['name']) .'" class="flatButton primaryDarkText">Play</a>';
+            echo '<button class="flatButton" id="' . htmlspecialchars($value['creatorNickname']) .'-'
+                . htmlspecialchars($value['name']) . '">Show scores</button>';
+        echo '</li>';
     }
     echo '</ul>';
 }
 
 function printLevelsCreatedBy($creatorNickname, $levels) {
-    echo '<ul>';
+    echo '<table>';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>Level</th>';
+    echo '<th>Delete</th>';
+    echo '<th></th>';
+    echo '<th></th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
     foreach ($levels as $key => $value) {
-        echo '<form action="deleteLevel.php" method="post">';
-        echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($creatorNickname);
-        echo '&levelName=' . urlencode($value['name']) . '">' . htmlspecialchars($value['name']) . '</a>';
-        echo '<input type="checkbox" name="levelName" required value="' . $value['name'] . '">';
-        echo '<input type="submit" value="delete" id="updatePassword">';
-        echo '</form>';
+        echo '<tr>';
+            echo '<td>' . htmlspecialchars($value['name']) . '</td>';
+            echo '<form action="deleteLevel.php" method="post">';
+                echo '<td><input type="checkbox" name="levelName" required value="' . $value['name'] . '"></td>';
+                echo '<td><button type="submit" value="submit" id="updatePassword" class="flatButton">Delete</button></td>';
+            echo '</form>';
+            echo '<td><a href="play.php?creatorNickname=' . urlencode($creatorNickname) . '&levelName=';
+            echo urlencode($value['name']) . '" class="flatButton primaryDarkText">Play</a></td>';
+        echo '</tr>';
     }
-    echo '</ul>';
+    echo '</tbody>';
+    echo '</table>';
 }
 
 function printUserScores($playerNickname, $scores) {
-    echo '<ul>';
+    echo '<table>';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>Level</th>';
+    echo '<th>Creator</th>';
+    echo '<th>Score</th>';
+    echo '<th></th>';
+    echo '<th></th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
     foreach ($scores as $key => $value) {
-        echo '<li>Level name: <a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']);
-        echo '&levelName=' . urlencode($value['levelName']) . '">' . htmlspecialchars($value['levelName']);
-        echo '</a> | Creator: ' . htmlspecialchars($value['creatorNickname']);
-        echo '| Score: <a href="replay.php?id=' . urlencode($value['id']) . '">' . $value['score'] . '</a></li>';
+        echo '<tr>';
+            echo '<td>' . htmlspecialchars($value['levelName']) . '</td>';
+            echo '<td>' . htmlspecialchars($value['creatorNickname']) . '</td>';
+            echo '<td>' . htmlspecialchars($value['score']) . '</td>';
+            echo '<td><a href="replay.php?id=' . urlencode($value['id']) . '" class="flatButton">Replay</a></td>';
+            echo '<td><a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) . '&levelName=';
+            echo urlencode($value['levelName']) . '" class="flatButton primaryDarkText">Play</a></td>';
+        echo '</tr>';
     }
-    echo '</ul>';
+    echo '</tbody>';
+    echo '</table>';
 }
 ?>
