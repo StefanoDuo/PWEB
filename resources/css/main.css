@@ -14,7 +14,6 @@ html, body {
 
 body {
    height: 100%;
-   font-weight: bold;
 }
 
 h1, h2, h3, h4 , h5, h6 {
@@ -40,7 +39,6 @@ h1, h2, h3, h4 , h5, h6 {
 }
 
 .yWrapper {
-   height: 75%;
    display: flex;
    flex-direction: column;
    flex-wrap: nowrap;
@@ -317,6 +315,11 @@ main {
 .inline {
    display: inline-block;
    margin: 0 !important;
+}
+
+.foregroundSketcher {
+   position: absolute;
+   transition: left .1s ease-in-out, top .1s ease-in-out;
 }
 
 .red, .player {

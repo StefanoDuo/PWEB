@@ -32,8 +32,14 @@ BackgroundSketcher.prototype.initialize = function() {
 
 BackgroundSketcher.prototype.drawGrid = function(grid) {
    for(var i = 0; i < this.gridSize; i++)
-      for(var j = 0; j < this.gridSize; j++)
-         this.grid[i][j].className = this.tileBaseClass + ' ' + grid[i][j];
+      for(var j = 0; j < this.gridSize; j++) {
+         var element = grid[i][j];
+         this.grid[i][j].className = this.tileBaseClass;
+         if(element) {
+            element = element.replace(/player|ball|\s/g, '');
+            this.grid[i][j].className += ' ' + element;
+         }
+      }
 }
 
 BackgroundSketcher.prototype.drawBoxByCoordinates = function(x, y, cssClass) {

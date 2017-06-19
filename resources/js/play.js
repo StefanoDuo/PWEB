@@ -67,6 +67,7 @@ function start() {
       localSaves.pushStoredScoreSaves(playerNickname);
    }
    var gameFieldSize = 20;
+   var refreshTimer = 100;
    var inputTranslator = {
       87: 'UP',
       65: 'LEFT',
@@ -99,6 +100,9 @@ function start() {
 
    var input = new Input('body', new Queue(), inputTranslator);
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
+   var playerTile = new ForegroundSketcher('player', 'gameField', 'box player foregroundSketcher', {'top': 0, 'left': 0}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
+   var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ball foregroundSketcher', {'top': 100, 'left': 100}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
+
    var game = localSaves.getResumeSave(levelCreatorNickname, levelName, playerNickname);
    if(!game) {
       // retrieve levelObject from hidden input element, and transforms simple object into Vectors
@@ -117,6 +121,8 @@ function start() {
    updateScore(currentState.score, scoreElements);
    drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo, translateRedo);
    sketcher.drawGrid(game.getGrid());
+   playerTile.setPosition(currentState.playerPosition);
+   ballTile.setPosition(currentState.ballPosition);
    input.startListening();
 
    function startGame() {
@@ -125,8 +131,9 @@ function start() {
          var currentState = game.getFullState();
          updateScore(currentState.score, scoreElements);
          drawStacks(currentState.redoStack, currentState.undoStack, undoContainer, redoContainer, translateUndo, translateRedo);
-         sketcher.drawGrid(game.getGrid());
-      }, 100);
+         ballTile.setPosition(currentState.ballPosition);
+         playerTile.setPosition(currentState.playerPosition);
+      }, refreshTimer);
    }
    var intervalID = startGame();
    var isLevelBeaten = false;

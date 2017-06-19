@@ -47,6 +47,7 @@
 	<script type="text/javascript" src="./utilities/js/queue.js"></script>
 	<script type="text/javascript" src="./utilities/js/game.js"></script>
 	<script type="text/javascript" src="./utilities/js/backgroundSketcher.js"></script>
+	<script type="text/javascript" src="./utilities/js/foregroundSketcher.js"></script>
 	<script type="text/javascript" src="./utilities/js/input.js"></script>
 	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
 	<script type="text/javascript" src="./utilities/js/localSaves.js"></script>
