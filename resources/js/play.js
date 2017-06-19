@@ -1,4 +1,19 @@
-function filterUndo(element) {
+// polyfill for String.prototype.includes() taken from MDN
+if(!String.prototype.includes) {
+   String.prototype.includes = function(search, start) {
+      if (typeof start !== 'number') {
+         start = 0;
+      }
+       
+      if (start + search.length > this.length) {
+         return false;
+      } else {
+         return this.indexOf(search, start) !== -1;
+      }
+   };
+}
+
+function filterStack(element) {
    var action = element.action;
    if(element.hasBallMoved) {
       action = 'BALL ' + action;
@@ -18,14 +33,16 @@ function removeChilds(element) {
 function drawStacks(redoStack, undoStack, undoContainer, redoContainer, translateUndo, translateRedo) {
    var redo = [], undo = [];
    var movesToShow = 5;
-   redoStack.forEach(filterRedo, redo);
-   undoStack.forEach(filterUndo, undo);
+   redoStack.forEach(filterStack, redo);
+   undoStack.forEach(filterStack, undo);
    removeChilds(undoContainer);
    removeChilds(redoContainer);
    for (var i = undo.length - 1; i >=0 && i >= undo.length - (movesToShow + 1); i--) {
       var liElement = document.createElement('li');
       var divElement = document.createElement('div');
       divElement.className = 'kbd';
+      if(undo[i].includes('BALL'))
+         divElement.className += ' ball';
       var kbdElement = document.createElement('kbd');
       kbdElement.textContent = translateUndo[undo[i]];
       divElement.appendChild(kbdElement);
@@ -36,6 +53,8 @@ function drawStacks(redoStack, undoStack, undoContainer, redoContainer, translat
       var liElement = document.createElement('li');
       var divElement = document.createElement('div');
       divElement.className = 'kbd';
+      if(redo[i].includes('BALL'))
+         divElement.className += ' ball';
       var kbdElement = document.createElement('kbd');
       kbdElement.textContent = translateRedo[redo[i]];
       divElement.appendChild(kbdElement);
@@ -100,8 +119,8 @@ function start() {
 
    var input = new Input('body', new Queue(), inputTranslator);
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
-   var playerTile = new ForegroundSketcher('player', 'gameField', 'box player foregroundSketcher', {'top': 0, 'left': 0}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
-   var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ball foregroundSketcher', {'top': 100, 'left': 100}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
+   var playerTile = new ForegroundSketcher('player', 'gameField', 'box player playerTransition', {'top': 0, 'left': 0}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
+   var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ball ballTransition', {'top': 100, 'left': 100}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
 
    var game = localSaves.getResumeSave(levelCreatorNickname, levelName, playerNickname);
    if(!game) {
@@ -112,7 +131,7 @@ function start() {
       levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
       levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
       levelObject.rocks.forEach(function(element, index, array) {
-            array[index] = new Vector(element.x, element.y);
+         array[index] = new Vector(element.x, element.y);
       });
       game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
    }

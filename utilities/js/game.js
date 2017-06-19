@@ -210,21 +210,21 @@ Game.prototype.updateBallPosition = function(newPosition) {
 }
 
 Game.prototype.moveBall = function() {
-   var hasHitHole = false;
-   if(this.isBallOutOfBounds()) {
-      this.ballMovingDirection = new this.vectorConstructor(0, 0);
-      return;
-   }
-   var object = this.isBallColliding();
-   if(object) {
-      if(object === 'hole' && this.victoryCallback)
-         this.victoryCallback(this.score, this.replay);
-      else
+   while(this.isBallMoving()) {
+      var hasHitHole = false;
+      if(this.isBallOutOfBounds()) {
          this.ballMovingDirection = new this.vectorConstructor(0, 0);
-   }
-   this.updateBallPosition(this.ballPosition.add(this.ballMovingDirection));
-   if(object === 'hole') {
-      this.ballMovingDirection = new this.vectorConstructor(0, 0);
+         return;
+      }
+      var object = this.isBallColliding();
+      if(object === 'rock')
+         this.ballMovingDirection = new this.vectorConstructor(0, 0);
+      this.updateBallPosition(this.ballPosition.add(this.ballMovingDirection));
+      if(object === 'hole') {
+         this.ballMovingDirection = new this.vectorConstructor(0, 0);
+         if(this.victoryCallback)
+            this.victoryCallback(this.score, this.replay);
+      }
    }
 }
 
@@ -246,8 +246,8 @@ Game.prototype.movePlayer = function(direction) {
             currentState.ballMovingDirection = new this.vectorConstructor(0, 0);
             currentState.ballPosition = oldBallPosition;
             this.undoStack.push(currentState);
+            return true;
          }
-         return true;
       }
       return false;
    }

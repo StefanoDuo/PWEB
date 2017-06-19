@@ -70,8 +70,7 @@ input {
    border: 0;
    border-bottom: 2px solid #9ea7aa;
    padding-bottom: 10px;
-   margin: 15px;
-   margin-left: 0;
+   margin: 15px 0 15px 0;
    width: 100%;
    transition: border .3s ease-in-out;
 }
@@ -208,10 +207,6 @@ main {
    margin-bottom: 5px;
 }
 
-#levelName {
-   margin-right: 5px;
-}
-
 .smallText {
    font-size: 13px;
 }
@@ -317,9 +312,14 @@ main {
    margin: 0 !important;
 }
 
-.foregroundSketcher {
+.playerTransition {
    position: absolute;
    transition: left .1s ease-in-out, top .1s ease-in-out;
+}
+
+.ballTransition {
+   position: absolute;
+   transition: left .5s ease-in-out, top .5s ease-in-out;
 }
 
 .red, .player {
@@ -357,10 +357,6 @@ main {
 }
 .secondaryDarkText {
    color: #9ea7aa;
-}
-
-.pressedblue, .pressedPrimary {
-   background-color: #FF4081;
 }
 
 form {

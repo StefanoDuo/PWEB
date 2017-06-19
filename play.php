@@ -30,7 +30,7 @@
 		$nextButton = '<a class="raisedButton secondaryDark" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
 		$nextButton .= '&levelName=' . $nextLevel['name'] .'">Next Level</a>';
 	}
-	$levelTitle = '<span id="levelName">' . htmlspecialchars($levelName) . '</span>' .
+	$levelTitle = '<span id="levelName">' . htmlspecialchars($levelName) . '</span>';
 	$levelCreator = '<input type="hidden" id="levelCreatorNickname" value="' . htmlspecialchars($creatorNickname) . '">';
 	$levelObject = '<input type="hidden" id="levelObject" value="' . urlencode($currentLevel['levelObject']) . '">';
 ?>

@@ -13,12 +13,14 @@
 		2 => "User doesn't exists or the password doesn't match",
 	);
 	$errorNumber = isset($_GET['error']) ? $_GET['error'] : null;
-	if(isNull($errorNumber))
-		$errorMessage = '';
-	else if(isset($errors[$errorNumber]))
-		$errorMessage = '<p>' . $errors[$errorNumber] . '</p>';
-	else
-		$errorMessage = '';
+	$loginErrorMessage = '';
+	$signupErrorMessage = '';
+	if(!isNull($errorNumber) && isset($errors[$errorNumber])) {
+		if($errorNumber == 1)
+			$signupErrorMessage = '<p>' . $errors[$errorNumber] . '</p>';
+		else
+			$loginErrorMessage = '<p>' . $errors[$errorNumber] . '</p>';
+	}
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +45,7 @@
 		<input type="password" required name="password" placeholder="Password">
 		<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
 	</form>
-	<? echo $errorMessage ?>
+	<?php echo $loginErrorMessage ?>
 	</div>
 
 	<div class="card">
@@ -54,7 +56,7 @@
 		<input type="password" required name="password" placeholder="Password">
 		<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
 	</form>
-	<?php echo $errorMessage ?>
+	<?php echo $signupErrorMessage ?>
 	</div>
 </main>
 

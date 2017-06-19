@@ -72,6 +72,7 @@ function start() {
       pressedButton = null;
    }
    function clickButton(button) {
+      button.blur(); // removes the focus state from the button
       if(button.hasAttribute('pressed')) {
          // the button is currently pressed we need to release it
          releaseButton(button)

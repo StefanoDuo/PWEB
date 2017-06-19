@@ -12,6 +12,8 @@ function start() {
       'reset': document.getElementById('reset')
    };
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
+   var playerTile = new ForegroundSketcher('player', 'gameField', 'box player playerTransition', {'top': 0, 'left': 0}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
+   var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ball ballTransition', {'top': 100, 'left': 100}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
    // we need to store the JSON.stringify encoded as an URI otherwise the value attribute
    // of the input elements will be messed up by the json double quotes
    var levelObject = decodeURIComponent(document.getElementById('levelObject').value);
@@ -23,26 +25,15 @@ function start() {
    var matrix = new Matrix(gameFieldSize, gameFieldSize);
    var game = new Game(matrix, levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
+   playerTile.setPosition(levelObject.player);
+   ballTile.setPosition(levelObject.ball);
 
    function nextMove() {
-      var action;
-      // temporary hack, usually while the ball is moving inputs to the game.update() method
-      // is ignored but if we ignore a movement of a replay the end result will be different
-      // so we move the ball untile it stops during a single redraw
-      action = replay.pop();
-      if(action === 'REDO' || action === 'UNDO') {
-         numberOfMoves++;
-         game.update(action);
-      }
-      else if(game.isBallMoving()) {
-         replay.push(action);
-         game.moveBall();
-      }
-      else {
-         numberOfMoves++;
-         game.update(action);
-      }
-      sketcher.drawGrid(game.getGrid());
+      numberOfMoves++;
+      game.update(replay.pop());
+      var currentState = game.getFullState();
+      ballTile.setPosition(currentState.ballPosition);
+      playerTile.setPosition(currentState.playerPosition);
       if(numberOfMoves !== 0 && !buttons.start.disabled) {
          buttons.previous.disabled = false;
          //if(intervalId === null)
@@ -87,7 +78,9 @@ function start() {
       game.initialize();
       numberOfMoves = 0;
       replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
-      sketcher.drawGrid(game.getGrid());
+      var currentState = game.getFullState();
+      ballTile.setPosition(currentState.ballPosition);
+      playerTile.setPosition(currentState.playerPosition);
       buttons.reset.disabled = true;
       buttons.start.disabled = false;
       buttons.next.disabled = false;

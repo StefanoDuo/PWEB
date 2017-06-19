@@ -26,7 +26,7 @@
       echo $e->getMessage() . PHP_EOL;
    }
 	
-	$levelTitle = 'Level: <span id="levelName">' . htmlspecialchars($levelName) . '</span>. ' .
+	$levelTitle = '<span id="levelName">' . htmlspecialchars($levelName) . '</span>';
 		'Created by <span id="levelCreatorNickname">' . htmlspecialchars($creatorNickname) . '</span>';
 	$levelObject = '<input type="hidden" id="levelObject" value="' . urlencode($levelObject) . '">';
 	$replay = '<input type="hidden" id="replay" value="' . urlencode($replay['replay']) . '">';
@@ -43,7 +43,8 @@
 	<script type="text/javascript" src="./utilities/js/matrix.js"></script>
 	<script type="text/javascript" src="./utilities/js/queue.js"></script>
 	<script type="text/javascript" src="./utilities/js/game.js"></script>
-	<script type="text/javascript" src="./utilities/js/backgroundSketcher.js"></script>
+   <script type="text/javascript" src="./utilities/js/backgroundSketcher.js"></script>
+   <script type="text/javascript" src="./utilities/js/foregroundSketcher.js"></script>
 	<script type="text/javascript" src="./utilities/js/input.js"></script>
 	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
 	<script type="text/javascript" src="./resources/js/replay.js"></script>
@@ -59,7 +60,7 @@
 <main class="xWrapper">
    <div class="yWrapper">
 		<h1><?php echo $levelTitle ?></h1>
-	   <div id = "gameField" class="xWrapper"></div>
+	   <div id = "gameField" class="xWrapper relative"></div>
    </div>
    <div class="yWrapper">
       <input type="range" min="100" max="500" step="100" id="replaySpeed">
