@@ -61,8 +61,8 @@ function printLevelsList($levels) {
     echo '<ul>';
     foreach ($levels as $key => $value) {
         echo '<li class="card">';
-            echo '<p class="bigText">' . htmlspecialchars($value['name']) . '</p>';
-            echo '<p class="smallText">Created by ' . htmlspecialchars($value['creatorNickname']) . '</p>';
+            echo '<h1>' . htmlspecialchars($value['name']) . '</h1>';
+            echo '<p>Created by ' . htmlspecialchars($value['creatorNickname']) . '</p>';
             echo '<a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) . '&levelName='
                 . urlencode($value['name']) .'" class="flatButton primaryDarkText">Play</a>';
             echo '<button class="flatButton" id="' . htmlspecialchars($value['creatorNickname']) .'-'

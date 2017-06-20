@@ -1,3 +1,8 @@
+/* 2D matrix created to work with vectors
+ *
+ * DEPENDENCIES: none
+ */
+
 function Matrix(rowNumber, columnNumber) {
    this.rowNumber = rowNumber;
    this.columnNumber = columnNumber;

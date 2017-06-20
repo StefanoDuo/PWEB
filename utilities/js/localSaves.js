@@ -1,3 +1,9 @@
+/* abstract the LocalStorage offering methods to easily store replay and resumable gameplay
+ * and to push async score results to the database
+ *
+ * DEPENDENCIES: ajaxRequest function
+ */
+
 function LocalSaves(ajaxRequest, scoreSaveKey, baseResumeSaveKey) {
    this.scoreSaveKey = scoreSaveKey || 'scoreSaves';
    this.baseResumeSaveKey = baseResumeSaveKey || 'resumeSaves';

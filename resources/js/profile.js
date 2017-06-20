@@ -27,7 +27,6 @@ function start() {
 	}, false);
 	document.getElementById('updatePassword').addEventListener('click', function(event) {
 		event.preventDefault();
-		console.log('AAAA');
 		var nickname = document.getElementById('nickname').firstChild.textContent;
 		var password = document.getElementById('password').value;
 		var url = 'updatePassword.php';

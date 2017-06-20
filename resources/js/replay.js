@@ -11,9 +11,22 @@ function start() {
       'previous': document.getElementById('previous'),
       'reset': document.getElementById('reset')
    };
+   var playerClasses = {
+      'up': 'playerTop',
+      'down': 'playerDown',
+      'left': 'playerLeft',
+      'right': 'playerRight'
+   }
+   var ballClasses = {
+      'up': 'ballDown',
+      'down': 'ballDown',
+      'left': 'ballDown',
+      'right': 'ballDown'
+   }
+   var tileMargin = 1, tileBoxSize = 25, containerPadding = 0;
    var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
-   var playerTile = new ForegroundSketcher('player', 'gameField', 'box player playerTransition', {'top': 0, 'left': 0}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
-   var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ball ballTransition', {'top': 100, 'left': 100}, 1, 25, 2, 2, gameFieldSize, gameFieldSize);
+   var playerTile = new ForegroundSketcher('player', 'gameField', 'box playerTransition', playerClasses, tileMargin, tileBoxSize, containerPadding, containerPadding);
+   var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ballTransition', ballClasses, tileMargin, tileBoxSize, containerPadding, containerPadding);
    // we need to store the JSON.stringify encoded as an URI otherwise the value attribute
    // of the input elements will be messed up by the json double quotes
    var levelObject = decodeURIComponent(document.getElementById('levelObject').value);
@@ -22,8 +35,7 @@ function start() {
    levelObject.ball = new Vector(levelObject.ball.x, levelObject.ball.y);
    levelObject.hole = new Vector(levelObject.hole.x, levelObject.hole.y);
    var replay = JSON.parse(decodeURIComponent(document.getElementById('replay').value));
-   var matrix = new Matrix(gameFieldSize, gameFieldSize);
-   var game = new Game(matrix, levelObject, Vector);
+   var game = new Game(new Matrix(gameFieldSize, gameFieldSize), levelObject, Vector);
    sketcher.drawGrid(game.getGrid());
    playerTile.setPosition(levelObject.player);
    ballTile.setPosition(levelObject.ball);
@@ -32,12 +44,12 @@ function start() {
       numberOfMoves++;
       game.update(replay.pop());
       var currentState = game.getFullState();
-      ballTile.setPosition(currentState.ballPosition);
-      playerTile.setPosition(currentState.playerPosition);
+      var action = currentState.action ? currentState.action.toLowerCase() : false;
+      ballTile.setPosition(currentState.ballPosition, action);
+      playerTile.setPosition(currentState.playerPosition, action);
       if(numberOfMoves !== 0 && !buttons.start.disabled) {
          buttons.previous.disabled = false;
-         //if(intervalId === null)
-            buttons.reset.disabled = false;
+         buttons.reset.disabled = false;
       }
    }
    function previousMove() {
@@ -85,6 +97,7 @@ function start() {
       buttons.start.disabled = false;
       buttons.next.disabled = false;
       buttons.previous.disabled = true;
+      ballTile.tile.id = 'ball';
    }
 
    buttons.start.addEventListener('click', startReplay, false);
@@ -105,5 +118,6 @@ function start() {
       buttons.previous.disabled = true;
       buttons.start.disabled = true;
       buttons.next.disabled = true;
+      ballTile.tile.id = 'fallingBall';
    });
 }

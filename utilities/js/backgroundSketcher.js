@@ -3,15 +3,19 @@
  * gridSize: the size of the side of the square
  * whereToDraw: the id of the element that will contain the tiles
  * tileBaseClass: will be added to the css class of every tile
+ * backgroundImage: an array cointaining background images applicable to the single tiles
+ * chooseBackground: a function which returns a random index of backgroundImage
  *
  * DEPENDENCIES: none
  */
 
-function BackgroundSketcher(gridSize, whereToDraw, tileBaseClass) {
+function BackgroundSketcher(gridSize, whereToDraw, tileBaseClass, backgroundImage, chooseBackground) {
    this.whereToDraw = document.getElementById(whereToDraw);
    this.gridSize = gridSize;
    this.tileBaseClass = tileBaseClass;
    this.grid = new Array(this.gridSize);
+   this.backgroundImage = backgroundImage;
+   this.chooseBackground = chooseBackground;
 
    for(var i = 0; i < this.gridSize; i++) {
       this.grid[i] = new Array(this.gridSize);
@@ -35,10 +39,10 @@ BackgroundSketcher.prototype.drawGrid = function(grid) {
       for(var j = 0; j < this.gridSize; j++) {
          var element = grid[i][j];
          this.grid[i][j].className = this.tileBaseClass;
-         if(element) {
-            element = element.replace(/player|ball|\s/g, '');
-            this.grid[i][j].className += ' ' + element;
-         }
+         if(element === 'rock' || element === 'hole')
+            this.grid[i][j].className += ' ' + element + 'Gameplay';
+         else
+            this.grid[i][j].style.backgroundImage = "url('resources/img/" + this.backgroundImage[this.chooseBackground()] + "')";
       }
 }
 

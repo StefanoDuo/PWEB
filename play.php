@@ -52,6 +52,11 @@
 	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
 	<script type="text/javascript" src="./utilities/js/localSaves.js"></script>
 	<script type="text/javascript" src="./resources/js/play.js"></script>
+	<style type="text/css">
+		#playField{
+			background: url(./resources/img/<?php echo $randomBackground; ?>);
+		}
+	</style>
 </head>
 <body id="body" onLoad="start()">
 
@@ -70,7 +75,7 @@
 			<h1><?php echo $levelTitle?></h1>
 			<?php echo $levelCreator ?>
 			<div class="relative">
-			<div id="gameField" class="xWrapper"></div>
+				<div id="gameField" class="xWrapper"></div>
 				<div class="absolute hidden shadowDrop yWrapper" id="shadowDrop">
 					<h2>Congratulations</h2>
 					<div class="xWrapper">

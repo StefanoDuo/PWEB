@@ -7,7 +7,7 @@
  *
  * pressedKeyCodes: tracks the currently pressed keyCodes
  *
- * DEPENDENCIES: Vector, Queue objects
+ * DEPENDENCIES: Queue object
  */
 
 function Input(whereToListen, inputQueue, translator) {

@@ -22,11 +22,10 @@ function fetchLevelObject(grid) {
    };
    var string = '';
 
-   console.log(grid.length);
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
          // checks the classname of every element in the grid removing the substrings
-         // 'box', ' ', 'firstOfRow' or any their(?) combination
+         // 'box', ' ', 'borders' or any their(?) combination
          string = grid[i][j].className.replace(/box|borders|\s/g, '');
          if(string !== '') {
             if(string === 'player' || string === 'ball' || string === 'hole') {
@@ -54,6 +53,7 @@ function fetchLevelObject(grid) {
 }
 
 function start() {
+   document.getElementById('gameField').style.backgroundImage = 'none';
    var errorMessage = document.getElementById('errorMessage');
    var gamefieldSize = 20;
    var pressedButton = null;
@@ -131,6 +131,7 @@ function start() {
    });
 
    var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box borders');
+   // var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box', ['tile2.png', 'tile1.png']);
    var grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {

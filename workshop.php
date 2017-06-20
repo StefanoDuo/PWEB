@@ -34,7 +34,7 @@
       </div>
       <div class="yWrapper">
          <button id="player" class="raisedButton secondaryDark">Player</button>
-         <button id="ball" class="raisedButton secondaryDark">Ball</button>
+         <button id="ball" class="raisedButton secondaryDark">Chest</button>
          <button id="hole" class="raisedButton secondaryDark">Hole</button>
          <button id="rock" class="raisedButton secondaryDark">Rock</button>
          <button id="reset" class="raisedButton secondaryDark">Reset</button>

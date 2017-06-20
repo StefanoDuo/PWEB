@@ -1,5 +1,4 @@
-/* used to simplify player movements arithmetic
- */
+// used to simplify player movements arithmetic
 
 function Vector(x, y) {
    this.x = Math.round(x);

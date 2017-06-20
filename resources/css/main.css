@@ -1,3 +1,6 @@
+/***********************************************
+ ************ GENERAL HTML ELEMENTS ************
+ ***********************************************/
 * {
    color: rgba(0, 0, 0, .90);
    font-family: 'Roboto', GillSans, Calibri, Trebuchet, sans-serif;
@@ -10,16 +13,94 @@ html, body {
    border: 0;
    background-color: #ced7db;
    color: rgba(0, 0, 0, 1);
-}
-
-body {
    height: 100%;
 }
 
 h1, h2, h3, h4 , h5, h6 {
    text-transform: uppercase;
+   font-weight: 500;
 }
 
+main {
+   min-height: 500px;
+   max-width: 800px;
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: 1em;
+   margin-bottom: 3em;
+}
+
+nav {
+   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
+   width: 100%;
+}
+
+ul {
+   padding: 0;
+}
+
+li {
+   margin-top: 0;
+   list-style-type: none;
+}
+
+footer {
+   position: absolute;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   height: 32px;
+   line-height: 32px;
+   text-align: left;
+}
+
+
+
+/***********************************************
+ ******************* FORMS *********************
+ ***********************************************/
+form {
+   width: 100%;
+}
+
+input {
+   background-color: transparent;
+   font-size: 13px;
+   border: 0;
+   border-bottom: 2px solid #9ea7aa;
+   padding-bottom: 10px;
+   margin: 15px 0 15px 0;
+   width: 100%;
+   transition: border .3s ease-in-out;
+}
+
+input:focus {
+   outline-width: 0;
+   border-bottom: 2px solid #c88719;
+}
+
+input[type=range] {
+   border: none;
+   padding: 0;
+   height: 2px;
+   -webkit-appearance: none;
+   background-color: #9ea7aa;
+}
+
+input[type=range]:hover {
+   background-color: #c88719;
+   border: none;
+}
+
+input[type=range]:focus {
+   border: none;
+}
+
+
+
+/***********************************************
+ ****************** FLEXBOX ********************
+ ***********************************************/
 .xWrapper {
    width: 100%;
    display: flex;
@@ -47,68 +128,11 @@ h1, h2, h3, h4 , h5, h6 {
    align-content: space-between;
 }
 
-input[type=range] {
-   border: none;
-   padding: 0;
-   height: 2px;
-   -webkit-appearance: none;
-   background-color: #9ea7aa;
-}
 
-input[type=range]:hover {
-   background-color: #c88719;
-   border: none;
-}
 
-input[type=range]:focus {
-   border: none;
-}
-
-input {
-   background-color: transparent;
-   font-size: 13px;
-   border: 0;
-   border-bottom: 2px solid #9ea7aa;
-   padding-bottom: 10px;
-   margin: 15px 0 15px 0;
-   width: 100%;
-   transition: border .3s ease-in-out;
-}
-
-input:focus {
-   outline-width: 0;
-   border-bottom: 2px solid #c88719;
-}
-
-nav {
-   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
-   width: 100%;
-}
-
-.navBar {
-   justify-content: space-between;
-   height: 64px;
-   line-height: 64px;
-   list-style-type: none;
-   margin: auto;
-   padding: 0;
-   max-width: 800px;
-}
-
-.card {
-   width: 100%;
-   overflow: hidden;
-   line-height: 30px;
-   margin: 0;
-   margin-top: 2em;
-   padding: 24px;
-   padding-top: 8px;
-   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-   border: none;
-   border-radius: 2px;
-   background-color: #F5F5F6;
-}
-
+/***********************************************
+ ******************* TABLE *********************
+ ***********************************************/
 table {
    font-size: 13px;
    border-collapse: collapse;
@@ -138,17 +162,18 @@ tr:hover {
    background-color: #EEEEEE;
 }
 
-ul {
+
+
+/***********************************************
+ ******************* NAVBAR ********************
+ ***********************************************/
+.navBar {
+   justify-content: space-between;
+   height: 64px;
+   line-height: 64px;
+   margin: auto;
    padding: 0;
-}
-
-li {
-   margin-top: 0;
-   list-style-type: none;
-}
-
-li a {
-   text-decoration: none;
+   max-width: 800px;
 }
 
 .navBar a {
@@ -167,74 +192,11 @@ li a {
    background-color: #9da6a9;
 }
 
-main {
-   min-height: 500px;
-   max-width: 800px;
-   margin-left: auto;
-   margin-right: auto;
-   margin-top: 1em;
-   margin-bottom: 3em;
-}
 
-#gameField {
-   width: 544px;
-   border-radius: 2px;
-   background-color: #F5F5F6;
-   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 5px 2px -2px rgba(0, 0, 0, 0.2);
-   padding: 2px;
-}
 
-#redo {
-   margin-left: 0;
-   text-align: right;
-}
-
-.blurred {
-   filter: blur(10px);
-}
-
-.kbd {
-   text-align: center;
-   text-transform: uppercase;
-   font-size: 1em;
-   padding: .25em;
-   width: 30px;
-   height: 30px;
-   border: solid 1px #9da6a9;
-   border-radius: 4px;
-   background-color: #f0f0f0;
-   box-shadow: 1px 1px rgba(0, 0, 0, 0.14);
-   margin-bottom: 5px;
-}
-
-.smallText {
-   font-size: 13px;
-}
-
-.bigText {
-   font-size: 25px;
-   text-transform: uppercase;
-}
-
-.absolute {
-   position: absolute;
-   top: 0;
-   left: 0;
-}
-
-.relative {
-   position: relative;
-}
-
-.shadowDrop {
-   height: 100%;
-   width: 100%;
-}
-
-.hidden {
-   display: none;
-}
-
+/***********************************************
+ ******************* BUTTONS *******************
+ ***********************************************/
 .raisedButton, .flatButton {
    background-color: inherit;
    font-weight: 500;
@@ -303,15 +265,11 @@ main {
    cursor: not-allowed;
 }
 
-.success {
-   background-color: green !important;
-}
 
-.inline {
-   display: inline-block;
-   margin: 0 !important;
-}
 
+/***********************************************
+ ******************* GAME CSS ******************
+ ***********************************************/
 .playerTransition {
    position: absolute;
    transition: left .1s ease-in-out, top .1s ease-in-out;
@@ -322,29 +280,152 @@ main {
    transition: left .5s ease-in-out, top .5s ease-in-out;
 }
 
-.red, .player {
-   background-color: #F44336;
+.movesTracker {
+   min-width: 30px;
 }
-.green, .hole {
-   background-color: #4CAF50;
+
+.movesContainer {
+   margin-top: 200px;
 }
-.brown, .rock {
-   background-color: #795548;
+
+.borders {
+   border: 1px solid;
+   border-color: #ced7db;
 }
-.yellow, .ball {
-   background-color: #FFEB3B;
+
+.box {
+   width: 25px;
+   height: 25px;
+   margin: 1px;
 }
+
+.tutorial {
+   height: 100%;
+   width: 100%;
+}
+
+.alignTop {
+   align-items: flex-start;
+}
+
+#gameField {
+   background-image: url('../img/tile1.png');
+   width: 544px;
+   border-radius: 2px;
+   background-color: #F5F5F6;
+   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 5px 2px -2px rgba(0, 0, 0, 0.2);
+}
+
+#redo {
+   margin-left: 0;
+   text-align: right;
+}
+
+.blurred {
+   filter: blur(10px);
+   transition: filter 5s ease-in-out, -webkit-filter 5s ease-in-out, -moz-filter 5s ease-in-out, -ms-filter 5s ease-in-out, -o-filter 5s ease-in-out;
+   -webkit-filter: blur(10px);
+   -moz-filter: blur(10px)
+   -ms-filter: blur(10px)
+   -o-filter: blur(10px);
+}
+
+.shadowDrop {
+   height: 100%;
+   width: 100%;
+}
+
+.playerDown {
+   background-image: url('../img/character-down.png');
+   background-repeat: no-repeat;
+}
+.playerTop {
+   background-image: url('../img/character-top.png');
+   background-repeat: no-repeat;
+}
+.playerLeft {
+   background-image: url('../img/character-left.png');
+   background-repeat: no-repeat;
+}
+.playerRight {
+   background-image: url('../img/character-right.png');
+   background-repeat: no-repeat;
+}
+.ballDown {
+   background-image: url('../img/chest.png');
+   background-repeat: no-repeat;
+}
+#fallingBall {
+   transform: scale(.1, .1) translate(5px, 5px);
+   transition: transform 2s ease-in, left .5s ease-in-out, top .5s ease-in-out;
+}
+
+.player {
+   background-image: url('../img/character-down-workshop.png');
+   background-repeat: no-repeat;
+}
+.ball {
+   background-image: url('../img/chest-workshop.png');
+   background-repeat: no-repeat;
+}
+.rock {
+   background-image: url('../img/rock-workshop.png');
+   background-repeat: no-repeat;
+}
+.hole {
+   background-image: url('../img/hole-workshop.png');
+   background-repeat: no-repeat;
+}
+
+.rockGameplay {
+   background-image: url('../img/rock.png');
+   background-repeat: no-repeat;
+}
+.holeGameplay {
+   background-image: url('../img/hole.png');
+   background-repeat: no-repeat;
+}
+
+.playerTutorial {
+   background-image: url('../img/character-tutorial.png');
+   background-repeat: no-repeat;
+   height: 25px;
+   width: 25px;
+}
+.rockTutorial {
+   background-image: url('../img/rock-tutorial.png');
+   background-repeat: no-repeat;
+   height: 25px;
+   width: 25px;
+}
+.holeTutorial {
+   background-image: url('../img/hole-tutorial.png');
+   background-repeat: no-repeat;
+   height: 25px;
+   width: 25px;
+}
+.ballTutorial {
+   background-image: url('../img/chest-tutorial.png');
+   background-repeat: no-repeat;
+   height: 25px;
+   width: 25px;
+}
+
+
+/***********************************************
+ ******************* COLORS ********************
+ ***********************************************/
 .primary {
-   background-color: #ffb74d;
+   background-color: #ffb74d !important;
 }
 .primaryDark {
-   background-color: #c88719;
+   background-color: #c88719 !important;
 }
 .secondary {
-   background-color: #ced7db;
+   background-color: #ced7db !important;
 }
 .secondaryDark {
-   background-color: #9ea7aa;
+   background-color: #9ea7aa !important;
 }
 .primaryText {
    color: #ffb74d;
@@ -359,42 +440,67 @@ main {
    color: #9ea7aa;
 }
 
-form {
+
+
+/***********************************************
+ ********************* ETC *********************
+ ***********************************************/
+.success {
+   background-color: green !important;
+}
+
+.inline {
+   display: inline-block;
+   margin: 0 !important;
+}
+
+.card {
    width: 100%;
-}
-
-.movesTracker {
-   min-width: 30px;
-}
-
-.movesContainer {
-   margin-top: 200px;
-}
-
-.alignTop {
-   align-items: flex-start;
-}
-
-.box {
-   width: 25px;
-   height: 25px;
-   border-color: rgba(0,0,0,0.3);
-   border-width: 0 1px 1px 0;
-   box-sizing: border-box;
+   overflow: hidden;
+   line-height: 30px;
+   margin: 0;
+   margin-top: 2em;
+   padding: 24px;
+   padding-top: 8px;
+   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+   border: none;
    border-radius: 2px;
-   margin: 1px;
-}
-.borders {
-   border: 1px solid;
-   border-color: #ced7db;
+   background-color: #F5F5F6;
 }
 
-footer {
+.kbd {
+   text-align: center;
+   text-transform: uppercase;
+   font-size: 1em;
+   padding: .25em;
+   width: 30px;
+   height: 30px;
+   border: solid 1px #9da6a9;
+   border-radius: 4px;
+   background-color: #f0f0f0;
+   box-shadow: 1px 1px rgba(0, 0, 0, 0.14);
+   margin-bottom: 5px;
+}
+
+.absolute {
    position: absolute;
-   right: 0;
-   bottom: 0;
+   top: 0;
    left: 0;
-   height: 32px;
-   line-height: 32px;
-   text-align: left;
+}
+
+.relative {
+   position: relative;
+}
+
+.smallText {
+   font-size: 13px;
+}
+
+.bigText {
+   font-size: 25px;
+   text-transform: uppercase;
+}
+
+.hidden {
+   display: none;
 }

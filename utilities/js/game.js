@@ -1,6 +1,6 @@
 /* contains the game logic
  *
- * DEPENDENCIES: Vector, Matrix objects
+ * DEPENDENCIES: Vector constructor, Matrix object
  */
 
 function Game(matrix, levelObject, vectorConstructor) {
@@ -211,7 +211,6 @@ Game.prototype.updateBallPosition = function(newPosition) {
 
 Game.prototype.moveBall = function() {
    while(this.isBallMoving()) {
-      var hasHitHole = false;
       if(this.isBallOutOfBounds()) {
          this.ballMovingDirection = new this.vectorConstructor(0, 0);
          return;
