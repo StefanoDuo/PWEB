@@ -27,7 +27,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Login / Signup</title>
+	<title>The Maze: register and login</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
 	<link rel="stylesheet" href="./resources/css/main.css" >
 	<script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>

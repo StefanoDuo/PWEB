@@ -35,7 +35,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Level: <?php echo htmlspecialchars($levelName); ?></title>
+	<title>The Maze: <?php echo htmlspecialchars($levelName); ?></title>
 	<meta charset="utf-8">
    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
    <link rel="stylesheet" href="./resources/css/main.css" >

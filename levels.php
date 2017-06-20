@@ -17,7 +17,7 @@
 <html>
 <head>
    <meta charset="utf-8">
-   <title>Levels list</title>
+   <title>The Maze: levels list</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
    <script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
    <script type="text/javascript" src="./resources/js/levels.js"></script>

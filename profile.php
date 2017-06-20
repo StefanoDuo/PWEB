@@ -68,7 +68,7 @@
 <html>
 <head>
    <meta charset="utf-8">
-   <title>Your profile</title>
+   <title>The Maze: your profile</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
    <link rel="stylesheet" href="./resources/css/main.css" >
    <script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>

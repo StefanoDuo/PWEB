@@ -9,7 +9,7 @@
 <html>
 <head>
    <meta charset="utf-8">
-   <title>placeholder, a game</title>
+   <title>Welcome to the Maze</title>
    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
 	<link rel="stylesheet" href="./resources/css/main.css" >
 </head>
@@ -21,7 +21,7 @@
 	<div class="card">
 		<h1>Objective</h1>
 		<p><span class="playerTutorial inline"></span> That's you, an adventurer in search of fortune.</p>
-		<p>Your quest is to push this <span class="ballTutorial box inline"></span> chest full of treasures into the <span class="holeTutorial inline"></span> hole which leads out of the level.</p>
+		<p>Your quest is to push this <span class="ballTutorial inline"></span> chest full of treasures into the <span class="holeTutorial inline"></span> hole which leads out of the level.</p>
 		<p>Be careful once you push the chest it will travel until it hits a <span class="rockTutorial inline"></span> rock or the level walls.</p>
 		<p>Every action increases your score, and the lower the score the better, therefore think carefully before acting.</p>
 	</div>

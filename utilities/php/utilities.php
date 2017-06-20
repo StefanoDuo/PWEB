@@ -11,8 +11,10 @@ function getDBConnectionInfo($fileLocation) {
     $configString = file_get_contents($fileLocation);
     $lines = explode(PHP_EOL, $configString);
     foreach($lines as $value) {
-        $option = explode('=', $value);
-        $credentials[$option[0]] = $option[1];
+        if(strlen($value) > 0) {
+            $option = explode('=', $value);
+            $credentials[$option[0]] = $option[1];
+        }
     }
     return $credentials;
 }
