@@ -209,11 +209,12 @@ Game.prototype.updateBallPosition = function(newPosition) {
    this.updateEntityPosition('ball', newPosition);
 }
 
+//returns true if the ball has hit the hole
 Game.prototype.moveBall = function() {
    while(this.isBallMoving()) {
       if(this.isBallOutOfBounds()) {
          this.ballMovingDirection = new this.vectorConstructor(0, 0);
-         return;
+         return false;
       }
       var object = this.isBallColliding();
       if(object === 'rock')
@@ -221,10 +222,10 @@ Game.prototype.moveBall = function() {
       this.updateBallPosition(this.ballPosition.add(this.ballMovingDirection));
       if(object === 'hole') {
          this.ballMovingDirection = new this.vectorConstructor(0, 0);
-         if(this.victoryCallback)
-            this.victoryCallback(this.score, this.replay);
+         return true;
       }
    }
+   return false;
 }
 
 Game.prototype.movePlayer = function(direction) {
@@ -235,7 +236,7 @@ Game.prototype.movePlayer = function(direction) {
       if(object === 'ball') {
          var oldBallPosition = this.ballPosition;
          this.ballMovingDirection = direction;
-         this.moveBall();
+         var hasHitHole = this.moveBall();
          if(!oldBallPosition.isEqual(this.ballPosition)) {
             // if the player is pushing the ball against a wall the
             // score doesn't increase
@@ -245,6 +246,10 @@ Game.prototype.movePlayer = function(direction) {
             currentState.ballMovingDirection = new this.vectorConstructor(0, 0);
             currentState.ballPosition = oldBallPosition;
             this.undoStack.push(currentState);
+            // we need to call the callback after updating the
+            // undostackand replay otherwise we lose the last move
+            if(hasHitHole && this.victoryCallback)
+               this.victoryCallback(this.score, this.replay);
             return true;
          }
       }

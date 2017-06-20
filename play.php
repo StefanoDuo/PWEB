@@ -28,7 +28,7 @@
 		$nextButton = '<button class="raisedButton secondaryDark" disabled>You\'ve beaten all levels</button>';
 	else {
 		$nextButton = '<a class="raisedButton secondaryDark" href="play.php?creatorNickname=' . urlencode($nextLevel['creatorNickname']);
-		$nextButton .= '&levelName=' . $nextLevel['name'] .'">Next Level</a>';
+		$nextButton .= '&levelName=' . urlencode($nextLevel['name']) .'">Next Level</a>';
 	}
 	$levelTitle = '<span id="levelName">' . htmlspecialchars($levelName) . '</span>';
 	$levelCreator = '<input type="hidden" id="levelCreatorNickname" value="' . htmlspecialchars($creatorNickname) . '">';
