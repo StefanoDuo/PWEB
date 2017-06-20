@@ -513,3 +513,13 @@ tr:hover {
 .workshopButtons {
    margin-top: 190px;
 }
+
+.errorMessage {
+   font-size: 13px;
+   border: 0;
+   border-bottom: 2px solid #d50000;
+   color: #d50000;
+   padding-bottom: 5px;
+   margin: 15px 0 15px 0;
+   transition: border .3s ease-in-out;
+}

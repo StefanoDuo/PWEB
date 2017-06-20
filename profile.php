@@ -30,20 +30,20 @@
    }
 
    $emailErrors = array(
-      0 => "That's your current email",
+      0 => "That's your current email.",
    );
    $passwordErrors = array(
-      0 => "Something went wrong",
+      0 => "Something went wrong.",
    );
    $levelErrors = array(
-      0 => "Somebody alredy played that level, therefore it can't be deleted",
+      0 => "Somebody alredy played that level, therefore it can't be deleted.",
    );
 
    $passwordErrorNumber = isset($_GET['passwordError']) ? $_GET['passwordError'] : null;
    if(isNull($passwordErrorNumber))
       $passwordErrorMessage = '';
    else if(isset($passwordErrors[$passwordErrorNumber]))
-      $passwordErrorMessage = '<p>' . $passwordErrors[$passwordErrorNumber] . '</p>';
+      $passwordErrorMessage = '<span class="errorMessage">' . $passwordErrors[$passwordErrorNumber] . '</span>';
    else
       $passwordErrorMessage = '';
 
@@ -51,7 +51,7 @@
    if(isNull($emailErrorNumber))
       $emailErrorMessage = '';
    else if(isset($emailErrors[$emailErrorNumber]))
-      $emailErrorMessage = '<p>' . $emailErrors[$emailErrorNumber] . '</p>';
+      $emailErrorMessage = '<span class="errorMessage" id="emailErrorMessage">' . $emailErrors[$emailErrorNumber] . '</span>';
    else
       $emailErrorMessage = '';
 
@@ -59,7 +59,7 @@
    if(isNull($levelErrorNumber))
       $levelErrorMessage = '';
    else if(isset($levelErrors[$levelErrorNumber]))
-      $levelErrorMessage = '<p>' . $levelErrors[$levelErrorNumber] . '</p>';
+      $levelErrorMessage = '<span class="errorMessage">' . $levelErrors[$levelErrorNumber] . '</span>';
    else
       $levelErrorMessage = '';
 ?>
@@ -74,7 +74,7 @@
    <script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
    <script type="text/javascript" src="./resources/js/profile.js"></script>
 </head>
-<body>
+<body onload="start()">
    <?php
       printHeader('profile', $nickname);
       echo '<main>';
@@ -88,7 +88,7 @@
       printUserScores($nickname, $scores);
       echo '</div>';
    ?>
-   <div class="card">
+   <div class="card" id="emailCard">
       <h1>Update your email</h1>
       <form action="updateEmail.php" method="post">
          <input type="email" name="email" id="email" required placeholder="New email">

@@ -1,41 +1,37 @@
 function start() {
-	document.getElementById('updateEmail').addEventListener('click', function(event) {
-		event.preventDefault();
-		this.disabled = true;
-		var nickname = document.getElementById('nickname').firstChild.textContent;
-		var email = document.getElementById('email').value;
-		var url = 'updateEmail.php';
-      var method = 'POST';
-      var queryString = 'nickname=' + nickname + '&email=' + email;
-      var async = true;
-      var successCallback = function(response) {
-         var response = JSON.parse(response);
-         if(!response.success) {
-      		
-         }
+	function createErrorMessage(errorMessage) {
+      var emailErrorMessage = document.createElement('span');
+      emailErrorMessage.id = 'emailErrorMessage';
+      emailErrorMessage.className = 'errorMessage';
+      emailErrorMessage.textContent = errorMessage;
+      document.getElementById('emailCard').appendChild(emailErrorMessage);
+   }
+   function removeErrorMessage() {
+      var emailErrorMessage = document.getElementById('emailErrorMessage');
+      if(emailErrorMessage)
+         emailErrorMessage.remove();
+   }
 
-         var updateEmailButton = document.getElementById('updateEmail');
-         updateEmailButton.className += ' success';
-         window.setTimeout(function() {
-         	return function() {
-	      		updateEmailButton.classeName = updateEmailButton.classeName.replace('success', '');
-	      		updateEmailButton.disabled = false;
-         	}
-         }(), 5000);
-      }
-      ajaxRequest(url, method, queryString, async, successCallback);
-	}, false);
-	document.getElementById('updatePassword').addEventListener('click', function(event) {
-		event.preventDefault();
-		var nickname = document.getElementById('nickname').firstChild.textContent;
-		var password = document.getElementById('password').value;
-		var url = 'updatePassword.php';
-      var method = 'POST';
-      var queryString = 'nickname=' + nickname + '&password=' + password;
+   var email = document.getElementById('email');
+   removeErrorMessage();
+
+   function emailCallback(response) {
+      response = JSON.parse(response);
+      removeErrorMessage();
+      if(response.success && response.emailExists) {
+         var errorMessage = 'Email alredy associated with another account, please change it.';
+         email.setCustomValidity(errorMessage);
+         createErrorMessage(errorMessage);
+      } else
+         email.setCustomValidity('');
+      if(!email.validity.valid && !response.emailExists)
+         createErrorMessage(email.validationMessage);
+   }
+   email.addEventListener('change', function() {
+      var url = 'endpoints/emailExists.php';
+      var method = 'GET';
+      var queryString = 'email=' + email.value;
       var async = true;
-      var successCallback = function(response) {
-         response = JSON.parse(response);
-      }
-      ajaxRequest(url, method, queryString, async, successCallback);
-	}, false);
+      ajaxRequest(url, method, queryString, async, emailCallback);
+   }, false);
 }

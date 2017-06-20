@@ -17,9 +17,9 @@
 	$signupErrorMessage = '';
 	if(!isNull($errorNumber) && isset($errors[$errorNumber])) {
 		if($errorNumber == 1)
-			$signupErrorMessage = '<p>' . $errors[$errorNumber] . '</p>';
+			$signupErrorMessage = '<p id="signupErrorMessage">' . $errors[$errorNumber] . '</p>';
 		else
-			$loginErrorMessage = '<p>' . $errors[$errorNumber] . '</p>';
+			$loginErrorMessage = '<p id="loginErrorMessage">' . $errors[$errorNumber] . '</p>';
 	}
 ?>
 
@@ -38,7 +38,7 @@
 <?php printHeader('login', $nickname); ?>
 
 <main class="yWrapper">
-	<div class="card">
+	<div class="card" id="login">
 	<h1>Login</h1>
 	<form action="checkLogin.php" method="post">
 		<input type="text" required autofocus name="nickname" placeholder="Nickname">
@@ -48,7 +48,7 @@
 	<?php echo $loginErrorMessage ?>
 	</div>
 
-	<div class="card">
+	<div class="card" id="signup">
 	<h1>Signup</h1>
 	<form action="insertUser.php" method="post">
 		<input type="text" name="nickname" id="nickname" required placeholder="Nickname">

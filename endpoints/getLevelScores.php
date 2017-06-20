@@ -12,7 +12,7 @@ $jsonResponse->setElement('levelName', null);
 
 if(isNull($creatorNickname) || isNull($levelName)) {
    $jsonResponse->setOperationSuccess(false);
-   $jsonResponse->setErrorMessage('One or more fields are empty');
+   $jsonResponse->setErrorMessage('One or more fields are empty.');
 	echo $jsonResponse->getJsonEncoding();
 	exit();
 }
@@ -33,7 +33,7 @@ if($scores) {
    $jsonResponse->setElement('scores', $scores);
 } else {
    $jsonResponse->setOperationSuccess(false);
-   $jsonResponse->setErrorMessage('No scores');
+   $jsonResponse->setErrorMessage('No scores yet.');
    $jsonResponse->setElement('scores', null);
 }
 echo $jsonResponse->getJsonEncoding();

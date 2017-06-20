@@ -31,9 +31,10 @@ function getScores() {
 		// then we create the new one
 		if(!parsedResponse.success) {
 	 		buttonElement.textContent = 'Hide scores';
-			errorMessage = document.createElement('p');
+			errorMessage = document.createElement('span');
 			errorMessage.id = buttonID + '-' + 'errorMessage';
 			errorMessage.textContent = parsedResponse.errorMessage;
+			errorMessage.className = 'errorMessage';
 			parentListElement.appendChild(errorMessage);
 			return;
 		}
