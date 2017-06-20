@@ -24,7 +24,9 @@ function start() {
       'right': 'ballDown'
    }
    var tileMargin = 1, tileBoxSize = 25, containerPadding = 0;
-   var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box');
+   var sketcher = new BackgroundSketcher(gameFieldSize, 'gameField', 'box', ['tile2.png', 'tile1.png'], function() {
+      return Math.round(Math.random(0, 1) + 0.3);
+   });
    var playerTile = new ForegroundSketcher('player', 'gameField', 'box playerTransition', playerClasses, tileMargin, tileBoxSize, containerPadding, containerPadding);
    var ballTile = new ForegroundSketcher('ball', 'gameField', 'box ballTransition', ballClasses, tileMargin, tileBoxSize, containerPadding, containerPadding);
    // we need to store the JSON.stringify encoded as an URI otherwise the value attribute

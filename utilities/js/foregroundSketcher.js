@@ -21,7 +21,6 @@ function ForegroundSketcher(tileID, whereToDraw, tileBaseClasses, tileVariableCl
       'top': this.marginSize,
       'left': this.marginSize
    };
-   console.log(this.startingPosition);
    this.position = null;
    this.whereToDraw = document.getElementById(whereToDraw);
    this.tile = document.createElement('div');
