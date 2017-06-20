@@ -31,7 +31,7 @@
       <div class="yWrapper">
          <input type="text" id="levelName" required placeholder="Level name" maxlength="30">
          <div id="gameField" class="xWrapper"></div>
-         <p id="errorMessage"> </p>
+         <span id="errorMessage" class="errorMessage"> </span>
       </div>
       <div class="yWrapper workshopButtons">
          <button id="player" class="raisedButton secondaryDark">Player</button>

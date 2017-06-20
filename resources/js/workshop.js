@@ -30,7 +30,7 @@ function fetchLevelObject(grid) {
          if(string !== '') {
             if(string === 'player' || string === 'ball' || string === 'hole') {
                if(levelObject[string] !== null) {
-                  throw "You can't place multiple players, chests or holes";
+                  throw "You can't place multiple players, chests or holes.";
                } else {
                levelObject[string] = new Vector(j, i);
                }
@@ -114,7 +114,7 @@ function start() {
       }
       var levelName = document.getElementById('levelName').value;
       if(!levelName) {
-         errorMessage.textContent = "Level name can't be empty";
+         errorMessage.textContent = "Level name can't be empty.";
          return;
       }
       var creatorNickname = document.getElementById('nickname').firstChild.textContent;
