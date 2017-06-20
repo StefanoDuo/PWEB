@@ -30,7 +30,7 @@ function fetchLevelObject(grid) {
          if(string !== '') {
             if(string === 'player' || string === 'ball' || string === 'hole') {
                if(levelObject[string] !== null) {
-                  throw 'multiple player/ball/hole entity in the grid, that is not allowed';
+                  throw "You can't place multiple players, chests or holes";
                } else {
                levelObject[string] = new Vector(j, i);
                }
@@ -41,13 +41,13 @@ function fetchLevelObject(grid) {
       }
    }
    if(levelObject.player === null) {
-      throw 'a player entity is needed';
+      throw 'You need to place the character.';
    }
    if(levelObject.ball === null) {
-      throw 'a ball entity is needed';
+      throw 'You need to place the chest.';
    }
    if(levelObject.hole === null) {
-      throw 'a hole entity is needed';
+      throw 'You need to place the hole.';
    }
    return levelObject;
 }

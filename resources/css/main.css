@@ -504,3 +504,10 @@ tr:hover {
 .hidden {
    display: none;
 }
+
+.workshop {
+   align-items: flex-start !important;
+}
+.workshopButtons {
+   margin-top: 190px;
+}

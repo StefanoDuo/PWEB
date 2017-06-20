@@ -27,12 +27,13 @@
 <?php printHeader("workshop", $nickname); ?>
 
 <main>
-   <div class="xWrapper">
+   <div class="xWrapper workshop">
       <div class="yWrapper">
          <input type="text" id="levelName" required placeholder="Level name" maxlength="30">
          <div id="gameField" class="xWrapper"></div>
+         <p id="errorMessage"> </p>
       </div>
-      <div class="yWrapper">
+      <div class="yWrapper workshopButtons">
          <button id="player" class="raisedButton secondaryDark">Player</button>
          <button id="ball" class="raisedButton secondaryDark">Chest</button>
          <button id="hole" class="raisedButton secondaryDark">Hole</button>
@@ -41,7 +42,6 @@
          <button id="save" class="raisedButton secondaryDark">Save</button>
       </div>
    </div>
-   <p id="errorMessage"></p>
 </main>
 
 <?php include 'footer.php' ?>
