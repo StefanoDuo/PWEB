@@ -14,3 +14,7 @@ Queue.prototype.dequeue = function() {
          this.outbox.push(this.inbox.pop());
    return this.outbox.pop();
 }
+
+Queue.prototype.isEmpty = function() {
+   return this.inbox.length === 0 && this.outbox.length === 0;
+}

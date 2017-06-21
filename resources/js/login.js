@@ -1,21 +1,20 @@
 function start() {
    function createErrorMessage(errorMessage) {
-      var loginErrorMessage = document.createElement('span');
-      loginErrorMessage.id = 'loginErrorMessage';
-      loginErrorMessage.className = 'errorMessage';
-      loginErrorMessage.textContent = errorMessage;
-      document.getElementById('signup').appendChild(loginErrorMessage);
+      var signupError = document.createElement('span');
+      signupError.id = 'signupError';
+      signupError.className = 'errorMessage';
+      signupError.textContent = errorMessage;
+      document.getElementById('signup').appendChild(signupError);
    }
    function removeErrorMessage() {
-      var loginErrorMessage = document.getElementById('loginErrorMessage');
-      if(loginErrorMessage)
-         loginErrorMessage.remove();
+      var signupError = document.getElementById('signupError');
+      if(signupError)
+         signupError.remove();
    }
 
 
    var email = document.getElementById('email');
    var nickname = document.getElementById('nickname');
-   removeErrorMessage();
    
    function nicknameCallback(response) {
       response = JSON.parse(response);

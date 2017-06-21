@@ -20,6 +20,8 @@
    <script type="text/javascript" src="./utilities/js/vector.js"></script>
    <script type="text/javascript" src="./utilities/js/backgroundSketcher.js"></script>
    <script type="text/javascript" src="./utilities/js/ajaxRequest.js"></script>
+   <script type="text/javascript" src="./utilities/js/queue.js"></script>
+   <script type="text/javascript" src="./utilities/js/game.js"></script>
    <script type="text/javascript" src="./resources/js/workshop.js"></script>
 </head>
 <body id="body" onLoad="start()">

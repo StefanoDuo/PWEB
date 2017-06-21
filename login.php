@@ -8,18 +8,18 @@
 		exit();
 	}
 	$errors = array(
-		0 => 'One field was empty',
-		1 => 'Something went wrong',
-		2 => "User doesn't exists or the password doesn't match",
+		0 => 'One field was empty.',
+		1 => 'Something went wrong.',
+		2 => "User doesn't exists or the password doesn't match.",
 	);
 	$errorNumber = isset($_GET['error']) ? $_GET['error'] : null;
 	$loginErrorMessage = '';
 	$signupErrorMessage = '';
-	if(!isNull($errorNumber) && isset($errors[$errorNumber])) {
+	if(!isNull($errorNumber) && array_key_exists($errorNumber, $errors)) {
 		if($errorNumber == 1)
-			$signupErrorMessage = '<p id="signupErrorMessage">' . $errors[$errorNumber] . '</p>';
+			$signupErrorMessage = '<span id="signupError" class="errorMessage">' . $errors[$errorNumber] . '</span>';
 		else
-			$loginErrorMessage = '<p id="loginErrorMessage">' . $errors[$errorNumber] . '</p>';
+			$loginErrorMessage = '<span id="loginError" class="errorMessage">' . $errors[$errorNumber] . '</span>';
 	}
 ?>
 
@@ -39,24 +39,24 @@
 
 <main class="yWrapper">
 	<div class="card" id="login">
-	<h1>Login</h1>
-	<form action="checkLogin.php" method="post">
-		<input type="text" required autofocus name="nickname" placeholder="Nickname">
-		<input type="password" required name="password" placeholder="Password">
-		<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
-	</form>
-	<?php echo $loginErrorMessage ?>
+		<h1>Login</h1>
+		<form action="checkLogin.php" method="post">
+			<input type="text" required autofocus name="nickname" placeholder="Nickname">
+			<input type="password" required name="password" placeholder="Password">
+			<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
+		</form>
+		<?php echo $loginErrorMessage ?>
 	</div>
 
 	<div class="card" id="signup">
-	<h1>Signup</h1>
-	<form action="insertUser.php" method="post">
-		<input type="text" name="nickname" id="nickname" required placeholder="Nickname">
-		<input type="email" name="email" id="email" required placeholder="Email">
-		<input type="password" required name="password" placeholder="Password">
-		<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
-	</form>
-	<?php echo $signupErrorMessage ?>
+		<h1>Signup</h1>
+		<form action="insertUser.php" method="post">
+			<input type="text" name="nickname" id="nickname" required placeholder="Nickname">
+			<input type="email" name="email" id="email" required placeholder="Email">
+			<input type="password" required name="password" placeholder="Password">
+			<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
+		</form>
+		<?php echo $signupErrorMessage ?>
 	</div>
 </main>
 
