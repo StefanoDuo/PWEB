@@ -178,14 +178,6 @@ Game.prototype.update = function(action) {
          this.moveBall();
          return;
    }
-   // at the moment the ball and the player can't move at the same time
-   // if we want to allow that in the future the ball movement must be
-   // all computed at the same time otherwhise redo and undo action could
-   // lead to buggy behaviour
-   if(this.isBallMoving()) {
-      this.moveBall();
-      return;
-   }
    // you can redo action only while you're undo-ing, as soon
    // as you make a real move your redo stack is emptied
    this.redoStack = [];

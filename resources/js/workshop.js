@@ -136,7 +136,7 @@ function start() {
 
    var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box borders');
    // var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box', ['tile2.png', 'tile1.png']);
-   var grid = sketcher.getGrid();
+    grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
          grid[i][j].addEventListener('click', function() {
@@ -147,12 +147,9 @@ function start() {
    }
 }
 
-
-
-
-
-
-
+/***********************************
+ ******* LEVEL SOLVER LOGIC ********
+ ***********************************/
 
 
 function createConfiguration(playerPosition, ballPosition) {
@@ -182,29 +179,94 @@ function arePositionEqual(position1, position2) {
    return true;
 }
 
-function Set(comparisonFunction) {
-   this.elements = [];
-   this.compare = comparisonFunction;
+
+// does not alter the game object
+function isConfigurationPossible(configuration, game) {
+   // we need to remove 1 from gamefield size because the vector method checks with <=
+   if(!configuration.player.belongsToSquare(game.gameField.rowNumber - 1) || !configuration.ball.belongsToSquare(game.gameField.rowNumber - 1))
+      return false;
+   // we need to save and restore the ball and player position inside the game object
+   // otherwise we end up changing the level, because everytime we collide with something
+   // the playerPosition contains the position of the object and the next call to
+   // updateEntityPosition deletes that object
+   var oldPlayerPosition = game.playerPosition;
+   var oldBallPosition = game.ballPosition;
+   game.playerPosition = configuration.player;
+   game.ballPosition = configuration.ball;
+   var direction = new Vector(0, 0);
+   var result = !Boolean(game.isPlayerColliding(direction));
+   game.playerPosition = oldPlayerPosition;
+   game.ballPosition = oldBallPosition;
+   return result;
 }
 
-Set.prototype.contains = function(element) {
-   for(var i = 0; i < this.elements.length; i++)
-      if(this.compare(this.elements[i], element))
+
+// check if the player can reach the new newPlayerPosition from the oldPlayerPosition
+// in the given game object, the general method is the same for isLevelBeatable
+function isPositionReachable(oldPlayerPosition, newPlayerPosition, game) {
+   var visitedPositions = new Set(arePositionEqual);
+   var nextPositions = new Queue();
+
+   // initializing the nextPositions Queue with the 4 positions next to the oldPlayerPosition
+   var direction = new Vector(0, 1);
+   var newPosition = oldPlayerPosition.add(direction);
+   if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(oldPlayerPosition, direction))
+      nextPositions.enqueue(newPosition);
+
+   direction = new Vector(0, -1);
+   newPosition = oldPlayerPosition.add(direction);
+   if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(oldPlayerPosition, direction))
+      nextPositions.enqueue(newPosition);
+
+   direction = new Vector(1, 0);
+   newPosition = oldPlayerPosition.add(direction);
+   if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(oldPlayerPosition, direction))
+      nextPositions.enqueue(newPosition);
+
+   direction = new Vector(-1, 0);
+   newPosition = oldPlayerPosition.add(direction);
+   if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(oldPlayerPosition, direction))
+      nextPositions.enqueue(newPosition);
+
+   while(!nextPositions.isEmpty()) {
+      var currentPlayerPosition = nextPositions.dequeue();
+      if(arePositionEqual(currentPlayerPosition, newPlayerPosition))
          return true;
+
+      if(!visitedPositions.contains(currentPlayerPosition)) {
+         visitedPositions.insert(currentPlayerPosition);
+
+         direction = new Vector(0, 1);
+         newPosition = currentPlayerPosition.add(direction);
+         if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(currentPlayerPosition, direction))
+            nextPositions.enqueue(newPosition);
+
+         direction = new Vector(0, -1);
+         newPosition = currentPlayerPosition.add(direction);
+         if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(currentPlayerPosition, direction))
+            nextPositions.enqueue(newPosition);
+
+         direction = new Vector(1, 0);
+         newPosition = currentPlayerPosition.add(direction);
+         if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(currentPlayerPosition, direction))
+            nextPositions.enqueue(newPosition);
+
+         direction = new Vector(-1, 0);
+         newPosition = currentPlayerPosition.add(direction);
+         if(newPosition.belongsToSquare(game.gameField.rowNumber - 1) && !game.isColliding(currentPlayerPosition, direction))
+            nextPositions.enqueue(newPosition);
+      }
+   }
    return false;
 }
 
-Set.prototype.insert = function(element) {
-   this.elements.push(element);
-   return true;
-}
 
 /* Checks if a level can be beaten by creating all the possible ball and player
  * configurations.
  * A Set is used to store every "visited" configuration.
  * Possible configurations are created by placing the player next to the ball,
- * if the player isn't colliding with another object then the configuration is
- * feasible and added to a Queue.
+ * if the player isn't colliding with another object and the player can reach
+ * his new position then the configuration is feasible and added to a Queue.
  * The Queue is initialized using the ball starting position.
  * If the Queue empties without the ball hitting the hole then the level cannot be beaten.
  */
@@ -214,54 +276,29 @@ function isLevelBeatable(levelObject, gameFieldSize) {
    var hasHitHole = false;
    game.setVictoryCallback(function() {
       hasHitHole = true;
-      console.log('the ball has hit the hole.');
    })
    var visitedConfigurations = new Set(areConfigurationEqual);
    var nextConfigurations = new Queue();
 
-   // does not alter the game variable
-   function isConfigurationPossible(configuration) {
-      // we need to remove 1 from gamefield size because the vector method checks with <=
-      if(!configuration.player.belongsToSquare(gameFieldSize - 1) || !configuration.ball.belongsToSquare(gameFieldSize - 1))
-         return false;
-      // we need to save and restore the ball and player position inside the game object
-      // otherwise we end up changing the level, because everytime we collide with something
-      // the playerPosition contains the position of the object and the next call to
-      // updateEntityPosition deletes that object
-      var oldPlayerPosition = game.playerPosition;
-      var oldBallPosition = game.ballPosition;
-      game.playerPosition = configuration.player;
-      game.ballPosition = configuration.ball;
-      var direction = new Vector(0, 0);
-      var result = !Boolean(game.isPlayerColliding(direction))
-      game.playerPosition = oldPlayerPosition;
-      game.ballPosition = oldBallPosition;
-      return result;
-   }
-
-   function isPositionReachable(oldPlayerPosition, newPlayerPosition) {
-      var visitedPositions = new Set()
-   }
-
    // we never need the player starting position
    game.gameField.setPosition(game.playerPosition, null);
 
-   var configuration = createConfiguration(game.ballPosition.add(new Vector(0, 1)), game.ballPosition, );
-   if(isConfigurationPossible(configuration)) {
+   // initializing the nextConfiguration Queue
+   var configuration = createConfiguration(game.ballPosition.add(new Vector(0, 1)), game.ballPosition);
+   if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
       nextConfigurations.enqueue(configuration);
-   }
-   configuration = createConfiguration(game.ballPosition.subtract(new Vector(0, 1)), game.ballPosition, );
-   if(isConfigurationPossible(configuration)) {
+
+   configuration = createConfiguration(game.ballPosition.subtract(new Vector(0, 1)), game.ballPosition);
+   if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
       nextConfigurations.enqueue(configuration);
-   }
-   configuration = createConfiguration(game.ballPosition.add(new Vector(1, 0)), game.ballPosition, );
-   if(isConfigurationPossible(configuration)) {
+
+   configuration = createConfiguration(game.ballPosition.add(new Vector(1, 0)), game.ballPosition);
+   if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
       nextConfigurations.enqueue(configuration);
-   }
-   configuration = createConfiguration(game.ballPosition.subtract(new Vector(1, 0)), game.ballPosition, );
-   if(isConfigurationPossible(configuration)) {
+
+   configuration = createConfiguration(game.ballPosition.subtract(new Vector(1, 0)), game.ballPosition);
+   if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
       nextConfigurations.enqueue(configuration);
-   }
 
    while(!nextConfigurations.isEmpty()) {
       configuration = nextConfigurations.dequeue();
@@ -272,6 +309,8 @@ function isLevelBeatable(levelObject, gameFieldSize) {
          game.updateEntityPosition('player', configuration.player)
          game.updateEntityPosition('ball', configuration.ball)
 
+         // first we calculate the direction the player has to move to push the ball
+         // then we translate the vectorDirection to a string that the update method accepts
          var direction = game.ballPosition.subtract(game.playerPosition);
          var action = ''
          if(direction.x === 1)
@@ -290,22 +329,21 @@ function isLevelBeatable(levelObject, gameFieldSize) {
             return true;
 
          // creates the new 4 configurations and checks if they're feasible
-         configuration = createConfiguration(game.ballPosition.add(new Vector(0, 1)), game.ballPosition, );
-         if(isConfigurationPossible(configuration)) {
+         configuration = createConfiguration(game.ballPosition.add(new Vector(0, 1)), game.ballPosition);
+         if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
             nextConfigurations.enqueue(configuration);
-         }
-         configuration = createConfiguration(game.ballPosition.subtract(new Vector(0, 1)), game.ballPosition, );
-         if(isConfigurationPossible(configuration)) {
+
+         configuration = createConfiguration(game.ballPosition.subtract(new Vector(0, 1)), game.ballPosition);
+         if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
             nextConfigurations.enqueue(configuration);
-         }
-         configuration = createConfiguration(game.ballPosition.add(new Vector(1, 0)), game.ballPosition, );
-         if(isConfigurationPossible(configuration)) {
+
+         configuration = createConfiguration(game.ballPosition.add(new Vector(1, 0)), game.ballPosition);
+         if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
             nextConfigurations.enqueue(configuration);
-         }
-         configuration = createConfiguration(game.ballPosition.subtract(new Vector(1, 0)), game.ballPosition, );
-         if(isConfigurationPossible(configuration)) {
+
+         configuration = createConfiguration(game.ballPosition.subtract(new Vector(1, 0)), game.ballPosition);
+         if(isConfigurationPossible(configuration, game) && isPositionReachable(game.playerPosition, configuration.player, game))
             nextConfigurations.enqueue(configuration);
-         }
       }
    }
 
