@@ -7,7 +7,7 @@ SET `SQL_SAFE_UPDATES` = 0;
 
 CREATE TABLE `User` (
 	`nickname` VARCHAR(10) NOT NULL,
-	`email` VARCHAR(10) UNIQUE NOT NULL,
+	`email` VARCHAR(50) UNIQUE NOT NULL,
 	`password` VARCHAR(255) NOT NULL,
 
 	PRIMARY KEY (`nickname`)
