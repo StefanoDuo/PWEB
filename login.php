@@ -24,7 +24,7 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
 	<meta charset="utf-8">
 	<title>The Maze: register and login</title>
@@ -41,7 +41,7 @@
 	<div class="card" id="login">
 		<h1>Login</h1>
 		<form action="checkLogin.php" method="post">
-			<input type="text" required autofocus name="nickname" placeholder="Nickname">
+			<input type="text" required autofocus name="nickname" placeholder="Nickname" maxlength="10">
 			<input type="password" required name="password" placeholder="Password">
 			<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
 		</form>
@@ -51,7 +51,7 @@
 	<div class="card" id="signup">
 		<h1>Signup</h1>
 		<form action="insertUser.php" method="post">
-			<input type="text" name="nickname" id="nickname" required placeholder="Nickname">
+			<input type="text" name="nickname" id="nickname" required placeholder="Nickname" maxlength="10">
 			<input type="email" name="email" id="email" required placeholder="Email">
 			<input type="password" required name="password" placeholder="Password">
 			<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>

@@ -6,8 +6,8 @@ SET `SQL_SAFE_UPDATES` = 0;
 
 
 CREATE TABLE `User` (
-	`nickname` VARCHAR(50) NOT NULL,
-	`email` VARCHAR(50) UNIQUE NOT NULL,
+	`nickname` VARCHAR(10) NOT NULL,
+	`email` VARCHAR(10) UNIQUE NOT NULL,
 	`password` VARCHAR(255) NOT NULL,
 
 	PRIMARY KEY (`nickname`)
@@ -21,8 +21,8 @@ INSERT INTO `User` VALUES ('newuser', 'newuser@email.com', '$2y$10$YVWpHhws46C0s
 
 
 CREATE TABLE `Level` (
-	`name` VARCHAR(50) NOT NULL,
-	`creatorNickname` VARCHAR(50) NOT NULL,
+	`name` VARCHAR(30) NOT NULL,
+	`creatorNickname` VARCHAR(10) NOT NULL,
 	`levelObject` TEXT NOT NULL,
 
 	PRIMARY KEY (`name`, `creatorNickname`),
@@ -37,10 +37,10 @@ INSERT INTO `Level` VALUES ('Hidden hole', 'user2', '{"player":{"x":0,"y":0},"ba
 
 
 CREATE TABLE `BeatenBy` (
-	`playerNickname` VARCHAR(50) NOT NULL,
-    `id` CHAR(36) NOT NULL,
-	`creatorNickname` VARCHAR(50) NOT NULL,
-	`levelName` VARCHAR(50) NOT NULL,
+	`playerNickname` VARCHAR(10) NOT NULL,
+   `id` CHAR(36) NOT NULL,
+	`creatorNickname` VARCHAR(10) NOT NULL,
+	`levelName` VARCHAR(30) NOT NULL,
 	`score` INTEGER NOT NULL,
 	`replay` TEXT NOT NULL,
 

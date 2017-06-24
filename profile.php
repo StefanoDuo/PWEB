@@ -65,7 +65,7 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
    <meta charset="utf-8">
    <title>The Maze: your profile</title>

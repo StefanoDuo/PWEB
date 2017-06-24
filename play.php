@@ -36,7 +36,7 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
 	<title>The Maze: <?php echo htmlspecialchars($levelName) ?></title>
 	<meta charset="utf-8">

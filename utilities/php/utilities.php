@@ -86,15 +86,16 @@ function printLevelsCreatedBy($creatorNickname, $levels) {
     echo '</thead>';
     echo '<tbody>';
     foreach ($levels as $key => $value) {
+        echo '<form action="deleteLevel.php" method="post">';
         echo '<tr>';
             echo '<td>' . htmlspecialchars($value['name']) . '</td>';
-            echo '<form action="deleteLevel.php" method="post">';
+            
                 echo '<td><input type="checkbox" name="levelName" required value="' . $value['name'] . '"></td>';
                 echo '<td><button type="submit" value="submit" name="deleteLevel" class="flatButton">Delete</button></td>';
-            echo '</form>';
             echo '<td><a href="play.php?creatorNickname=' . urlencode($creatorNickname) . '&levelName=';
             echo urlencode($value['name']) . '" class="flatButton primaryDarkText">Play</a></td>';
         echo '</tr>';
+        echo '</form>';
     }
     echo '</tbody>';
     echo '</table>';

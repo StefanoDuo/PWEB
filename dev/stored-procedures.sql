@@ -1,7 +1,7 @@
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS getUser $$
-CREATE PROCEDURE getUser(IN _userNickname VARCHAR(50))
+CREATE PROCEDURE getUser(IN _userNickname VARCHAR(10))
 BEGIN
     SELECT U.*
     FROM User U
@@ -10,7 +10,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS updateEmail $$
-CREATE PROCEDURE updateEmail(IN _userNickname VARCHAR(50), IN _email VARCHAR(50))
+CREATE PROCEDURE updateEmail(IN _userNickname VARCHAR(10), IN _email VARCHAR(50))
 BEGIN
     UPDATE User U
     SET U.email = _email
@@ -19,7 +19,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS updatePassword $$
-CREATE PROCEDURE updatePassword(IN _userNickname VARCHAR(50), IN _password VARCHAR(255))
+CREATE PROCEDURE updatePassword(IN _userNickname VARCHAR(10), IN _password VARCHAR(255))
 BEGIN
     UPDATE `User`
     SET `password` = _password
@@ -28,7 +28,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS deleteLevel $$
-CREATE PROCEDURE deleteLevel(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
+CREATE PROCEDURE deleteLevel(IN _creatorNickname VARCHAR(10), IN _levelName VARCHAR(30))
 BEGIN
 	DELETE FROM `Level`
     WHERE creatorNickname = _creatorNickname
@@ -60,7 +60,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS getLevelsCreatedBy $$
-CREATE PROCEDURE getLevelsCreatedBy(IN _creatorNickname VARCHAR(50))
+CREATE PROCEDURE getLevelsCreatedBy(IN _creatorNickname VARCHAR(10))
 BEGIN
 	SELECT L.name
     FROM Level L
@@ -69,7 +69,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS getLevel $$
-CREATE PROCEDURE getLevel(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50))
+CREATE PROCEDURE getLevel(IN _creatorNickname VARCHAR(10), IN _levelName VARCHAR(30))
 BEGIN
 	SELECT L.*
     FROM Level L
@@ -79,8 +79,8 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS getUnbeatedLevel $$
-CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(50), IN _creatorNickname VARCHAR(50),
-								  IN _levelName VARCHAR(50))
+CREATE PROCEDURE getUnbeatedLevel(IN _playerNickname VARCHAR(10), IN _creatorNickname VARCHAR(10),
+								  IN _levelName VARCHAR(30))
 BEGIN
     SELECT L.*
     FROM Level L
@@ -99,7 +99,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS getUserScores $$
-CREATE PROCEDURE getUserScores(IN _playerNickname VARCHAR(50))
+CREATE PROCEDURE getUserScores(IN _playerNickname VARCHAR(10))
 BEGIN
 	SELECT B.levelName, B.creatorNickname, B.score, B.id
     FROM BeatenBy B
@@ -108,7 +108,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS getLevelScores $$
-CREATE PROCEDURE getLevelScores(IN _creatorNickname VARCHAR(50), IN _levelName VARCHAR(50),
+CREATE PROCEDURE getLevelScores(IN _creatorNickname VARCHAR(10), IN _levelName VARCHAR(30),
 								IN _resultLimit INT)
 BEGIN
     SELECT B.playerNickname, B.score, B.id
@@ -130,7 +130,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS insertLevel $$
-CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(50), IN _creatorNickname VARCHAR(50),
+CREATE PROCEDURE insertLevel(IN _levelName VARCHAR(30), IN _creatorNickname VARCHAR(10),
 							 IN _levelObject BLOB)
 BEGIN
 	INSERT INTO `Level`(`name`, `creatorNickname`, `levelObject`)
@@ -139,7 +139,7 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS insertUser $$
-CREATE PROCEDURE insertUser(IN _nickname VARCHAR(50), IN _email VARCHAR(50),
+CREATE PROCEDURE insertUser(IN _nickname VARCHAR(10), IN _email VARCHAR(50),
 							IN _password VARCHAR(255))
 BEGIN
 	INSERT INTO `User`(`nickname`, `email`, `password`)
@@ -148,8 +148,8 @@ END $$
 
 
 DROP PROCEDURE IF EXISTS insertScore $$
-CREATE PROCEDURE insertScore(IN _playerNickname VARCHAR(50), IN _levelCreatorNickname VARCHAR(50),
-							 IN _levelName VARCHAR(50), IN _score INTEGER, IN _replay TEXT)
+CREATE PROCEDURE insertScore(IN _playerNickname VARCHAR(10), IN _levelCreatorNickname VARCHAR(10),
+							 IN _levelName VARCHAR(30), IN _score INTEGER, IN _replay TEXT)
 BEGIN
 	INSERT INTO `BeatenBy`(`playerNickname`, `id`, `creatorNickname`, `levelName`, `score`, `replay`)
 		VALUE (_playerNickname, UUID(),_levelCreatorNickname, _levelName, _score, _replay);
