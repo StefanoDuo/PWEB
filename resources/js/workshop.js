@@ -32,7 +32,7 @@ function fetchLevelObject(grid) {
                if(levelObject[string] !== null) {
                   throw "You can't place multiple players, chests or holes.";
                } else {
-               levelObject[string] = new Vector(j, i);
+                  levelObject[string] = new Vector(j, i);
                }
             } else {
                levelObject.rocks.push(new Vector(j, i));
@@ -118,7 +118,7 @@ function start() {
          return;
       }
       if(!isLevelBeatable(levelObject)) {
-         errorMessage.textContent = "The level can't be beaten.";
+         errorMessage.textContent = "This level can't be beaten.";
          return;
       }
       var creatorNickname = document.getElementById('nickname').firstChild.textContent;
@@ -135,12 +135,12 @@ function start() {
    });
 
    var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box borders');
-   // var sketcher = new BackgroundSketcher(gamefieldSize, 'gameField', 'box', ['tile2.png', 'tile1.png']);
-    grid = sketcher.getGrid();
+   var grid = sketcher.getGrid();
    for(var i = 0; i < grid.length; i++) {
       for(var j = 0; j < grid[i].length; j++) {
          grid[i][j].addEventListener('click', function() {
-            if(pressedButton === null) return;
+            if(pressedButton === null)
+               return;
             sketcher.drawBoxById(this.id, this.className.includes(pressedButton.id) ? '' : pressedButton.id);
          })
       }

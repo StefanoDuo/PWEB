@@ -67,8 +67,8 @@ function printLevelsList($levels) {
             echo '<p>Created by ' . htmlspecialchars($value['creatorNickname']) . '</p>';
             echo '<a href="play.php?creatorNickname=' . urlencode($value['creatorNickname']) . '&levelName='
                 . urlencode($value['name']) .'" class="flatButton primaryDarkText">Play</a>';
-            echo '<button class="flatButton" id="' . htmlspecialchars($value['creatorNickname']) .'-'
-                . htmlspecialchars($value['name']) . '">Show scores</button>';
+            echo '<button class="flatButton" id="' . urlencode(htmlspecialchars($value['creatorNickname'])) .'-'
+                . urlencode(htmlspecialchars($value['name'])) . '">Show scores</button>';
         echo '</li>';
     }
     echo '</ul>';

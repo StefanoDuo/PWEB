@@ -7,7 +7,7 @@
 	$levelName = isset($_GET['levelName']) ? $_GET['levelName'] : null;
 	$playerNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 	if(isNull($creatorNickname) || isNull($levelName)) {
-      header('Location: /PWEB/index.php');
+      header('Location: ./index.php');
       exit();
 	}
 

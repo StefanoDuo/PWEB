@@ -4,7 +4,7 @@
 	session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 	if(!is_null($nickname)) {
-		header('Location: /PWEB/index.php');
+		header('Location: ./index.php');
 		exit();
 	}
 	$errors = array(
@@ -41,7 +41,7 @@
 	<div class="card" id="login">
 		<h1>Login</h1>
 		<form action="checkLogin.php" method="post">
-			<input type="text" required autofocus name="nickname" placeholder="Nickname" maxlength="10">
+			<input type="text" required autofocus name="nickname" placeholder="Nickname" maxlength="10" pattern="^[0-9a-zA-Z\s]*$">
 			<input type="password" required name="password" placeholder="Password">
 			<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>
 		</form>
@@ -51,7 +51,7 @@
 	<div class="card" id="signup">
 		<h1>Signup</h1>
 		<form action="insertUser.php" method="post">
-			<input type="text" name="nickname" id="nickname" required placeholder="Nickname" maxlength="10">
+			<input type="text" name="nickname" id="nickname" required placeholder="Nickname" maxlength="10" pattern="^[0-9a-zA-Z\s]*$">
 			<input type="email" name="email" id="email" required placeholder="Email">
 			<input type="password" required name="password" placeholder="Password">
 			<button type="submit" value="submit" class="raisedButton secondaryDark">Submit</button>

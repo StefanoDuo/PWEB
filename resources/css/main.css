@@ -328,8 +328,8 @@ tr:hover {
    filter: blur(10px);
    transition: filter 5s ease-in-out, -webkit-filter 5s ease-in-out, -moz-filter 5s ease-in-out, -ms-filter 5s ease-in-out, -o-filter 5s ease-in-out;
    -webkit-filter: blur(10px);
-   -moz-filter: blur(10px)
-   -ms-filter: blur(10px)
+   -moz-filter: blur(10px);
+   -ms-filter: blur(10px);
    -o-filter: blur(10px);
 }
 

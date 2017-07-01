@@ -10,7 +10,7 @@ function LocalSaves(ajaxRequest, scoreSaveKey, baseResumeSaveKey) {
    this.ajaxRequest = ajaxRequest;
 }
 
-// score saves are anonymouse so we can store all of them in an arrays under only one key and push
+// score saves are anonymous so we can store all of them in an arrays under only one key and push
 // all of them when the player logs in
 LocalSaves.prototype.insertScoreSave = function(replay, score, levelCreatorNickname, levelName) {
    var currentSaves = this.getScoreSaves();

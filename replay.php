@@ -6,7 +6,7 @@
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    $id = isset($_GET['id']) ? $_GET['id'] : null;
 	if(isNull($id)) {
-      header('Location: /PWEB/index.php');
+      header('Location: ./index.php');
       exit();
    }
 

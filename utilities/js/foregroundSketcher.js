@@ -12,7 +12,7 @@
 
 function ForegroundSketcher(tileID, whereToDraw, tileBaseClasses, tileVariableClasses, tileMarginSize, tileBoxSize, xOffset, yOffset, initialPosition) {
    this.tileBaseClasses = tileBaseClasses;
-   this.tileVariableClasses = tileVariableClasses
+   this.tileVariableClasses = tileVariableClasses;
    this.marginSize = tileMarginSize;
    this.boxSize = tileBoxSize;
    this.xOffset = xOffset;

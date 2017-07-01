@@ -4,13 +4,13 @@ require ROOT_DIR . '/utilities/php/utilities.php';
 require ROOT_DIR . '/utilities/php/database.php';
 session_start();
 if(!isset($_SESSION['nickname'])) {
-	header('Location: /PWEB/index.php');
+	header('Location: ./index.php');
    exit();
 }
 $nickname = $_SESSION['nickname'];
 $email = isset($_POST['email']) ? $_POST['email'] : null;
 if(isNull($email)) {
-	header('Location: /PWEB/index.php');
+	header('Location: ./index.php');
    exit();
 }
 
@@ -22,7 +22,7 @@ try {
    echo $e->getMessage() . PHP_EOL;
 }
 if($affectedRows)
-	header('Location: /PWEB/profile.php');
+	header('Location: ./profile.php');
 else
-	header('Location: /PWEB/profile.php?emailError=0');
+	header('Location: ./profile.php?emailError=0');
 ?>

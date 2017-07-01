@@ -5,7 +5,7 @@
    session_start();
    $nickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
    if(is_null($nickname)) {
-      header("Location: /PWEB/index.php");
+      header("Location: ./index.php");
       exit();
    }
 

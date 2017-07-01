@@ -6,7 +6,7 @@ session_start();
 $creatorNickname = isset($_SESSION['nickname']) ? $_SESSION['nickname'] : null;
 $levelName = isset($_POST['levelName']) ? $_POST['levelName'] : null;
 if(isNull($creatorNickname) || isNull($levelName)) {
-	header('Location: /PWEB/index.php');
+	header('Location: ./index.php');
    exit();
 }
 
@@ -18,7 +18,7 @@ try {
    echo $e->getMessage() . PHP_EOL;
 }
 if(isNull($level)) {
-	header('Location: /PWEB/index.php');
+	header('Location: ./index.php');
    exit();
 }
 try {
@@ -28,7 +28,7 @@ try {
    echo $e . PHP_EOL;
 }
 if($affectedRows)
-	header('Location: /PWEB/profile.php');
+	header('Location: ./profile.php');
 else
-	header('Location: /PWEB/profile.php?levelError=0');
+	header('Location: ./profile.php?levelError=0');
 ?>

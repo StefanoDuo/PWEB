@@ -34,7 +34,7 @@
 		<p>To help you keep track of your previous moves there can be up to 5 arrows representing the direction your character
 			will move if you press <kbd class="kbd">Q</kbd>, the same goes for the redoable actions.</p>
 		<p>The arrow at the top is the first move that will be undone.</p>
-		<p>If the arrow has an orange background then the ball will move instead of your character.</p>
+		<p>If the arrow has an orange background then the chest will move instead of your character.</p>
 		<p><kbd class="kbd">R</kbd> resets the level to its starting configuration.</p>
 	</div>
 

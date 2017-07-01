@@ -1,5 +1,5 @@
 function getScores() {
-	var whichButton = this.id;
+	var whichButton = this.id.replace(/\+/g, ' ');
 	var levelInfo = whichButton.split('-');
 	var creatorNickname = levelInfo[0];
 	var levelName = levelInfo[1];
@@ -11,6 +11,7 @@ function getScores() {
 	ajaxRequest(url, method, queryString, async, function(textResponse) {
 		var parsedResponse = JSON.parse(textResponse);
 		var buttonID = parsedResponse.creatorNickname + '-' + parsedResponse.levelName;
+		buttonID = buttonID.replace(/\ /g, '+');
 		var buttonElement = document.getElementById(buttonID);
 		var scoresTable = document.getElementById(buttonID + '-' + 'scoresTable');
 		var errorMessage = document.getElementById(buttonID + '-' + 'errorMessage');
